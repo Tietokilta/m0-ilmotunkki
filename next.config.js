@@ -12,9 +12,6 @@ const nextConfig = {
     locales: ['fi', 'en',],
     defaultLocale: 'fi',
   },
-  experimental: {
-    serverComponents: true,
-  },
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;

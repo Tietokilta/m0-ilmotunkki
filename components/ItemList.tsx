@@ -1,8 +1,7 @@
-import { NextComponentType } from "next";
 import styled from 'styled-components';
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { Item, ItemType } from "../utils/models";
+import { Item, ItemCategory, ItemType } from "../utils/models";
 
 
 const ItemWrapper = styled.div`
@@ -44,10 +43,14 @@ const itemCount = (items: Item[], itemSlug: string) => items.filter(
         data: { attributes }
       }
     }
-  }) => attributes.slug === itemSlug).length
+  }) => attributes.slug === itemSlug).length;
 
-const ItemList: NextComponentType = () => {
-  const { order, itemTypes, initializeOrder, addItem, deleteItem, items } = useContext(AppContext);
+type Props = {
+  itemTypes: ItemType[],
+  itemCategories: ItemCategory[],
+}
+const ItemList: React.FC<Props> = ({itemTypes, itemCategories}) => {
+  const { order, initializeOrder, addItem, deleteItem, items } = useContext(AppContext);
   const handleClick = async (item: ItemType) => {
     let orderId = order.id
     if (!order.id) {

@@ -44,8 +44,14 @@ const CallbackPage = () => {
     }
     verifyPayment();
   },[parsed,router, verifyPayment, verifySkipPayment]);
+  useEffect(() => {
+    if(isValid && paymentStatus === 'ok') {
+      
+    }
+  },[isValid, paymentStatus]);
   if (!isValid) return <div>Maksun käsittelyssä tapahtui virhe</div>
   if (paymentStatus !== 'ok') return <div>Maksu keskeytyi</div>
+
   return (
     <Wrapper>
       <h1>Onnistuit Jee</h1>

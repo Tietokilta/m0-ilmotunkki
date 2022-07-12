@@ -10,7 +10,8 @@ import ItemList from '../components/ItemList'
 import { AppContext } from '../context/AppContext'
 import { fetchAPI } from '../lib/api'
 import { button } from '../styles/styles'
-import { FrontPageFields } from '../utils/models'
+import { FrontPageFields, ItemCategory, ItemType } from '../utils/models'
+import useSwr from 'swr';
 
 export const getStaticProps: GetStaticProps<{content: FrontPageFields}> = async (context) => {
   const [content] = await Promise.all([
@@ -41,6 +42,11 @@ const Wrapper = styled.main`
 const Home: NextPage<PropType> = ({content}) => {
   const {items} = useContext(AppContext)
   const { title, bodyText } = content.attributes;
+  const {data: itemTypes} = useSwr('/item-types', url => fetchAPI<ItemType[]>(url,{},{
+    populate: ['itemCategory'],
+  }),
+  );
+  const {data: itemCategories} = useSwr('/item-categories', fetchAPI<ItemCategory[]>);
   return (
     <div>
       <Head>
@@ -54,7 +60,9 @@ const Home: NextPage<PropType> = ({content}) => {
           <p>
             {bodyText}
           </p>
-          <ItemList></ItemList>
+          {itemCategories && itemTypes &&
+            <ItemList itemCategories={itemCategories} itemTypes={itemTypes}></ItemList>
+          }
           <br></br>
           {items.length > 0 && <Link href={'/contact'} passHref><StyledLink >Seuraava</StyledLink></Link>}
         </section>

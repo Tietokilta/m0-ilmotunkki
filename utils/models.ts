@@ -16,6 +16,7 @@ export type ItemCategory = StrapiBaseType<{
   maximumItemLimit: number;
   name: string;
   itemTypes: StrapiResponse<ItemType[]>;
+  currentQuantity: number;
 }>;
 
 export type ItemType = StrapiBaseType<{

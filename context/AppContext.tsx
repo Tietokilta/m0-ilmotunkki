@@ -5,7 +5,6 @@ import { fetchAPI } from "../lib/api";
 import { Customer, Item, ItemType, Order } from "../utils/models";
 
 export interface AppContextType {
-  itemTypes: ItemType[];
   order: Order;
   customer: Customer;
   items: Item[];
@@ -34,7 +33,6 @@ const initialCustomer =  {
   }
 };
 const appContextDefault: AppContextType = {
-  itemTypes: [],
   customer: initialCustomer,
   order: {
     id: 0,
@@ -70,14 +68,6 @@ const ItemProvider: FC<Props> = ({ children }) => {
   const [order, setOrder] = useState<Order>(appContextDefault.order);
   const [customer, setCustomer] = useState<Customer>(appContextDefault.customer);
   const [items, setItems] = useState<Item[]>(appContextDefault.items);
-  const [itemTypes, setItemTypes] = useState<ItemType[]>(appContextDefault.itemTypes);
-
-  const updateItemTypes = useCallback( async () => {
-    const types = await fetchAPI<ItemType[]>('/item-types',{},{
-      populate: ['itemCategory'],
-    });
-    return setItemTypes(types);
-  },[]);
 
   const initializeOrder = async () => {
     const newOrder = await fetchAPI<Order>('/orders',{
@@ -172,14 +162,12 @@ const ItemProvider: FC<Props> = ({ children }) => {
   },[]);
 
   useEffect(() => {
-    updateItemTypes();
     refreshFields()
-  },[updateItemTypes,refreshFields])
+  },[refreshFields])
 
   return (
     <AppContext.Provider value={
       {
-        itemTypes,
         items,
         order,
         customer,
