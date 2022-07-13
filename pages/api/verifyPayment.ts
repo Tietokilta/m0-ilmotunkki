@@ -8,11 +8,16 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const {data}  = request.body;
   const result = paytrailService.verifyPayment(data);
   if (!result) return response.status(400).json({});
-  await updateOrderState(
-    data['checkout-reference'],
-    data['checkout-status'],
-    data['checkout-transaction-id'],
-  );
+  try {
+    await updateOrderState(
+      data['checkout-reference'],
+      data['checkout-status'],
+      data['checkout-transaction-id'],
+    );
+  } catch(error) {
+    return response.status(500).json({});
+  }
+
   return response.status(200).json({});
 }
 

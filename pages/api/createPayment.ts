@@ -32,7 +32,6 @@ const createPayment = async (orderId: string) => {
       },
     })
   ]);
-  console.log(JSON.stringify(order));
   order.attributes.items = {data: items};
   if (!order) throw new Error("No Order");
   const mappedCart = mappedItems(order.attributes.items.data);

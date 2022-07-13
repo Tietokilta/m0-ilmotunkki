@@ -10,18 +10,6 @@ const CallbackPage = () => {
   const [paymentStatus, setPaymentStatus] = useState<CheckoutStatus>('pending')
   const [isValid, setValid] = useState<boolean | undefined>(undefined);
   const parsed = router.query;
-  const verifySkipPayment = useCallback(async () => {
-    const response = await fetch(`/api/verifySkip`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ orderId: parsed['checkout-reference'] })
-    });
-    if(!response.ok) return setValid(false);
-    setValid(true);
-    setPaymentStatus('ok');
-  },[parsed])
 
   const verifyPayment = useCallback(async () => {
     const response = await fetch(`/api/verifyPayment`, {
@@ -38,12 +26,8 @@ const CallbackPage = () => {
 
   useEffect(() =>{
     if(!parsed['checkout-status']) return;
-    if (parsed['checkout-status'] === 'skip') {
-      verifySkipPayment();
-      return;
-    }
     verifyPayment();
-  },[parsed,router, verifyPayment, verifySkipPayment]);
+  },[parsed, verifyPayment]);
   useEffect(() => {
     if(isValid && paymentStatus === 'ok') {
       

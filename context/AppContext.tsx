@@ -11,7 +11,7 @@ export interface AppContextType {
   initializeOrder: () => Promise<Order>;
   refreshFields: () => Promise<void>;
   addItem: (item: ItemType, orderId: number) => Promise<void>;
-  deleteItem: (itemSlug: string) => Promise<void>;
+  deleteItem: (itemId: number) => Promise<void>;
 }
 const initialCustomer =  {
   id: 0,
@@ -112,8 +112,8 @@ const ItemProvider: FC<Props> = ({ children }) => {
     }
   },[order.id]);
 
-  const deleteItem = async (itemSlug: string) => {
-    const itemToRemove = items.find(({attributes: {itemType}}) => itemType.data.attributes.slug === itemSlug);
+  const deleteItem = async (itemId: number) => {
+    const itemToRemove = items.find(({attributes: {itemType}}) => itemType.data.id === itemId);
     if (!itemToRemove) return;
     const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
       method: 'DELETE',

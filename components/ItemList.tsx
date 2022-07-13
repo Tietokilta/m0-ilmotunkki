@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { Item, ItemCategory, ItemType } from "../utils/models";
+import { useSWRConfig } from 'swr';
 
 
 const ItemWrapper = styled.div`
@@ -36,20 +37,27 @@ const ItemCount = styled.p`
 const DeleteItem = styled.button`
 
 `;
-const itemCount = (items: Item[], itemSlug: string) => items.filter(
+const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
     attributes: {
       itemType: {
-        data: { attributes }
+        data
       }
     }
-  }) => attributes.slug === itemSlug).length;
+  }) => data.id === itemId).length;
 
 type Props = {
   itemTypes: ItemType[],
   itemCategories: ItemCategory[],
 }
+const isSoldOut = (itemType: ItemType, itemCategories: ItemCategory[]) => {
+  const category = itemCategories.find(c => c.id === itemType.attributes.itemCategory.data.id);
+  if(!category) return true;
+  if(category.attributes.overflowItem.data?.id === itemType.id) return false;
+  return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
+}
 const ItemList: React.FC<Props> = ({itemTypes, itemCategories}) => {
+  const {mutate} = useSWRConfig()
   const { order, initializeOrder, addItem, deleteItem, items } = useContext(AppContext);
   const handleClick = async (item: ItemType) => {
     let orderId = order.id
@@ -58,17 +66,34 @@ const ItemList: React.FC<Props> = ({itemTypes, itemCategories}) => {
       orderId = result.id
     }
     await addItem(item, orderId);
+    mutate('/item-categories');
+  };
+  const handleDelete = async (event: any, item: ItemType) => {
+    event.stopPropagation();
+    await deleteItem(item.id);
+    mutate('/item-categories');
   }
   return (
     <ItemContainer>
-      {itemTypes.map(item =>
+      {itemTypes.filter(item => {
+        // Do not show reserve, unless soldOut and empty cart
+        const categoryId = item.attributes.itemCategory.data.id;
+        const category = itemCategories.find(c => c.id === categoryId);
+        if (!category) return false;
+        const overflowItem = category.attributes.overflowItem.data;
+        const isOverflowItem = overflowItem?.id === item.id;
+        if(!isOverflowItem) return true;
+        const soldOut = category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
+        return soldOut;
+      }).map(item =>
       <ItemWrapper onClick={() => handleClick(item)} key={item.id}>
         <ItemLabel>
           {item.attributes.slug}
         </ItemLabel>
         <ItemPrice>{item.attributes.price} €</ItemPrice>
-        <ItemCount>{itemCount(items, item.attributes.slug)} kpl</ItemCount>
-        <DeleteItem onClick={(e) => {e.stopPropagation(); deleteItem(item.attributes.slug)}}>-</DeleteItem>
+        <ItemCount>{itemCount(items, item.id)} kpl</ItemCount>
+        {isSoldOut(item, itemCategories) && <ItemLabel>Loppuunmyyty</ItemLabel>}
+        <DeleteItem onClick={(e) => handleDelete(e,item)}>-</DeleteItem>
       </ItemWrapper>)} 
     </ItemContainer>
   );

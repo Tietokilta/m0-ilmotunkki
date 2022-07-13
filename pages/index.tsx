@@ -4,7 +4,7 @@ import type {
   InferGetStaticPropsType} from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import ItemList from '../components/ItemList'
 import { AppContext } from '../context/AppContext'
@@ -46,7 +46,9 @@ const Home: NextPage<PropType> = ({content}) => {
     populate: ['itemCategory'],
   }),
   );
-  const {data: itemCategories} = useSwr('/item-categories', fetchAPI<ItemCategory[]>);
+  const {data: itemCategories} = useSwr('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
+    populate: ['overflowItem'],
+  }));
   return (
     <div>
       <Head>

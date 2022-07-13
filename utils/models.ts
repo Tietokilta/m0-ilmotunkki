@@ -17,6 +17,7 @@ export type ItemCategory = StrapiBaseType<{
   name: string;
   itemTypes: StrapiResponse<ItemType[]>;
   currentQuantity: number;
+  overflowItem: StrapiResponse<ItemType | null>;
 }>;
 
 export type ItemType = StrapiBaseType<{

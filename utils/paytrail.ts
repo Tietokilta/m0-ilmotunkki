@@ -112,7 +112,7 @@ const createSkipPayment = async (order: Order) => {
     'checkout-algorithm': 'sha256',
     'checkout-amount': '0',
     'checkout-status': 'ok',
-    'checkout-transaction-id': 'skip',
+    'checkout-transaction-id': `skip-${Array.from(Array(20), () => Math.floor(Math.random() * 36).toString(36)).join('')}`,
   }
   const signature = calculateHmac(params);
   params.signature = signature;
