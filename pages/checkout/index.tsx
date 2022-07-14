@@ -48,7 +48,7 @@ const ProviderWrapper = styled.div`
   padding: 64px;
 `;
 
-const PaymentProviders = () => {
+const Checkout = () => {
   const {order} = useContext(AppContext);
   const [paymentProviders, setProviders] = useState<PaymentProvider[]>([]);
   const [skipParams, setSkipParams] = useState<Record<string,string>>({});
@@ -93,10 +93,5 @@ const PaymentProviders = () => {
     </ProviderWrapper>
   );
 }
-
-const Checkout = () => {
-  return <PaymentProviders/>;
-}
-
 
 export default Checkout;

@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 
 type CheckoutStatus = 'new' | 'ok' | 'fail' | 'pending' | 'delayed';
@@ -30,12 +31,14 @@ const CallbackPage = () => {
   },[parsed, verifyPayment]);
   useEffect(() => {
     if(isValid && paymentStatus === 'ok') {
-      
+      sessionStorage.removeItem('orderId');
     }
   },[isValid, paymentStatus]);
-  if (!isValid) return <div>Maksun käsittelyssä tapahtui virhe</div>
+  if (!isValid) return <div>
+    Maksun käsittelyssä tapahtui virhe
+    <Link href="/summary"><a>Takaisn tilaukseen</a></Link>
+    </div>
   if (paymentStatus !== 'ok') return <div>Maksu keskeytyi</div>
-
   return (
     <Wrapper>
       <h1>Onnistuit Jee</h1>
