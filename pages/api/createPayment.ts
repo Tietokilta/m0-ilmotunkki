@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { fetchAPI } from '../../lib/api'
+import { fetchAPI } from '../../lib/api';
+import { serverFetchAPI } from '../../lib/serverApi';
 import { mappedItems } from '../../utils/helpers';
-import { Item, Order } from '../../utils/models'
+import { Order } from '../../utils/models'
 import paytrailService from '../../utils/paytrail';
 
 export const updateOrderState = async (orderId: number, status: string, transactionId?: string) => {
@@ -13,29 +14,24 @@ export const updateOrderState = async (orderId: number, status: string, transact
         transactionId,
       }
     })
-  })
+  });
 }
 
-const createPayment = async (orderId: string) => {
-  const [order, items] = await Promise.all([
-    fetchAPI<Order>(`/orders/${orderId}`,{},{
-      populate: 'customer'
-    }),
-    fetchAPI<Item[]>('/items',{}, {
-      populate: 'itemType',
-      filters: {
-        order: {
-          id: {
-            $eq: orderId,
-          },
-        },
-      },
-    })
-  ]);
-  order.attributes.items = {data: items};
+const createPayment = async (orderUid: string) => {
+  const order = await serverFetchAPI<Order>(`/orders/${orderUid}`,{},{
+      populate: [
+        'customer',
+        'items',
+        'items.itemType',
+        'items.itemType.itemCategory',
+      ]
+    }
+  );
+  console.log('here', order);
   if (!order) throw new Error("No Order");
   const mappedCart = mappedItems(order.attributes.items.data);
   const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  await updateOrderState(order.id, 'pending');
   if (total === 0) return paytrailService.createSkipPayment(order);
   return paytrailService.createPayment(order);
 }
@@ -46,7 +42,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   if (!orderId) return response.status(404).json({});
   try {
     const result = await createPayment(orderId);
-    await updateOrderState(orderId, 'pending');
     return response.status(200).json(result);
   } catch(error) {
     console.error(error);

@@ -10,7 +10,7 @@ export interface AppContextType {
   items: Item[];
   initializeOrder: () => Promise<Order>;
   refreshFields: () => Promise<void>;
-  addItem: (item: ItemType, orderId: number) => Promise<void>;
+  addItem: (item: ItemType) => Promise<void>;
   deleteItem: (itemId: number) => Promise<void>;
 }
 const initialCustomer =  {
@@ -77,7 +77,7 @@ const ItemProvider: FC<Props> = ({ children }) => {
       }),
     });
     setOrder(newOrder);
-    sessionStorage.setItem('orderId', String(newOrder.id));
+    sessionStorage.setItem('orderUid', String(newOrder.attributes.uid));
     const newCustomer = await fetchAPI<Customer>('/customers', {
       method: 'POST',
       body: JSON.stringify({
@@ -90,9 +90,9 @@ const ItemProvider: FC<Props> = ({ children }) => {
     return newOrder;
   };
   const refreshFields = useCallback(async () => {
-    if(!order.id) return;
+    if(!order.attributes.uid) return;
     try {
-      const newOrder = await fetchAPI<Order>(`/orders/${order.id}`,{},{
+      const newOrder = await fetchAPI<Order>(`/orders/findByUid/${order.attributes.uid}`,{},{
         populate: [
           'customer',
           'items',
@@ -108,9 +108,9 @@ const ItemProvider: FC<Props> = ({ children }) => {
       setOrder(appContextDefault.order);
       setCustomer(appContextDefault.customer);
       setItems(appContextDefault.items);
-      sessionStorage.removeItem('orderId');
+      sessionStorage.removeItem('orderUid');
     }
-  },[order.id]);
+  },[order.attributes.uid]);
 
   const deleteItem = async (itemId: number) => {
     const itemToRemove = items.find(({attributes: {itemType}}) => itemType.data.id === itemId);
@@ -122,7 +122,12 @@ const ItemProvider: FC<Props> = ({ children }) => {
     setItems(filteredItems);
   };
 
-  const addItem = async (itemType: ItemType, orderId: number) => {
+  const addItem = async (itemType: ItemType) => {
+    let orderUid = order.attributes.uid;
+    if (!order.id) {
+      const result = await initializeOrder();
+      orderUid = result.attributes.uid;
+    }
     const itemCategory = itemType.attributes.itemCategory.data;
     const categoryItemCount = items.filter(item => 
       item
@@ -139,7 +144,7 @@ const ItemProvider: FC<Props> = ({ children }) => {
         body: JSON.stringify({
           data: {
             itemType: itemType.id,
-            order: orderId,
+            order: orderUid,
           }
         }),
       },
@@ -152,11 +157,14 @@ const ItemProvider: FC<Props> = ({ children }) => {
   }
 
   useEffect(() => {
-    const savedOrderId = Number(sessionStorage.getItem('orderId'));
-    if(savedOrderId) {
+    const savedOrderUid = sessionStorage.getItem('orderUid');
+    if(savedOrderUid) {
       setOrder(previousOrder => ({
-        ...previousOrder,
-        id: savedOrderId,
+        attributes: {
+          ...previousOrder.attributes,
+          uid: savedOrderUid,
+        },
+        id: previousOrder.id,
       }))
     }
   },[]);

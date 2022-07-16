@@ -58,14 +58,10 @@ const isSoldOut = (itemType: ItemType, itemCategories: ItemCategory[]) => {
 }
 const ItemList: React.FC<Props> = ({itemTypes, itemCategories}) => {
   const {mutate} = useSWRConfig()
-  const { order, initializeOrder, addItem, deleteItem, items } = useContext(AppContext);
+  const { addItem, deleteItem, items } = useContext(AppContext);
+
   const handleClick = async (item: ItemType) => {
-    let orderId = order.id
-    if (!order.id) {
-      const result = await initializeOrder();
-      orderId = result.id
-    }
-    await addItem(item, orderId);
+    await addItem(item);
     mutate('/item-categories');
   };
   const handleDelete = async (event: any, item: ItemType) => {
