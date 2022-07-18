@@ -4,14 +4,13 @@ import type {
   InferGetStaticPropsType} from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import ItemList from '../components/ItemList'
 import { AppContext } from '../context/AppContext'
 import { fetchAPI } from '../lib/api'
 import { button } from '../styles/styles'
-import { FrontPageFields, ItemCategory, ItemType } from '../utils/models'
-import useSwr from 'swr';
+import { FrontPageFields } from '../utils/models'
 
 export const getStaticProps: GetStaticProps<{content: FrontPageFields}> = async (context) => {
   const [content] = await Promise.all([
@@ -42,13 +41,7 @@ const Wrapper = styled.main`
 const Home: NextPage<PropType> = ({content}) => {
   const {items} = useContext(AppContext)
   const { title, bodyText } = content.attributes;
-  const {data: itemTypes} = useSwr('/item-types', url => fetchAPI<ItemType[]>(url,{},{
-    populate: ['itemCategory'],
-  }),
-  );
-  const {data: itemCategories} = useSwr('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
-    populate: ['overflowItem'],
-  }));
+
   return (
     <div>
       <Head>
@@ -62,10 +55,7 @@ const Home: NextPage<PropType> = ({content}) => {
           <p>
             {bodyText}
           </p>
-          {itemCategories && itemTypes &&
-            <ItemList itemCategories={itemCategories} itemTypes={itemTypes}></ItemList>
-          }
-          <br></br>
+          <ItemList />
           {items.length > 0 && <Link href={'/contact'} passHref><StyledLink >Seuraava</StyledLink></Link>}
         </section>
       </Wrapper>

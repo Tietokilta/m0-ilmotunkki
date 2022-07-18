@@ -9,6 +9,7 @@ import { button, Input, Label } from '../../styles/styles';
 import { StrapiBaseType } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import useSWR from 'swr';
 
 type FormData = {
   attributes: {
@@ -37,15 +38,9 @@ type TranslationResponse = StrapiBaseType<{
 const Form: NextComponentType = () => {
   const router = useRouter();
   const {customer, refreshFields} = useContext(AppContext);
-  const [formData, setForm] = useState<FormData>({attributes:{}});
   const [inputFields, setInputFields] = useState(customer.attributes);
-  const fetchData = async () => {
-    const response = await fetchAPI<{schema: FormData}>('/content-type-builder/content-types/api::customer.customer');
-    setForm(response.schema);
-  };
-  useEffect(() => {
-    fetchData();
-  },[]);
+  const {data} = useSWR<{schema: FormData}>('/content-type-builder/content-types/api::customer.customer', fetchAPI);
+  const formData = data?.schema;
   useEffect(() => {
     setInputFields(customer.attributes);
   },[customer])
@@ -59,7 +54,7 @@ const Form: NextComponentType = () => {
     delete updateFields.updatedAt;
     delete updateFields.publishedAt;
     delete updateFields.orders;
-    await fetchAPI(`/customers/${customer.id}`, {
+    await fetchAPI(`/customers/${customer.attributes.uid}`, {
       method: 'PUT',
       body: JSON.stringify({
         data: {
@@ -78,7 +73,7 @@ const Form: NextComponentType = () => {
       }
     })
   }
-  if(!formData.attributes || !customer.id) return null;
+  if(!formData || !formData.attributes || !customer.id) return null;
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -108,7 +103,6 @@ const Form: NextComponentType = () => {
         })}
         <Button>Lähetä</Button>
       </form>
-      <br></br>
       <Link href="/">
         <Button>Takaisin</Button>
       </Link>

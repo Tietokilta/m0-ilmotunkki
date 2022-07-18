@@ -56,11 +56,12 @@ const isSoldOut = (itemType: ItemType, itemCategories: ItemCategory[]) => {
 const ItemList: React.FC = () => {
   const {data: itemTypes} = useSWR('/item-types', url => fetchAPI<ItemType[]>(url,{},{
     populate: ['itemCategory'],
-  }));
+  }), {suspense: true});
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: ['overflowItem'],
-  }));
+  }), {suspense: true});
   const { addItem, deleteItem, items } = useContext(AppContext);
+  if(!itemTypes || !itemCategories) return null;
   const handleClick = async (item: ItemType) => {
     await addItem(item);
     mutateCategories();
@@ -72,10 +73,10 @@ const ItemList: React.FC = () => {
   }
   return (
     <ItemContainer>
-      {itemTypes?.filter(item => {
+      {itemTypes.filter(item => {
         // Do not show reserve, unless soldOut and empty cart
         const categoryId = item.attributes.itemCategory.data.id;
-        const category = itemCategories?.find(c => c.id === categoryId);
+        const category = itemCategories.find(c => c.id === categoryId);
         if (!category) return false;
         const overflowItem = category.attributes.overflowItem.data;
         const isOverflowItem = overflowItem?.id === item.id;
@@ -89,7 +90,7 @@ const ItemList: React.FC = () => {
         </ItemLabel>
         <ItemPrice>{item.attributes.price} €</ItemPrice>
         <ItemCount>{itemCount(items, item.id)} kpl</ItemCount>
-        {isSoldOut(item, itemCategories || []) && <ItemLabel>Loppuunmyyty</ItemLabel>}
+        {isSoldOut(item, itemCategories) && <ItemLabel>Loppuunmyyty</ItemLabel>}
         <DeleteItem onClick={(e) => handleDelete(e,item)}>-</DeleteItem>
       </ItemWrapper>)} 
     </ItemContainer>

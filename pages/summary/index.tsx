@@ -102,7 +102,6 @@ const Summary = () => {
           <StyledLink> käyttöehdot</StyledLink>
         </Link>
       </Label>
-      <br></br>
       <NavigationButtons>
       <Link passHref href="/contact"><Button>Takaisin</Button></Link>
       <Link passHref href="/checkout"><Button disabled={!termsAccepted || items.length === 0}>Maksamaan</Button></Link>
