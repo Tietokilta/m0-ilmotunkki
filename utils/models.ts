@@ -31,11 +31,27 @@ export type ItemType = StrapiBaseType<{
 export type Item = StrapiBaseType<{
   itemType: StrapiResponse<ItemType>;
   order: StrapiResponse<Order>;
-}>
+  giftCard: StrapiResponse<GiftCard | null>;
+}>;
+
+export type GiftCard = StrapiBaseType<{
+  code: string;
+}>;
 
 export type FrontPageFields = StrapiBaseType<{
   bodyText: string;
   title: string;
+}>;
+
+export type Field = {
+  label: string,
+  type: string,
+  required: boolean,
+  fieldName: string,
+}
+
+export type ContactForm = StrapiBaseType<{
+  contactForm: Field[];
 }>;
 
 export type Order = StrapiBaseType<{
@@ -51,10 +67,6 @@ export type Customer = StrapiBaseType<{
   firstName: string,
   lastName: string;
   email: string;
-  phone: string;
-  postalCode: string;
-  startYear: string;
-  extra: string;
-  orders: StrapiResponse<Order[]>;
   uid: string;
+  [key: string]: string | number;
 }>

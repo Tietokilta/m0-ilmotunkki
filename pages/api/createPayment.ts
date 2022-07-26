@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { fetchAPI } from '../../lib/api';
 import { serverFetchAPI } from '../../lib/serverApi';
 import { mappedItems } from '../../utils/helpers';
 import { Order } from '../../utils/models'
 import paytrailService from '../../utils/paytrail';
 
 export const updateOrderState = async (orderId: number, status: string, transactionId?: string) => {
-  return fetchAPI(`/orders/${orderId}`, {
+  return serverFetchAPI<Order>(`/orders/${orderId}`, {
     method: 'PUT',
     body: JSON.stringify({
       data: {
@@ -17,13 +16,14 @@ export const updateOrderState = async (orderId: number, status: string, transact
   });
 }
 
-const createPayment = async (orderUid: string) => {
-  const order = await serverFetchAPI<Order>(`/orders/${orderUid}`,{},{
+const createPayment = async (orderId: number) => {
+  const order = await serverFetchAPI<Order>(`/orders/${orderId}`,{},{
       populate: [
         'customer',
         'items',
         'items.itemType',
         'items.itemType.itemCategory',
+        'items.giftCard',
       ]
     }
   );

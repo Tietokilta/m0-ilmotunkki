@@ -27,9 +27,6 @@ const initialCustomer =  {
     startYear: '',
     updatedAt: '',
     uid: '',
-    orders: {
-      data: [],
-    },
   }
 };
 const appContextDefault: AppContextType = {
@@ -93,18 +90,11 @@ const ItemProvider: FC<Props> = ({ children }) => {
     if(!order.attributes.uid) return;
     try {
       const newOrder = await fetchAPI<Order>(`/orders/findByUid/${order.attributes.uid}`,{},{
-        populate: [
-          'customer',
-          'items',
-          'items.itemType',
-          'items.itemType.itemCategory',
-        ]
       });
       setOrder(newOrder);
       setCustomer(newOrder.attributes.customer.data);
       setItems(newOrder.attributes.items.data);
     } catch(error) {
-      console.error(error);
       setOrder(appContextDefault.order);
       setCustomer(appContextDefault.customer);
       setItems(appContextDefault.items);

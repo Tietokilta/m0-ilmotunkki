@@ -1,12 +1,17 @@
-import { ST } from "next/dist/shared/lib/utils";
+import type {
+  NextPage,
+} from 'next'
 import Link from "next/link";
+import { useRouter } from 'next/router';
 import { useContext, useState } from "react";
 import styled from "styled-components";
+import useSWR from "swr";
 import GiftCardComponent from "../../components/GiftCard";
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
+import { fetchAPI } from "../../lib/api";
 import { button, Label, Element, Checkbox } from "../../styles/styles";
-import { Customer } from "../../utils/models";
+import { ContactForm, Customer } from "../../utils/models";
 
 const Container = styled.section`
   padding: 64px;
@@ -17,32 +22,21 @@ const ItemContainer = styled.div`
 `;
 
 const ContactComponent = ({customer}: {customer: Customer}) => {
-  const data = [
-    {
-      label: 'Nimi',
-      string: `${customer.attributes.firstName} ${customer.attributes.lastName}`,
-    },
-    {
-      label: 'Sähköposti',
-      string: customer.attributes.email,
-    },
-    {
-      label: 'Aloitusvuosi',
-      string: customer.attributes.startYear,
-    },
-    {
-      label: 'Lisätiedot',
-      string: customer.attributes.extra || '-',
-    }
-  ]
+  const {locale} = useRouter();
+  const { data } = useSWR<ContactForm>(['/contact-form',locale], url => fetchAPI<ContactForm>(url,{},{
+    locale,
+    populate: 'contactForm',
+  }));
+  const fields = data?.attributes.contactForm;
+  if(!fields) return null;
   return (
     <ContactWrapper>
       <h3>Tiedot</h3>
       <BoxWrapper>
-        {data.map(row =>
-        <Flex key={row.label}>
+        {fields.map(row =>
+        <Flex key={row.fieldName}>
           <ContactLabel flex={1}>{row.label}</ContactLabel>
-          <Element flex={2}>{row.string}</Element>
+          <Element flex={2}>{customer.attributes[row.fieldName]}</Element>
         </Flex>)}
     </BoxWrapper>
     </ContactWrapper>
@@ -86,7 +80,7 @@ const Button = styled.button`
   ${button}
 `;
 
-const Summary = () => {
+const Summary: NextPage = ({}) => {
   const {customer, items} = useContext(AppContext);
   const [ termsAccepted, setTermsAccepted ] = useState(false);
   return (

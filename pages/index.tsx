@@ -4,7 +4,7 @@ import type {
   InferGetStaticPropsType} from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { Suspense, useContext } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 import ItemList from '../components/ItemList'
 import { AppContext } from '../context/AppContext'
@@ -22,6 +22,7 @@ export const getStaticProps: GetStaticProps<{content: FrontPageFields}> = async 
     props: {
       content,
     },
+    revalidate: 60,
   }
 }
 

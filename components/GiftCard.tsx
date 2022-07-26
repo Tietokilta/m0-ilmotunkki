@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { AppContext } from '../context/AppContext';
-import { fetchAPI } from '../lib/api';
+import { fetchAPI, StrapiError } from '../lib/api';
 import { Error, Input, button } from '../styles/styles';
 
 
@@ -15,23 +15,22 @@ const GiftCardComponent = () => {
   const [ giftCard, setGiftCard ] = useState('');
   const submitGiftcard = async () => {
     try {
-      await fetchAPI('/giftcard',{
+      await fetchAPI('/giftcards/addGiftCard',{
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            code: giftCard,
-            order: order.id,
-          }
+          code: giftCard,
+          orderUid: order.attributes.uid,
         }),
-      })
+      });
       refreshFields();
       setGiftCardError('');
     } catch(e) {
-      const error = e as any;
-      const { status } = error.response.data;
-      if (error.response.statusCode === 429) 
+      const error = e as StrapiError;
+      console.log(error);
+      const {message} = error;
+      if (error.status === 429) 
         return setGiftCardError('Liian monta yritystä peräkkäin. Odota hetki');
-      switch(status){
+      switch(message){
         case 'NOMATCH':
           return setGiftCardError('Ostoskorissa ei ole yhteensopivaa lippua');
         case 'DUPLICATE':

@@ -22,6 +22,9 @@ const Timer = () => {
       setTime(newTime);
     },1000);
     setIntervalValue(intervalValue);
+    return () => {
+      if(interval) clearInterval(interval);
+    }
   },[order.attributes.createdAt, created, status, interval]);
   if(!order.id) return null;
   if (!created || time <= 0 || status === 'ok') {

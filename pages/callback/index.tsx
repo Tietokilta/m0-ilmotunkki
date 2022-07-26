@@ -1,39 +1,56 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
+import type {
+  NextPage,
+  GetServerSideProps, 
+  InferGetServerSidePropsType} from 'next'
+import { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { AppContext } from '../../context/AppContext';
+import paytrailService from '../../utils/paytrail';
+import { updateOrderState } from '../api/createPayment';
 
 
 type CheckoutStatus = 'new' | 'ok' | 'fail' | 'pending' | 'delayed';
 
-const CallbackPage = () => {
-  const router = useRouter();
-  const [paymentStatus, setPaymentStatus] = useState<CheckoutStatus>('pending')
-  const [isValid, setValid] = useState<boolean | undefined>(undefined);
-  const parsed = router.query;
+export const getServerSideProps: GetServerSideProps<{isValid: boolean, paymentStatus: CheckoutStatus}> = async (context) => {
+  const data = context.query as Record<string,number | string>;
+  const isValid = paytrailService.verifyPayment(data);
+  try {
+    await updateOrderState(
+      data['checkout-reference'] as number,
+      data['checkout-status'] as string,
+      data['checkout-transaction-id'] as string,
+    );
+  } catch(error) {
+    console.error(error);
+    return {
+      props: {
+        isValid: false,
+        paymentStatus: 'fail',
+      }
+    }
+  }
+  return {
+    props: {
+      isValid,
+      paymentStatus: data['checkout-status'] as CheckoutStatus,
+    },
+  }
+}
 
-  const verifyPayment = useCallback(async () => {
-    const response = await fetch(`/api/verifyPayment`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: parsed }),
-    });
-    if(!response.ok) return setValid(false);
-    setValid(true);
-    setPaymentStatus(parsed['checkout-status'] as CheckoutStatus)
-  },[parsed]);
+type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
-  useEffect(() =>{
-    if(!parsed['checkout-status']) return;
-    verifyPayment();
-  },[parsed, verifyPayment]);
+
+const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus}) => {
+  const {refreshFields} = useContext(AppContext);
+
   useEffect(() => {
     if(isValid && paymentStatus === 'ok') {
-      sessionStorage.removeItem('orderId');
+      sessionStorage.removeItem('orderUid');
+      refreshFields();
     }
-  },[isValid, paymentStatus]);
+  },[isValid, paymentStatus, refreshFields]);
+  if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) return <div>
     Maksun käsittelyssä tapahtui virhe
     <Link href="/summary"><a>Takaisn tilaukseen</a></Link>

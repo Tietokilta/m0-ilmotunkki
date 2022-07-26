@@ -8,6 +8,7 @@ export const serverFetchAPI = <T>(
   urlParamsObject = {}) => fetchAPI<T>(path,{
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
       ...options.headers
     },
     ...options,

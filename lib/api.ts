@@ -27,19 +27,26 @@ export const fetchAPI = async <T>(
   const response = await fetch(requestUrl, mergedOptions);
   // Handle response
   if (!response.ok) {
-    console.error(`Error with ${options.method} ${path}`, response);
-    throw new Error(`An error occured please try again`);
+    const {error} = await response.json()
+    throw error;
   }
   const {data} = await response.json();
   return data as T;
 };
+
+export type StrapiError = {
+  status: number,
+  name: string,
+  message: string,
+  details: any,
+}
 
 type Media = {
   data: {
     attributes: {
       url: string;
     }
-  }
+  },
 };
 
 export const getStrapiMedia = (media: Media) => {

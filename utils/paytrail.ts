@@ -142,7 +142,7 @@ const createPayment = async (order: Order) => {
 }
 
 
-const verifyPayment = (data: Record<string,string>) => {
+const verifyPayment = (data: Record<string,string | number>) => {
   try {
     const headers = data;
     const signature = headers['signature'];

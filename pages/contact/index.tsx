@@ -1,46 +1,39 @@
 import type {
-  NextComponentType,
-} from 'next';
+  NextPage,
+  GetStaticProps, 
+  InferGetStaticPropsType} from 'next'
 import styled from 'styled-components';
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { fetchAPI } from '../../lib/api';
 import { AppContext } from '../../context/AppContext';
 import { button, Input, Label } from '../../styles/styles';
-import { StrapiBaseType } from '../../utils/models';
+import { ContactForm,Field } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useSWR from 'swr';
 
-type FormData = {
-  attributes: {
-    [key: string]: {
-      type: string;
-      [key: string]: string | number | boolean;
-    }
-  }
-}
 const Button = styled.button`
   ${button}
 `;
 
-type GenericHelperType = Record<string, any>
+export const getStaticProps: GetStaticProps<{contactForm: Field[]}> = async (context) => {
+  const formData = await fetchAPI<ContactForm>('/contact-form',{},{
+    locale: context.locale,
+    populate: 'contactForm',
+  });
+  return {
+    props: {
+      contactForm: formData.attributes.contactForm
+    },
+    revalidate: 60,
+  }
+}
 
-const cmsTypeToInputType = {
-  string: 'text',
-  text: 'text',
-  integer: 'number',
-  email: 'email',
-} as Record<string, string>
+type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-type TranslationResponse = StrapiBaseType<{
-  contactForm: Record<string,string>;
-}>;
-const Form: NextComponentType = () => {
+const Form: NextPage<PropType> = ({contactForm}) => {
   const router = useRouter();
   const {customer, refreshFields} = useContext(AppContext);
   const [inputFields, setInputFields] = useState(customer.attributes);
-  const {data} = useSWR<{schema: FormData}>('/content-type-builder/content-types/api::customer.customer', fetchAPI);
-  const formData = data?.schema;
   useEffect(() => {
     setInputFields(customer.attributes);
   },[customer])
@@ -49,11 +42,10 @@ const Form: NextComponentType = () => {
   }
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const updateFields: GenericHelperType = {...inputFields};
+    const updateFields: any = {...inputFields};
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
     delete updateFields.publishedAt;
-    delete updateFields.orders;
     await fetchAPI(`/customers/${customer.attributes.uid}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -73,34 +65,20 @@ const Form: NextComponentType = () => {
       }
     })
   }
-  if(!formData || !formData.attributes || !customer.id) return null;
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {Object.keys(formData.attributes).filter(fieldKey => {
-          const field = formData.attributes[fieldKey];
-          switch(field.type) {
-            case 'string':
-            case 'integer':
-            case 'email':
-            case 'text':
-              return true;
-            default:
-              return false;
-          }
-        }).map(fieldKey => {
-          const field = formData.attributes[fieldKey];
-          return (
-            <Label key={fieldKey}>
-              {fieldKey}
-              <Input 
-                type={cmsTypeToInputType[field.type]}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, fieldKey)}
-                value={(inputFields as GenericHelperType)[fieldKey] || ''}
-              />
-            </Label>
-          );
-        })}
+        {contactForm.map(field => (
+          <Label key={field.fieldName}>
+          {field.label}
+          <Input 
+            type={field.type}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName)}
+            value={inputFields[field.fieldName] || ''}
+            required={field.required}
+          />
+        </Label>
+        ))}
         <Button>Lähetä</Button>
       </form>
       <Link href="/">
