@@ -3,7 +3,7 @@ import type {
 } from 'next'
 import Link from "next/link";
 import { useRouter } from 'next/router';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 import GiftCardComponent from "../../components/GiftCard";
@@ -82,7 +82,11 @@ const Button = styled.button`
 
 const Summary: NextPage = ({}) => {
   const {customer, items} = useContext(AppContext);
+  const router = useRouter();
   const [ termsAccepted, setTermsAccepted ] = useState(false);
+  useEffect(() => {
+    if(!customer.attributes.firstName) router.push('/');
+  },[customer.attributes.firstName, router])
   return (
     <Container>
       <ContactComponent customer={customer}/>

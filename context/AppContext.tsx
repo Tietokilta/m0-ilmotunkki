@@ -1,5 +1,5 @@
 import {
-  createContext, useState, useEffect, FC, useCallback
+  createContext, useState, useEffect, FC, useCallback, useRef
 } from "react";
 import { fetchAPI } from "../lib/api";
 import { Customer, Item, ItemType, Order } from "../utils/models";
@@ -12,6 +12,7 @@ export interface AppContextType {
   refreshFields: () => Promise<void>;
   addItem: (item: ItemType) => Promise<void>;
   deleteItem: (itemId: number) => Promise<void>;
+  reset: () => void;
 }
 const initialCustomer =  {
   id: 0,
@@ -53,6 +54,7 @@ const appContextDefault: AppContextType = {
   refreshFields: () => Promise.resolve(),
   addItem: () => Promise.resolve(),
   deleteItem: () => Promise.resolve(),
+  reset: () => null,
 };
 
 export const AppContext = createContext<AppContextType>(appContextDefault);
@@ -61,10 +63,18 @@ type Props = {
   children: React.ReactNode
 }
 
-const ItemProvider: FC<Props> = ({ children }) => {
+const AppProvider: FC<Props> = ({ children }) => {
   const [order, setOrder] = useState<Order>(appContextDefault.order);
   const [customer, setCustomer] = useState<Customer>(appContextDefault.customer);
   const [items, setItems] = useState<Item[]>(appContextDefault.items);
+  const orderFetched = useRef(false);
+
+  const reset = useCallback(() => {
+    setOrder(appContextDefault.order);
+    setCustomer(appContextDefault.customer);
+    setItems(appContextDefault.items);
+    sessionStorage.removeItem('orderUid');
+  },[]);
 
   const initializeOrder = async () => {
     const newOrder = await fetchAPI<Order>('/orders',{
@@ -95,12 +105,9 @@ const ItemProvider: FC<Props> = ({ children }) => {
       setCustomer(newOrder.attributes.customer.data);
       setItems(newOrder.attributes.items.data);
     } catch(error) {
-      setOrder(appContextDefault.order);
-      setCustomer(appContextDefault.customer);
-      setItems(appContextDefault.items);
-      sessionStorage.removeItem('orderUid');
+      reset();
     }
-  },[order.attributes.uid]);
+  },[order.attributes.uid, reset]);
 
   const deleteItem = async (itemId: number) => {
     const itemToRemove = items.find(({attributes: {itemType}}) => itemType.data.id === itemId);
@@ -162,9 +169,11 @@ const ItemProvider: FC<Props> = ({ children }) => {
   },[]);
 
   useEffect(() => {
-    refreshFields()
-  },[refreshFields])
-
+    if(!orderFetched.current && order.attributes.uid) {
+      refreshFields();
+      orderFetched.current = true;
+    }
+  },[refreshFields, order.attributes.uid])
   return (
     <AppContext.Provider value={
       {
@@ -175,10 +184,11 @@ const ItemProvider: FC<Props> = ({ children }) => {
         refreshFields,
         addItem,
         deleteItem,
+        reset,
       }}>
       {children}
     </AppContext.Provider>
   );
 };
 
-export default ItemProvider;
+export default AppProvider;
