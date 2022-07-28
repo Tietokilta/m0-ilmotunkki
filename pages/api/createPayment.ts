@@ -27,7 +27,6 @@ const createPayment = async (orderId: number) => {
       ]
     }
   );
-  console.log('here', order);
   if (!order) throw new Error("No Order");
   const mappedCart = mappedItems(order.attributes.items.data);
   const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);

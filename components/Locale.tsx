@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useCallback, useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 
 type StyleProps = {

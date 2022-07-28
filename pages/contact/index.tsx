@@ -32,14 +32,17 @@ type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
 const Form: NextPage<PropType> = ({contactForm}) => {
   const router = useRouter();
-  const {customer, refreshFields} = useContext(AppContext);
+  const {customer, refreshFields, isEmpty} = useContext(AppContext);
   const [inputFields, setInputFields] = useState(customer.attributes);
   useEffect(() => {
     setInputFields(customer.attributes);
-  },[customer])
-  if(!customer.id) {
-    return null;
-  }
+  },[customer]);
+  useEffect(() => {
+    if(isEmpty) {
+      router.push('/');
+    }
+  },[isEmpty, router]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const updateFields: any = {...inputFields};

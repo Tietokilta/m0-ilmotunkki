@@ -1,17 +1,19 @@
 import {
-  createContext, useState, useEffect, FC, useCallback, useRef
+  createContext, useState, useEffect, FC, useCallback, useRef, useMemo
 } from "react";
+import useSWR, {mutate} from "swr";
 import { fetchAPI } from "../lib/api";
 import { Customer, Item, ItemType, Order } from "../utils/models";
 
 export interface AppContextType {
-  order: Order;
+  order?: Order;
   customer: Customer;
   items: Item[];
-  initializeOrder: () => Promise<Order>;
+  initializeOrder: () => Promise<string>;
   refreshFields: () => Promise<void>;
   addItem: (item: ItemType) => Promise<void>;
   deleteItem: (itemId: number) => Promise<void>;
+  isEmpty: boolean;
   reset: () => void;
 }
 const initialCustomer =  {
@@ -30,7 +32,7 @@ const initialCustomer =  {
     uid: '',
   }
 };
-const appContextDefault: AppContextType = {
+const appContextDefault: Required<AppContextType> = {
   customer: initialCustomer,
   order: {
     id: 0,
@@ -50,7 +52,8 @@ const appContextDefault: AppContextType = {
     }
   },
   items: [],
-  initializeOrder: () => Promise.resolve(appContextDefault.order),
+  isEmpty: true,
+  initializeOrder: () => Promise.resolve(''),
   refreshFields: () => Promise.resolve(),
   addItem: () => Promise.resolve(),
   deleteItem: () => Promise.resolve(),
@@ -64,17 +67,16 @@ type Props = {
 }
 
 const AppProvider: FC<Props> = ({ children }) => {
-  const [order, setOrder] = useState<Order>(appContextDefault.order);
-  const [customer, setCustomer] = useState<Customer>(appContextDefault.customer);
-  const [items, setItems] = useState<Item[]>(appContextDefault.items);
-  const orderFetched = useRef(false);
+  const [orderUid, setOrderUid] = useState<string | undefined>(undefined);
+  const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
+  const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
+  const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);
 
   const reset = useCallback(() => {
-    setOrder(appContextDefault.order);
-    setCustomer(appContextDefault.customer);
-    setItems(appContextDefault.items);
     sessionStorage.removeItem('orderUid');
-  },[]);
+    setOrderUid('');
+    mutateOrder(undefined);
+  },[mutateOrder]);
 
   const initializeOrder = async () => {
     const newOrder = await fetchAPI<Order>('/orders',{
@@ -83,7 +85,7 @@ const AppProvider: FC<Props> = ({ children }) => {
         data: {}
       }),
     });
-    setOrder(newOrder);
+    setOrderUid(newOrder.attributes.uid);
     sessionStorage.setItem('orderUid', String(newOrder.attributes.uid));
     const newCustomer = await fetchAPI<Customer>('/customers', {
       method: 'POST',
@@ -93,48 +95,36 @@ const AppProvider: FC<Props> = ({ children }) => {
         }
       }),
     });
-    setCustomer(newCustomer);
-    return newOrder;
+    newOrder.attributes.customer = {data:newCustomer}
+    newOrder.attributes.items = {data: appContextDefault.items}
+    mutateOrder(newOrder);
+    return newOrder.attributes.uid;
   };
-  const refreshFields = useCallback(async () => {
-    if(!order.attributes.uid) return;
-    try {
-      const newOrder = await fetchAPI<Order>(`/orders/findByUid/${order.attributes.uid}`,{},{
-      });
-      setOrder(newOrder);
-      setCustomer(newOrder.attributes.customer.data);
-      setItems(newOrder.attributes.items.data);
-    } catch(error) {
-      reset();
-    }
-  },[order.attributes.uid, reset]);
 
   const deleteItem = async (itemId: number) => {
-    const itemToRemove = items.find(({attributes: {itemType}}) => itemType.data.id === itemId);
+    const itemToRemove = items?.find(({attributes: {itemType}}) => itemType.data.id === itemId);
     if (!itemToRemove) return;
     const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
       method: 'DELETE',
     },
     {
-      orderUid: order.attributes.uid,
+      orderUid,
     });
-    const filteredItems = items.filter(item => item.id !== removeResult.id);
-    setItems(filteredItems);
+    const filteredItems = items?.filter(item => item.id !== removeResult.id) || [];
+    const newOrder = order || appContextDefault.order;
+    newOrder.attributes.items = {data:filteredItems};
+    mutateOrder(newOrder);
   };
 
   const addItem = async (itemType: ItemType) => {
-    let orderUid = order.attributes.uid;
-    if (!order.id) {
-      const result = await initializeOrder();
-      orderUid = result.attributes.uid;
-    }
+    const currentOrderUid = orderUid || await initializeOrder();
     const itemCategory = itemType.attributes.itemCategory.data;
-    const categoryItemCount = items.filter(item => 
+    const categoryItemCount = items?.filter(item => 
       item
       .attributes.itemType.data
       .attributes.itemCategory.data
       .id === itemCategory.id
-      ).length;
+      ).length || 0;
     if (categoryItemCount + 1 > itemCategory.attributes.orderItemLimit) {
       return;
     }
@@ -144,39 +134,35 @@ const AppProvider: FC<Props> = ({ children }) => {
         body: JSON.stringify({
           data: {
             itemType: itemType.id,
-            order: orderUid,
+            order: currentOrderUid,
           }
         }),
       });
-      setItems([...items, newItem]);
+      const newItems = [...items, newItem];
+      const newOrder = order || appContextDefault.order;
+      newOrder.attributes.items = {data: newItems};
+      mutateOrder(newOrder);
     } catch(error) {
     }
+  }
+  const refreshFields = async () => {
+    mutateOrder();
   }
 
   useEffect(() => {
     const savedOrderUid = sessionStorage.getItem('orderUid');
     if(savedOrderUid) {
-      setOrder(previousOrder => ({
-        attributes: {
-          ...previousOrder.attributes,
-          uid: savedOrderUid,
-        },
-        id: previousOrder.id,
-      }))
+      setOrderUid(savedOrderUid);
+      return;
     }
+    setOrderUid('');
   },[]);
-
-  useEffect(() => {
-    if(!orderFetched.current && order.attributes.uid) {
-      refreshFields();
-      orderFetched.current = true;
-    }
-  },[refreshFields, order.attributes.uid])
   return (
     <AppContext.Provider value={
       {
-        items,
-        order,
+        items: items,
+        order: order,
+        isEmpty: orderUid === '' && !error && !order, // Is empty;
         customer,
         initializeOrder,
         refreshFields,

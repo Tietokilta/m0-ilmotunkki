@@ -14,6 +14,7 @@ const GiftCardComponent = () => {
   const { order, refreshFields } = useContext(AppContext);
   const [ giftCard, setGiftCard ] = useState('');
   const submitGiftcard = async () => {
+    if(!order) return;
     try {
       await fetchAPI('/giftcards/addGiftCard',{
         method: 'POST',
@@ -26,7 +27,6 @@ const GiftCardComponent = () => {
       setGiftCardError('');
     } catch(e) {
       const error = e as StrapiError;
-      console.log(error);
       const {message} = error;
       if (error.status === 429) 
         return setGiftCardError('Liian monta yritystä peräkkäin. Odota hetki');

@@ -54,14 +54,14 @@ const Checkout = () => {
   const [skipParams, setSkipParams] = useState<Record<string,string>>({});
   const router = useRouter();
 
-  const initializePayment = useCallback(async () => {
+  const initializePayment = useCallback(async (orderId: number) => {
     const response = await fetch('/api/createPayment', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        orderId: order.id,
+        orderId,
       })
     });
     const data = await response.json();
@@ -69,17 +69,18 @@ const Checkout = () => {
       return setSkipParams(data.params);
     }
     setProviders(data.providers);
-  },[order.id]);
+  },[]);
 
   useEffect(() => {
-    if (!order.id) return;
-    initializePayment();
-  },[order.id, initializePayment]);
+    if (!order) return;
+    initializePayment(order.id);
+  },[order, initializePayment]);
 
-  if (skipParams['checkout-reference']===String(order.id)) {
-    router.push(`/callback?${qs.stringify(skipParams)}`);
-    return null;
-  }
+  useEffect(() => {
+    if (order && skipParams['checkout-reference']===String(order.id)) {
+      router.push(`/callback?${qs.stringify(skipParams)}`);
+    }
+  },[order,skipParams,router])
 
   return (
     <ProviderWrapper>

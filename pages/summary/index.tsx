@@ -81,12 +81,14 @@ const Button = styled.button`
 `;
 
 const Summary: NextPage = ({}) => {
-  const {customer, items} = useContext(AppContext);
+  const {customer, items, isEmpty} = useContext(AppContext);
   const router = useRouter();
   const [ termsAccepted, setTermsAccepted ] = useState(false);
   useEffect(() => {
-    if(!customer.attributes.firstName) router.push('/');
-  },[customer.attributes.firstName, router])
+    if(isEmpty) {
+      router.push('/');
+    }
+  },[isEmpty, router]);
   return (
     <Container>
       <ContactComponent customer={customer}/>
@@ -102,7 +104,11 @@ const Summary: NextPage = ({}) => {
       </Label>
       <NavigationButtons>
       <Link passHref href="/contact"><Button>Takaisin</Button></Link>
-      <Link passHref href="/checkout"><Button disabled={!termsAccepted || items.length === 0}>Maksamaan</Button></Link>
+      <Link passHref href="/checkout"><Button disabled={
+        !termsAccepted
+        || items.length === 0
+        || !customer.attributes.firstName
+        }>Maksamaan</Button></Link>
     </NavigationButtons>
     </Container>
   );
