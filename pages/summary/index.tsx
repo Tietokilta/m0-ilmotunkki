@@ -36,7 +36,11 @@ const ContactComponent = ({customer}: {customer: Customer}) => {
         {fields.map(row =>
         <Flex key={row.fieldName}>
           <ContactLabel flex={1}>{row.label}</ContactLabel>
-          <Element flex={2}>{customer.attributes[row.fieldName]}</Element>
+          <Element flex={2}>{
+          row.type === 'checkbox' ?
+          customer.attributes[row.fieldName] ? 'Kyllä' : 'Ei'
+          :customer.attributes[row.fieldName]
+          }</Element>
         </Flex>)}
     </BoxWrapper>
     </ContactWrapper>

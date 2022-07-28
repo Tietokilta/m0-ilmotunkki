@@ -33,7 +33,7 @@ type PropType = InferGetStaticPropsType<typeof getStaticProps>
 const Form: NextPage<PropType> = ({contactForm}) => {
   const router = useRouter();
   const {customer, refreshFields, isEmpty} = useContext(AppContext);
-  const [inputFields, setInputFields] = useState(customer.attributes);
+  const [inputFields, setInputFields] = useState<Record<string,any>>(customer.attributes);
   useEffect(() => {
     setInputFields(customer.attributes);
   },[customer]);
@@ -60,11 +60,13 @@ const Form: NextPage<PropType> = ({contactForm}) => {
     await refreshFields();
     router.push('/summary');
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement>, key: string) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>, key: string, type: string) => {
+    const value = type === 'checkbox' ? event.target.checked : event.target.value;
+    console.log(value);
     setInputFields(previousKeys => {
       return {
         ...previousKeys,
-        [key]: event.target.value,
+        [key]: value,
       }
     })
   }
@@ -76,8 +78,9 @@ const Form: NextPage<PropType> = ({contactForm}) => {
           {field.label}
           <Input 
             type={field.type}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName)}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
             value={inputFields[field.fieldName] || ''}
+            checked={inputFields[field.fieldName] || false}
             required={field.required}
           />
         </Label>
