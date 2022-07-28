@@ -47,21 +47,17 @@ const itemCount = (items: Item[], itemId: number) => items.filter(
     }
   }) => data.id === itemId).length;
 
-const isSoldOut = (itemType: ItemType, itemCategories: ItemCategory[]) => {
-  const category = itemCategories.find(c => c.id === itemType.attributes.itemCategory.data.id);
-  if(!category) return true;
+const isSoldOut = (itemType: ItemType, category: ItemCategory) => {
   if(category.attributes.overflowItem.data?.id === itemType.id) return false;
   return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
 }
 const ItemList: React.FC = () => {
-  const {data: itemTypes} = useSWR('/item-types', url => fetchAPI<ItemType[]>(url,{},{
-    populate: ['itemCategory'],
-  }));
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
-    populate: ['overflowItem'],
+    populate: ['overflowItem','itemTypes'],
   }));
   const { addItem, deleteItem, items } = useContext(AppContext);
-  const handleClick = async (item: ItemType) => {
+  const handleClick = async (item: ItemType, category: ItemCategory) => {
+    item.attributes.itemCategory = {data: category};
     await addItem(item);
     mutateCategories();
   };
@@ -72,26 +68,21 @@ const ItemList: React.FC = () => {
   }
   return (
     <ItemContainer>
-      {itemTypes?.filter(item => {
-        // Do not show reserve, unless soldOut and empty cart
-        const categoryId = item.attributes.itemCategory.data.id;
-        const category = itemCategories?.find(c => c.id === categoryId);
-        if (!category) return false;
-        const overflowItem = category.attributes.overflowItem.data;
-        const isOverflowItem = overflowItem?.id === item.id;
-        if(!isOverflowItem) return true;
-        const soldOut = category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
-        return soldOut;
-      }).map(item =>
-      <ItemWrapper onClick={() => handleClick(item)} key={item.id}>
+      {itemCategories?.sort((a,b) => a.id-b.id).map(category => 
+        category.attributes.itemTypes.data.filter(item => {
+          if(category.attributes.overflowItem.data?.id !== item.id) return true;
+          return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
+        }).map(item => 
+          <ItemWrapper onClick={() => handleClick(item, category)} key={item.id}>
         <ItemLabel>
           {item.attributes.slug}
         </ItemLabel>
         <ItemPrice>{item.attributes.price} €</ItemPrice>
         <ItemCount>{itemCount(items, item.id)} kpl</ItemCount>
-        {isSoldOut(item, itemCategories || []) && <ItemLabel>Loppuunmyyty</ItemLabel>}
+        {isSoldOut(item, category) && <ItemLabel>Loppuunmyyty</ItemLabel>}
         <DeleteItem onClick={(e) => handleDelete(e,item)}>-</DeleteItem>
-      </ItemWrapper>)} 
+      </ItemWrapper>)
+      )}
     </ItemContainer>
   );
 }

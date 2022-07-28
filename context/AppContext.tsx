@@ -114,7 +114,8 @@ const AppProvider: FC<Props> = ({ children }) => {
     if (!itemToRemove) return;
     const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
       method: 'DELETE',
-    },{
+    },
+    {
       orderUid: order.attributes.uid,
     });
     const filteredItems = items.filter(item => item.id !== removeResult.id);
@@ -146,9 +147,6 @@ const AppProvider: FC<Props> = ({ children }) => {
             order: orderUid,
           }
         }),
-      },
-      {
-        populate: ['itemType', 'itemType.itemCategory']
       });
       setItems([...items, newItem]);
     } catch(error) {
