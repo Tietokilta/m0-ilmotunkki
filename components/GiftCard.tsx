@@ -1,13 +1,6 @@
 import { ChangeEvent, useState, useContext } from 'react';
-import styled from 'styled-components';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, StrapiError } from '../lib/api';
-import { Error, Input, button } from '../styles/styles';
-
-
-const Button = styled.button`
-  ${button};
-`;
 
 const GiftCardComponent = () => {
   const [ giftCardError, setGiftCardError ] = useState('');
@@ -47,58 +40,26 @@ const GiftCardComponent = () => {
     setGiftCard(e.target.value);
   }
   return(
-    <FullWidth>
-      <StyledGiftCard>
-        <StyledInput
+    <div className='w-full'>
+      <div className='mt-2 flex gap-2 w-full'>
+        <input
+          className='tx-input'
           type="text"
           name="giftCard"
           value={giftCard}
           onChange={handleGiftCardChange}
           placeholder='Lahjakorttikoodi'
-        ></StyledInput>
-        <GiftCardButton
+        />
+        <button
+          className='btn'
           disabled={false || giftCard.length === 0}
           onClick={submitGiftcard}>
           Lisää
-        </GiftCardButton>
-      </StyledGiftCard>
-      <Error>{giftCardError}</Error>
-    </FullWidth>
+        </button>
+      </div>
+      <p className='text-red-400'>{giftCardError}</p>
+    </div>
   )
 }
-
-const FullWidth = styled.div`
-  width: 100%;
-`
-
-const StyledGiftCard = styled.div`
-  margin: 8px 0;
-  display: flex;
-  gap: 8px;
-  width: 100%;
-`;
-
-const StyledInput = styled(Input)`
-  margin: 0;
-  font-size: 1.2rem;
-  flex: 1;
-`;
-
-
-const GiftCardButton = styled(Button)`
-  background-color: ${props => props.theme.primary};
-  border: 2px solid ${props => props.theme.secondary};
-  color: ${props => props.theme.secondary};
-  @media (hover: hover) {
-    &:hover:enabled {
-      background-color: ${props => props.theme.primary};
-    }
-    &:active:enabled {
-      transform: translateY(-1px);
-    }
-  }
-  &:hover{
-  }
-`
 
 export default GiftCardComponent;

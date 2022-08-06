@@ -3,10 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     loader: "default",
-    domains: ["localhost"],
-  },
-  compiler: {
-    styledComponents: true,
+    domains: ["localhost", "static.paytrail.com"],
   },
   i18n: {
     locales: ['fi', 'en',],

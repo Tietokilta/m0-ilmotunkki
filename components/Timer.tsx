@@ -1,12 +1,8 @@
 import { useContext, useEffect, useState } from "react"
-import styled from "styled-components";
 import { AppContext } from "../context/AppContext"
 
 const padNumber = (number: number) => String(number).length > 1 ? String(number) : `0${number}`;
 
-const TimerWrapper = styled.div`
-  height: 1rem;
-`
 type TimerProps = {
   status: string;
   created: Date;
@@ -57,7 +53,7 @@ const Parent = () => {
     reset();
   }
   return (
-    <TimerWrapper>
+    <div className='h-4'>
       {order &&
       order.attributes.createdAt &&
       order.attributes.status !== 'ok'
@@ -65,7 +61,7 @@ const Parent = () => {
         created={new Date(order.attributes.createdAt)}
         reset={handleReset}
         status={order.attributes.status} />}
-    </TimerWrapper>
+    </div>
   )
 }
 

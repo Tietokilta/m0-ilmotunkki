@@ -3,7 +3,6 @@ import type {
   GetServerSideProps, 
   InferGetServerSidePropsType} from 'next'
 import { useEffect, useContext } from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
 import { AppContext } from '../../context/AppContext';
 import paytrailService from '../../utils/paytrail';
@@ -57,14 +56,10 @@ const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus}) => {
     </div>
   if (paymentStatus !== 'ok') return <div>Maksu keskeytyi</div>
   return (
-    <Wrapper>
-      <h1>Onnistuit Jee</h1>
-    </Wrapper>
+    <div className='container'>
+      <h1>Maksu onnistui</h1>
+    </div>
   );
 }
-const Wrapper = styled.div`
-  
-`
-
 
 export default CallbackPage

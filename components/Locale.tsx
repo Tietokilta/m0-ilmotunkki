@@ -1,17 +1,4 @@
 import { useRouter } from 'next/router';
-import styled, { css } from 'styled-components';
-
-type StyleProps = {
-  selected?: boolean;
-}
-
-const LocaleItem = styled.span<StyleProps>`
-  font-weight: 600;
-  ${props => props.selected && css`border-bottom: 1px solid ${props.theme.secondaryLight};`}
-  margin: 4px;
-  text-transform: uppercase;
-  cursor: pointer;
-`
 
 const Locale = () => {
   const router = useRouter();
@@ -19,12 +6,17 @@ const Locale = () => {
   return (
     <div>
       {router.locales?.map(locale => (
-        <LocaleItem
+        <span
+          className='m-1 uppercase cursor-pointer font-bold select'
           key={locale}
-          selected={router.locale === locale}
           onClick={() => router.push({ pathname, query }, asPath, { locale, })}>
+          <style jsx>{`
+            .select {
+              ${router.locale === locale && `border-bottom: 2px solid black`}
+            }
+        `}</style>
           {locale}
-      </LocaleItem>
+      </span>
       ))}
     </div>
   )

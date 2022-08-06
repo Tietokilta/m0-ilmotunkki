@@ -2,18 +2,12 @@ import type {
   NextPage,
   GetStaticProps, 
   InferGetStaticPropsType} from 'next'
-import styled from 'styled-components';
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { fetchAPI } from '../../lib/api';
 import { AppContext } from '../../context/AppContext';
-import { button, Input, Label } from '../../styles/styles';
 import { ContactForm,Field } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
-const Button = styled.button`
-  ${button}
-`;
 
 export const getStaticProps: GetStaticProps<{contactForm: Field[]}> = async (context) => {
   const formData = await fetchAPI<ContactForm>('/contact-form',{},{
@@ -71,24 +65,29 @@ const Form: NextPage<PropType> = ({contactForm}) => {
     })
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="container max-w-3xl mx-auto">
+      <form className='mb-6' 
+            onSubmit={handleSubmit}>
         {contactForm.map(field => (
-          <Label key={field.fieldName}>
-          {field.label}
-          <Input 
-            type={field.type}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
-            value={inputFields[field.fieldName] || ''}
-            checked={inputFields[field.fieldName] || false}
-            required={field.required}
-          />
-        </Label>
+          <div key={field.fieldName}>
+            <label className='text-sky-700 block'>
+            {field.label}
+            <input
+              className='tx-input'
+              type={field.type}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
+              value={inputFields[field.fieldName] || ''}
+              checked={inputFields[field.fieldName] || false}
+              required={field.required}
+            />
+          </label>
+          </div>
+
         ))}
-        <Button>Lähetä</Button>
+          <button className='btn'>Lähetä</button>
       </form>
       <Link href="/">
-        <Button>Takaisin</Button>
+        <a className='btn'>Takaisin</a>
       </Link>
     </div>
 

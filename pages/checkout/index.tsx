@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import Image from 'next/image';
 import {useRouter} from 'next/router';
 import { useContext, useEffect, useState, useCallback } from 'react';
 import { AppContext } from '../../context/AppContext';
@@ -16,37 +16,6 @@ interface PaymentProvider {
     value: string
   }[];
 }
-
-const Provider = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  @media only screen and (max-width: 1000px) {
-    width: 150px;
-  }
-`
-const ProviderButton = styled.button`
-  background: transparent;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-`;
-
-const ProviderImage = styled.img`
-  height: 100%;
-  width: 100%;
-`
-
-const ProviderWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  padding: 64px;
-`;
 
 const Checkout = () => {
   const {order} = useContext(AppContext);
@@ -83,15 +52,19 @@ const Checkout = () => {
   },[order,skipParams,router])
 
   return (
-    <ProviderWrapper>
+    <main className='container flex flex-wrap justify-center gap-3 p-2'>
       {paymentProviders.filter(provider => provider.group !== 'credit').map(provider =>
-      <Provider key={provider.name} method="POST" action={provider.url}>
+      <form
+      className='flex justify-center items-center w-40'
+       key={provider.name} method="POST" action={provider.url}>
         {provider.parameters && provider.parameters.map(parameter => 
           <input key={parameter.name} type='hidden' name={parameter.name} value={parameter.value} />
         )}
-        <ProviderButton><ProviderImage src={provider.svg} alt={`${provider.name}-icon`}/></ProviderButton>
-      </Provider>)}
-    </ProviderWrapper>
+        <button className='bg-transparent border-black border rounded h-full w-full'>
+          <Image height={60} width={150} src={provider.svg} alt={`${provider.name}-icon`}/>
+          </button>
+      </form>)}
+    </main>
   );
 }
 

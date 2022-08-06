@@ -1,43 +1,9 @@
-import styled from 'styled-components';
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
 import { fetchAPI } from '../lib/api';
 
-
-const ItemWrapper = styled.div`
-  text-align: center;
-  box-shadow: 0 1px 2px hsl(0, 0%, 35%);
-  width: 100%;
-  cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
-const ItemContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 200px);
-  gap: 32px;
-`;
-
-const ItemLabel = styled.p`
-  font-size: 1rem;
-`;
-
-const ItemPrice = styled.p`
-  color: hsl(0, 0%, 35%);
-`;
-
-const ItemCount = styled.p`
-  color: hsl(0, 0%, 34.90196078431372%);
-`;
-
-const DeleteItem = styled.button`
-
-`;
 const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
     attributes: {
@@ -67,23 +33,28 @@ const ItemList: React.FC = () => {
     mutateCategories();
   }
   return (
-    <ItemContainer>
+    <div className='grid grid-cols-3 gap-8 my-8'>
       {itemCategories?.sort((a,b) => a.id-b.id).map(category => 
         category.attributes.itemTypes.data.filter(item => {
           if(category.attributes.overflowItem.data?.id !== item.id) return true;
           return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
         }).map(item => 
-          <ItemWrapper onClick={() => handleClick(item, category)} key={item.id}>
-        <ItemLabel>
-          {item.attributes.slug}
-        </ItemLabel>
-        <ItemPrice>{item.attributes.price} €</ItemPrice>
-        <ItemCount>{itemCount(items, item.id)} kpl</ItemCount>
-        {isSoldOut(item, category) && <ItemLabel>Loppuunmyyty</ItemLabel>}
-        <DeleteItem onClick={(e) => handleDelete(e,item)}>-</DeleteItem>
-      </ItemWrapper>)
+        <div onClick={() => handleClick(item, category)} key={item.id} 
+            className='text-center shadow shadow-gray-400 cursor-pointer transition hover:bg-gray-50'>
+          <p>
+            {item.attributes.slug}
+          </p>
+          <p className='text-gray-500'>{item.attributes.price} €</p>
+          <p className='text-gray-500'>{itemCount(items, item.id)} kpl</p>
+          {isSoldOut(item, category) && <p>Loppuunmyyty</p>}
+          <button
+            onClick={(e) => handleDelete(e,item)}
+            className='btn'
+            disabled={itemCount(items, item.id) === 0}
+            >-</button>
+        </div>)
       )}
-    </ItemContainer>
+    </div>
   );
 }
 

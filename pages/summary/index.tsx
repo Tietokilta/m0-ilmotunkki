@@ -4,22 +4,12 @@ import type {
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
 import useSWR from "swr";
 import GiftCardComponent from "../../components/GiftCard";
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
 import { fetchAPI } from "../../lib/api";
-import { button, Label, Element, Checkbox } from "../../styles/styles";
 import { ContactForm, Customer } from "../../utils/models";
-
-const Container = styled.section`
-  padding: 64px;
-  max-width: ${props => props.theme.commonWidth};
-  margin: auto;
-`;
-const ItemContainer = styled.div`
-`;
 
 const ContactComponent = ({customer}: {customer: Customer}) => {
   const {locale} = useRouter();
@@ -30,60 +20,24 @@ const ContactComponent = ({customer}: {customer: Customer}) => {
   const fields = data?.attributes.contactForm;
   if(!fields) return null;
   return (
-    <ContactWrapper>
-      <h3>Tiedot</h3>
-      <BoxWrapper>
+    <div className='mb-5'>
+      <h3 className='text-lg'>Tiedot</h3>
+      <div className='shadow-lg rounded p-4 flex flex-col gap-2'>
         {fields.map(row =>
-        <Flex key={row.fieldName}>
-          <ContactLabel flex={1}>{row.label}</ContactLabel>
-          <Element flex={2}>{
+        <div
+        className='flex flex-col sm:flex-row'
+        key={row.fieldName}>
+          <div className='flex-1 text-sm sm:text-base'>{row.label}</div>
+          <div className='flex-1'>{
           row.type === 'checkbox' ?
           customer.attributes[row.fieldName] ? 'Kyllä' : 'Ei'
           :customer.attributes[row.fieldName]
-          }</Element>
-        </Flex>)}
-    </BoxWrapper>
-    </ContactWrapper>
+          }</div>
+        </div>)}
+    </div>
+    </div>
   );
 }
-const ContactLabel = styled(Element)`
-  @media only screen and (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-`
-
-const BoxWrapper = styled.div`
-  box-shadow: 2px 2px 10px ${props => props.theme.primaryAccent};
-  border-radius: 5px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const ContactWrapper = styled.section`
-  max-width: 450px;
-  margin: 12px auto;
-`
-const StyledLink = styled.a`
-  text-decoration: none;
-  color: ${props => props.theme.secondaryDark};
-`;
-const Flex = styled.div`
-  display: flex;
-  @media only screen and (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-const NavigationButtons = styled.div`
-  display: flex;
-  gap: 8px;
-`
-
-const Button = styled.button`
-  ${button}
-`;
-
 const Summary: NextPage = ({}) => {
   const {customer, items, isEmpty} = useContext(AppContext);
   const router = useRouter();
@@ -94,27 +48,33 @@ const Summary: NextPage = ({}) => {
     }
   },[isEmpty, router]);
   return (
-    <Container>
+    <div className='container mx-auto px-4'>
       <ContactComponent customer={customer}/>
-      <ItemContainer>
+      <div>
         <Order items={items}><GiftCardComponent/></Order>
-      </ItemContainer>
-      <Label>
-      <Checkbox type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)}/>
-        Olen lukenut
-        <Link href="/ehdot" passHref>
-          <StyledLink> käyttöehdot</StyledLink>
-        </Link>
-      </Label>
-      <NavigationButtons>
-      <Link passHref href="/contact"><Button>Takaisin</Button></Link>
-      <Link passHref href="/checkout"><Button disabled={
+      </div>
+      <div className='my-2'>
+        <label className='text-sky-700'>
+        <input
+          className='h-4 w-4 mr-3 bg-transparent'
+          type="checkbox"
+          checked={termsAccepted}
+          onChange={(event) => setTermsAccepted(event.target.checked)}/>
+          Olen lukenut <Link href="/ehdot" passHref>
+            <a className='text-sky-900 underline'>käyttöehdot</a>
+          </Link>
+        </label>
+      </div>
+
+      <div className='flex gap-2'>
+      <Link passHref href="/contact"><a className='btn'>Takaisin</a></Link>
+      <Link passHref href="/checkout"><button className='btn' disabled={
         !termsAccepted
         || items.length === 0
         || !customer.attributes.firstName
-        }>Maksamaan</Button></Link>
-    </NavigationButtons>
-    </Container>
+        }>Maksamaan</button></Link>
+    </div>
+    </div>
   );
 }
 
