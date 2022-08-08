@@ -1,15 +1,32 @@
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+import { fetchAPI } from '../lib/api';
 
 const Locale = () => {
   const router = useRouter();
-  const { pathname, asPath, query } = router
+  const {customer} = useContext(AppContext);
+  const { pathname, asPath, query } = router;
+  const handleClick = async (locale: string) => {
+    router.push({ pathname, query }, asPath, { locale, });
+    if(!customer.attributes.uid) return;
+    await fetchAPI(`/customers/${customer.attributes.uid}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        data: {
+          locale,
+        }
+      }),
+    });
+  }
+
   return (
     <div>
       {router.locales?.map(locale => (
         <span
           className='m-1 uppercase cursor-pointer font-bold select'
           key={locale}
-          onClick={() => router.push({ pathname, query }, asPath, { locale, })}>
+          onClick={() => handleClick(locale)}>
           <style jsx>{`
             .select {
               ${router.locale === locale && `border-bottom: 2px solid black`}

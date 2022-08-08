@@ -68,5 +68,6 @@ export type Customer = StrapiBaseType<{
   lastName: string;
   email: string;
   uid: string;
+  locale: string;
   [key: string]: string | number;
 }>

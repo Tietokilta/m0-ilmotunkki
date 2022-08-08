@@ -33,25 +33,32 @@ const ItemList: React.FC = () => {
     mutateCategories();
   }
   return (
-    <div className='grid grid-cols-3 gap-8 my-8'>
+    <div >
       {itemCategories?.sort((a,b) => a.id-b.id).map(category => 
         category.attributes.itemTypes.data.filter(item => {
           if(category.attributes.overflowItem.data?.id !== item.id) return true;
           return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
         }).map(item => 
-        <div onClick={() => handleClick(item, category)} key={item.id} 
-            className='text-center shadow shadow-gray-400 cursor-pointer transition hover:bg-gray-50'>
-          <p>
+        <div key={item.id} 
+            className='flex gap-2 text-center border-b-2 border-b-gray-200 mb-4 last:border-none items-center'>
+          <p className='flex-1'>
             {item.attributes.slug}
           </p>
-          <p className='text-gray-500'>{item.attributes.price} €</p>
-          <p className='text-gray-500'>{itemCount(items, item.id)} kpl</p>
+          <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
           {isSoldOut(item, category) && <p>Loppuunmyyty</p>}
+          <div className='flex-1 gap-4 flex items-center'>
           <button
-            onClick={(e) => handleDelete(e,item)}
-            className='btn'
-            disabled={itemCount(items, item.id) === 0}
-            >-</button>
+            onClick={() => handleClick(item, category)}
+            className='btn mb-4'
+            >+</button>
+            <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
+            <button
+              onClick={(e) => handleDelete(e,item)}
+              className='btn mb-4'
+              disabled={itemCount(items, item.id) === 0}
+              >-</button>
+          </div>
+
         </div>)
       )}
     </div>

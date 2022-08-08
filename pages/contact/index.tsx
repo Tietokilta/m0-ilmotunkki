@@ -40,6 +40,7 @@ const Form: NextPage<PropType> = ({contactForm}) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const updateFields: any = {...inputFields};
+    updateFields.locale = router.locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
     delete updateFields.publishedAt;

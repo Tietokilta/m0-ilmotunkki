@@ -24,6 +24,7 @@ const initialCustomer =  {
     createdAt: '',
     email: '',
     extra: '',
+    locale: '',
     phone: '',
     postalCode: '',
     publishedAt: '',
