@@ -5,18 +5,31 @@ import type {
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { fetchAPI } from '../../lib/api';
 import { AppContext } from '../../context/AppContext';
-import { ContactForm,Field } from '../../utils/models';
+import { ContactForm,Field, Translation } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { transformTranslations } from '../../utils/helpers';
 
-export const getStaticProps: GetStaticProps<{contactForm: Field[]}> = async (context) => {
-  const formData = await fetchAPI<ContactForm>('/contact-form',{},{
-    locale: context.locale,
-    populate: 'contactForm',
-  });
+
+type StaticPropType = {
+  contactForm: Field[],
+  translation: Record<string, string>
+}
+export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
+  const [formData, translation] = await Promise.all([
+    fetchAPI<ContactForm>('/contact-form',{},{
+      locale: context.locale,
+      populate: 'contactForm',
+    }),
+    fetchAPI<Translation>('/translation',{},{
+      locale: context.locale,
+      populate: ['translations']
+    }),
+  ]);
   return {
     props: {
-      contactForm: formData.attributes.contactForm
+      contactForm: formData.attributes.contactForm,
+      translation: transformTranslations(translation),
     },
     revalidate: 60,
   }
@@ -24,7 +37,7 @@ export const getStaticProps: GetStaticProps<{contactForm: Field[]}> = async (con
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Form: NextPage<PropType> = ({contactForm}) => {
+const Form: NextPage<PropType> = ({contactForm, translation}) => {
   const router = useRouter();
   const {customer, refreshFields, isEmpty} = useContext(AppContext);
   const [inputFields, setInputFields] = useState<Record<string,any>>(customer.attributes);
@@ -57,7 +70,6 @@ const Form: NextPage<PropType> = ({contactForm}) => {
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>, key: string, type: string) => {
     const value = type === 'checkbox' ? event.target.checked : event.target.value;
-    console.log(value);
     setInputFields(previousKeys => {
       return {
         ...previousKeys,
@@ -85,10 +97,10 @@ const Form: NextPage<PropType> = ({contactForm}) => {
           </div>
 
         ))}
-          <button className='btn'>Lähetä</button>
+          <button className='btn'>{translation.send}</button>
       </form>
       <Link href="/">
-        <a className='btn'>Takaisin</a>
+        <a className='btn'>{translation.back}</a>
       </Link>
     </div>
 

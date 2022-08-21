@@ -8,17 +8,30 @@ import { useContext } from 'react'
 import ItemList from '../components/ItemList'
 import { AppContext } from '../context/AppContext'
 import { fetchAPI } from '../lib/api'
-import { FrontPageFields } from '../utils/models'
+import { transformTranslations } from '../utils/helpers'
+import { FrontPageFields, Translation } from '../utils/models'
 
-export const getStaticProps: GetStaticProps<{content: FrontPageFields}> = async (context) => {
-  const [content] = await Promise.all([
+type StaticPropType = {
+  content: FrontPageFields,
+  translation: Record<string,string>
+}
+export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
+  const [
+    content,
+    translation,
+    ] = await Promise.all([
     fetchAPI<FrontPageFields>('/front-page',{},{
       locale: context.locale,
-    })
+    }),
+    fetchAPI<Translation>('/translation',{},{
+      locale: context.locale,
+      populate: ['translations']
+    }),
   ]);
   return {
     props: {
       content,
+      translation: transformTranslations(translation)
     },
     revalidate: 60,
   }
@@ -26,7 +39,7 @@ export const getStaticProps: GetStaticProps<{content: FrontPageFields}> = async 
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Home: NextPage<PropType> = ({content}) => {
+const Home: NextPage<PropType> = ({content,translation}) => {
   const {items} = useContext(AppContext)
   const { title, bodyText } = content.attributes;
 
@@ -42,10 +55,10 @@ const Home: NextPage<PropType> = ({content}) => {
           <p className="text-base mt-0 mb-4">
             {bodyText}
           </p>
-          <ItemList />
+          <ItemList translation={translation} />
           {items.length > 0 && 
           <Link href={'/contact'} passHref>
-            <a className="btn">Seuraava</a>
+            <a className="btn">{translation.next}</a>
           </Link>}
       </main>
     </div>

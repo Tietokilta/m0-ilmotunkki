@@ -3,16 +3,19 @@ import { Item } from "../utils/models";
 
 type PropType = {
   items: Item[];
+  translation: Record<string,string>;
   children?: React.ReactNode;
 }
 
-const Order: React.FC<PropType> = ({items: cartItems, children}) => {
-  const items = mappedItems(cartItems);
+const Order: React.FC<PropType> = ({items: cartItems, translation, children}) => {
+  const items = mappedItems(cartItems,translation);
   const totalQuantity = items.reduce((acc,item) => item.quantity + acc,0);
   const cartTotal = items.reduce((acc,item) => item.quantity*item.price + acc,0);
   return (
     <div className='shadow-lg rounded p-4'>
-      <div className='flex-[4] p-1 pl-2 font-bold border-b-2 border-b-gray-300'>{totalQuantity} {totalQuantity === 1 ? 'tuote' : 'tuotetta'}</div>
+      <div className='flex-[4] p-1 pl-2 font-bold border-b-2 border-b-gray-300'>
+        {translation.products}
+      </div>
       {items.map(item => {
         if (!item.quantity) return null;
         return (

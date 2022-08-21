@@ -1,6 +1,7 @@
 import crypto from 'crypto';
-import { mappedItems } from './helpers';
-import { Order } from './models';
+import { fetchAPI } from '../lib/api';
+import { mappedItems, transformTranslations } from './helpers';
+import { Order, Translation } from './models';
 
 type PaymentBodyItem = {
   unitPrice: number;
@@ -71,8 +72,8 @@ const calculateHmac = (
   return crypto.createHmac('sha256', SECRET_KEY).update(payload).digest('hex');
 }
 
-const generatePaymentBody = (order: Order) => {
-  const mappedCart = mappedItems(order.attributes.items.data);
+const generatePaymentBody = (order: Order, translation: Record<string,string>) => {
+  const mappedCart = mappedItems(order.attributes.items.data,translation);
   const items: PaymentBodyItem[] = mappedCart.map(item => {
     return {
       unitPrice: item.price*100,
@@ -120,7 +121,11 @@ const createSkipPayment = async (order: Order) => {
 }
 
 const createPayment = async (order: Order) => {
-  const body = generatePaymentBody(order);
+  const translation = await fetchAPI<Translation>('/translation',{},{
+    locale: order.attributes.customer.data.attributes.locale,
+    populate: ['translations']
+  })
+  const body = generatePaymentBody(order, transformTranslations(translation));
   const headers = {
     'checkout-account': MERCHANT_ID,
     'checkout-algorithm': 'sha256',

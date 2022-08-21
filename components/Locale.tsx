@@ -19,7 +19,9 @@ const Locale = () => {
       }),
     });
   }
-
+  if(router.pathname === '/callback') {
+    return null;
+  }
   return (
     <div>
       {router.locales?.map(locale => (

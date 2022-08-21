@@ -7,13 +7,32 @@ import Link from 'next/link';
 import { AppContext } from '../../context/AppContext';
 import paytrailService from '../../utils/paytrail';
 import { updateOrderState } from '../api/createPayment';
+import { serverFetchAPI } from '../../lib/serverApi';
+import { CallbackPageFields, Translation } from '../../utils/models';
+import { fetchAPI } from '../../lib/api';
+import { transformTranslations } from '../../utils/helpers';
 
 
 type CheckoutStatus = 'new' | 'ok' | 'fail' | 'pending' | 'delayed';
 
-export const getServerSideProps: GetServerSideProps<{isValid: boolean, paymentStatus: CheckoutStatus}> = async (context) => {
+type ServerPropsType = {
+  isValid: boolean;
+  paymentStatus: CheckoutStatus;
+  translation: Record<string,string>;
+  content: CallbackPageFields;
+}
+
+export const getServerSideProps: GetServerSideProps<ServerPropsType> = async (context) => {
+  const [content, translation] = await Promise.all([
+    serverFetchAPI<CallbackPageFields>('/callback-page'),
+    fetchAPI<Translation>('/translation',{},{
+      locale: context.locale,
+      populate: ['translations']
+    }),
+  ]);
   const data = context.query as Record<string,number | string>;
   const isValid = paytrailService.verifyPayment(data);
+  console.log({isValid});
   try {
     await updateOrderState(
       data['checkout-reference'] as number,
@@ -26,6 +45,8 @@ export const getServerSideProps: GetServerSideProps<{isValid: boolean, paymentSt
       props: {
         isValid: false,
         paymentStatus: 'fail',
+        content,
+        translation: transformTranslations(translation),
       }
     }
   }
@@ -33,6 +54,8 @@ export const getServerSideProps: GetServerSideProps<{isValid: boolean, paymentSt
     props: {
       isValid,
       paymentStatus: data['checkout-status'] as CheckoutStatus,
+      content,
+      translation: transformTranslations(translation),
     },
   }
 }
@@ -40,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<{isValid: boolean, paymentSt
 type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
 
-const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus}) => {
+const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus, content, translation}) => {
   const {refreshFields} = useContext(AppContext);
 
   useEffect(() => {
@@ -49,15 +72,19 @@ const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus}) => {
       refreshFields();
     }
   },[isValid, paymentStatus, refreshFields]);
+  console.log(isValid, paymentStatus);
   if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) return <div>
-    Maksun käsittelyssä tapahtui virhe
-    <Link href="/summary"><a>Takaisn tilaukseen</a></Link>
+    {content.attributes.onError}
+    <Link href="/summary"><a>{translation.backToOrder}</a></Link>
     </div>
-  if (paymentStatus !== 'ok') return <div>Maksu keskeytyi</div>
+    if (paymentStatus !== 'ok') return <div>
+      {content.attributes.onCancel}
+      <Link href="/summary"><a>{translation.backToOrder}</a></Link>
+    </div>
   return (
     <div className='container'>
-      <h1>Maksu onnistui</h1>
+      {content.attributes.onSuccess}
     </div>
   );
 }

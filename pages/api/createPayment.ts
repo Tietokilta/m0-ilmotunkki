@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { fetchAPI } from '../../lib/api';
 import { serverFetchAPI } from '../../lib/serverApi';
-import { mappedItems } from '../../utils/helpers';
-import { Order } from '../../utils/models'
+import { mappedItems, transformTranslations } from '../../utils/helpers';
+import { Order, Translation } from '../../utils/models'
 import paytrailService from '../../utils/paytrail';
 
 export const updateOrderState = async (orderId: number, status: string, transactionId?: string) => {
@@ -28,7 +29,11 @@ const createPayment = async (orderId: number) => {
     }
   );
   if (!order) throw new Error("No Order");
-  const mappedCart = mappedItems(order.attributes.items.data);
+  const translation = await fetchAPI<Translation>('/translation',{},{
+    locale: order.attributes.customer.data.attributes.locale,
+    populate: ['translations']
+  })
+  const mappedCart = mappedItems(order.attributes.items.data, transformTranslations(translation));
   const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   await updateOrderState(order.id, 'pending');
   if (total === 0) return paytrailService.createSkipPayment(order);

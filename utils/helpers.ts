@@ -1,4 +1,4 @@
-import { Item } from "./models";
+import { Item, Translation } from "./models";
 
 type AggrecatedItem = {
   id: number;
@@ -7,7 +7,7 @@ type AggrecatedItem = {
   name: string;
 };
 
-export const mappedItems = (items: Item[]) => items.reduce((acc, item) => {
+export const mappedItems = (items: Item[], translation: Record<string,string>) => items.reduce((acc, item) => {
   const hasGiftCard = item.attributes.giftCard.data ? true : false;
   const itemTypeId = item.attributes.itemType.data.id
   const existingItem = acc.find(existingItem => itemTypeId === existingItem.id);
@@ -16,13 +16,13 @@ export const mappedItems = (items: Item[]) => items.reduce((acc, item) => {
       id: itemTypeId+1000,
       price: 0,
       quantity: 1,
-      name: `${item.attributes.itemType.data.attributes.slug}-0`,
+      name: `${translation[item.attributes.itemType.data.attributes.slug]}-0`,
       }:
       {
         id: itemTypeId,
         price: item.attributes.itemType.data.attributes.price,
         quantity: 1,
-        name: item.attributes.itemType.data.attributes.slug,
+        name: translation[item.attributes.itemType.data.attributes.slug],
       }
     return [
       ...acc,
@@ -32,3 +32,10 @@ export const mappedItems = (items: Item[]) => items.reduce((acc, item) => {
   existingItem.quantity += 1;
   return acc
 },[] as AggrecatedItem[])
+
+export const transformTranslations = (t: Translation): Record<string,string> => 
+  t.attributes.translations.reduce((acc, row) =>{
+      const {key, value} = row;
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string,string>);

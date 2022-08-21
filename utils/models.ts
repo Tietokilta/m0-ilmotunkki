@@ -34,6 +34,13 @@ export type Item = StrapiBaseType<{
   giftCard: StrapiResponse<GiftCard | null>;
 }>;
 
+export type Translation = StrapiBaseType<{
+  translations: {
+    key: string;
+    value: string;
+  }[]
+}>
+
 export type GiftCard = StrapiBaseType<{
   code: string;
 }>;
@@ -41,6 +48,11 @@ export type GiftCard = StrapiBaseType<{
 export type FrontPageFields = StrapiBaseType<{
   bodyText: string;
   title: string;
+}>;
+export type CallbackPageFields = StrapiBaseType<{
+  onSuccess: string;
+  onCancel: string;
+  onError: string;
 }>;
 
 export type Field = {

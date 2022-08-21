@@ -17,7 +17,7 @@ const isSoldOut = (itemType: ItemType, category: ItemCategory) => {
   if(category.attributes.overflowItem.data?.id === itemType.id) return false;
   return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
 }
-const ItemList: React.FC = () => {
+const ItemList: React.FC<{translation: Record<string,string>}> = ({translation}) => {
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: ['overflowItem','itemTypes'],
   }));
@@ -42,10 +42,10 @@ const ItemList: React.FC = () => {
         <div key={item.id} 
             className='flex gap-2 text-center border-b-2 border-b-gray-200 mb-4 last:border-none items-center'>
           <p className='flex-1'>
-            {item.attributes.slug}
+            {translation[item.attributes.slug]}
           </p>
           <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
-          {isSoldOut(item, category) && <p>Loppuunmyyty</p>}
+          {isSoldOut(item, category) && <p>{translation.soldOut}</p>}
           <div className='flex-1 gap-4 flex items-center'>
           <button
             onClick={() => handleClick(item, category)}
