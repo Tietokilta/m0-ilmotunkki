@@ -7,6 +7,7 @@ body {
   height: 100%;
   font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
   'Arial', sans-serif;
+  @apply bg-slate-200;
 }
 
 html {
@@ -19,5 +20,5 @@ html {
 }
 
 .tx-input {
-  @apply bg-transparent border-b-2 border-b-sky-700 text-sky-700 block w-full focus:outline-none focus:border-b-sky-800
+  @apply bg-transparent border-b-2 border-b-sky-700 block w-full focus:outline-none focus:border-b-sky-800
 }

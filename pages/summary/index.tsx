@@ -24,7 +24,6 @@ const ContactComponent = ({customer, translation}: {customer: Customer, translat
   if(!fields) return null;
   return (
     <div className='mb-5'>
-      <h3 className='text-lg'>{translation.info}</h3>
       <div className='shadow-lg rounded p-4 flex flex-col gap-2'>
         {fields.map(row =>
         <div
@@ -70,9 +69,11 @@ const Summary: NextPage<PropType> = ({translation}) => {
     }
   },[isEmpty, router]);
   return (
-    <div className='container mx-auto px-4'>
-      <ContactComponent customer={customer} translation={translation}/>
-      <div>
+    <div className='container mx-auto px-4 max-w-3xl'>
+      <div className='bg-slate-50 rounded'>
+        <ContactComponent customer={customer} translation={translation}/>
+      </div>
+      <div className='bg-slate-50 rounded'>
         <Order items={items} translation={translation}><GiftCardComponent/></Order>
       </div>
       <div className='my-2'>

@@ -78,15 +78,15 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
     })
   }
   return (
-    <div className="container max-w-3xl mx-auto">
+    <div className="container max-w-3xl mx-auto bg-slate-50 rounded shadow-md p-8">
       <form className='mb-6' 
             onSubmit={handleSubmit}>
         {contactForm.map(field => (
-          <div key={field.fieldName}>
-            <label className='text-sky-700 block'>
-            {field.label}
+          <div className="mb-8" key={field.fieldName}>
+            <label className='block p-1'>
+            {field.label}{field.required && '*'}
             <input
-              className='tx-input'
+              className='tx-input mt-2'
               type={field.type}
               onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
               value={inputFields[field.fieldName] || ''}
@@ -97,11 +97,16 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
           </div>
 
         ))}
-          <button className='btn'>{translation.send}</button>
+        <div className='float-right'>
+          <button className='btn h-12'>{translation.send}</button>
+        </div>
       </form>
-      <Link href="/">
-        <a className='btn'>{translation.back}</a>
-      </Link>
+        <div>
+          <Link href="/">
+            <button className='btn h-12'>{translation.back}</button>
+          </Link>
+      </div>
+
     </div>
 
   );
