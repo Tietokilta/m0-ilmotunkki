@@ -13,7 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build
-      run: docker build --build-arg STRAPI_TOKEN=${{ secrets.STRAPI_TOKEN }} --build-args NEXT_PUBLIC_STRAPI_API_URL=${{ NEXT_PUBLIC_STRAPI_API_URL }} -t ghcr.io/${{ secrets.OWNER }}/ilmotunkki-web:latest .
+      run: docker build --build-arg STRAPI_TOKEN=${{ secrets.STRAPI_TOKEN }} --build-args NEXT_PUBLIC_STRAPI_API_URL=${{ secrets.NEXT_PUBLIC_STRAPI_API_URL }} -t ghcr.io/${{ secrets.OWNER }}/ilmotunkki-web:latest .
     - name: Push
       run: docker push ghcr.io/${{ secrets.OWNER }}/ilmotunkki-web:latest
   deploy:
