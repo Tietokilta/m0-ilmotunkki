@@ -47,18 +47,21 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
           <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
           {isSoldOut(item, category) && <p>{translation.soldOut}</p>}
           <div className='flex-1 gap-4 flex items-center'>
-          <button
-            onClick={() => handleClick(item, category)}
-            className='btn mb-4'
-            >+</button>
-            <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
             <button
               onClick={(e) => handleDelete(e,item)}
               className='btn mb-4'
               disabled={itemCount(items, item.id) === 0}
-              >-</button>
+              >
+              -
+            </button>
+            <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
+            <button
+              onClick={() => handleClick(item, category)}
+              className='btn mb-4'
+              >
+              +
+            </button>
           </div>
-
         </div>)
       )}
     </div>
