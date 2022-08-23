@@ -1,0 +1,40 @@
+name: production
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Login
+      run: echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: docker build --build-arg STRAPI_TOKEN=${{ secrets.STRAPI_TOKEN }} --build-args NEXT_PUBLIC_STRAPI_API_URL=${{ NEXT_PUBLIC_STRAPI_API_URL }} -t ghcr.io/${{ secrets.OWNER }}/ilmotunkki-web:latest .
+    - name: Push
+      run: docker push ghcr.io/${{ secrets.OWNER }}/ilmotunkki-web:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy.key
+          chmod 600 ~/.ssh/deploy.key
+          cat >>~/.ssh/config<<END
+          Host production
+            HostName ${{ secrets.SSH_HOST }}
+            User ${{ secrets.SSH_USER }}
+            IdentityFile ~/.ssh/deploy.key
+            StrictHostKeyChecking no
+          END
+      - name: pull
+        run: ssh production 'cd ./production && docker-compose pull next'
+      - name: restart
+        run: ssh production 'cd ./production && docker-compose up -d --force-recreate --no-deps next'
+
+
