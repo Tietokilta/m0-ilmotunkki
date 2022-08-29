@@ -32,13 +32,11 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
     populate: ['overflowItem','itemTypes'],
   }));
   const { addItem, deleteItem, items } = useContext(AppContext);
-  const handleClick = async (item: ItemType, category: ItemCategory) => {
-    item.attributes.itemCategory = {data: category};
+  const handleClick = async (item: ItemType) => {
     await addItem(item);
     mutateCategories();
   };
   const handleDelete = async (event: any, item: ItemType) => {
-    event.stopPropagation();
     await deleteItem(item.id);
     mutateCategories();
   }
@@ -67,7 +65,7 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
             <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
             <button
               disabled={isAtLimit(items,category)}
-              onClick={() => handleClick(item, category)}
+              onClick={() => handleClick(item)}
               className='btn mb-4'
               >
               +

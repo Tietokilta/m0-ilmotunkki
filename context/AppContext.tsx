@@ -119,16 +119,6 @@ const AppProvider: FC<Props> = ({ children }) => {
 
   const addItem = async (itemType: ItemType) => {
     const currentOrderUid = orderUid || await initializeOrder();
-    const itemCategory = itemType.attributes.itemCategory.data;
-    const categoryItemCount = items?.filter(item => 
-      item
-      .attributes.itemType.data
-      .attributes.itemCategory.data
-      .id === itemCategory.id
-      ).length || 0;
-    if (categoryItemCount + 1 > itemCategory.attributes.orderItemLimit) {
-      return;
-    }
     try {
       const newItem = await fetchAPI<Item>('/items', {
         method: 'POST',
