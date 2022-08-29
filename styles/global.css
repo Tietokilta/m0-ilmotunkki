@@ -16,7 +16,7 @@ html {
 }
 
 .btn {
-  @apply bg-sky-700 hover:bg-sky-900 text-white font-bold p-3 rounded-sm shadow-sm disabled:opacity-50
+  @apply bg-sky-700 hover:bg-sky-900 text-white font-bold p-3 rounded-sm shadow-sm disabled:opacity-50 disabled:hover:bg-sky-700
 }
 
 .tx-input {

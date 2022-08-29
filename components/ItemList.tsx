@@ -17,6 +17,16 @@ const isSoldOut = (itemType: ItemType, category: ItemCategory) => {
   if(category.attributes.overflowItem.data?.id === itemType.id) return false;
   return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
 }
+
+const isAtLimit = (items: Item[], itemCategory: ItemCategory) => {
+  const categoryItemCount = items?.filter(item => 
+    item
+    .attributes.itemType.data
+    .attributes.itemCategory.data
+    .id === itemCategory.id
+    ).length || 0;
+    return categoryItemCount + 1 > itemCategory.attributes.orderItemLimit
+}
 const ItemList: React.FC<{translation: Record<string,string>}> = ({translation}) => {
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: ['overflowItem','itemTypes'],
@@ -56,6 +66,7 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
             </button>
             <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
             <button
+              disabled={isAtLimit(items,category)}
               onClick={() => handleClick(item, category)}
               className='btn mb-4'
               >
