@@ -51,7 +51,7 @@ const Home: NextPage<PropType> = ({content,translation}) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='container mx-auto px-4'>
-        <h1 className='font-medium leading-tight text-5xl'>{title}</h1>
+        <h1 className='font-medium leading-tight text-5xl' style={{hyphens: "auto"}}>{title}</h1>
           <p className="text-base mt-0 mb-4 whitespace-pre-wrap">
             {bodyText}
           </p>
