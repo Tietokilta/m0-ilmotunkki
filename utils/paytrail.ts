@@ -57,7 +57,6 @@ const SECRET_KEY = process.env.SECRET_KEY || '';
 const REDIRECT_SUCCESS = process.env.REDIRECT_SUCCESS || '';
 const REDIRECT_CANCEL = process.env.REDIRECT_CANCEL || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || '';
-const REFUND_CALLBACK_URL = process.env.REFUND_CALLBACK_URL || '';
 
 const getRandomString = (length: number = 16) => crypto.randomBytes(length).toString('base64');
 

@@ -52,7 +52,7 @@ const Home: NextPage<PropType> = ({content,translation}) => {
       </Head>
       <main className='container mx-auto px-4'>
         <h1 className='font-medium leading-tight text-5xl'>{title}</h1>
-          <p className="text-base mt-0 mb-4">
+          <p className="text-base mt-0 mb-4 whitespace-pre-wrap">
             {bodyText}
           </p>
           <ItemList translation={translation} />
