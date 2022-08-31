@@ -49,7 +49,7 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
         }).map(item => 
         <div key={item.id} 
             className='flex gap-2 text-center border-b-2 border-b-gray-200 mb-4 last:border-none items-center'>
-          <p className='flex-1'>
+          <p className='flex-1 text-slate-900'>
             {translation[item.attributes.slug]}
           </p>
           <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>

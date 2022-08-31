@@ -26,12 +26,12 @@ const Locale = () => {
     <div>
       {router.locales?.map(locale => (
         <span
-          className='m-1 uppercase cursor-pointer font-bold select'
+          className='m-1 uppercase cursor-pointer font-bold select text-slate-900'
           key={locale}
           onClick={() => handleClick(locale)}>
           <style jsx>{`
             .select {
-              ${router.locale === locale && `border-bottom: 2px solid black`}
+              ${router.locale === locale && `border-bottom: 2px solid; @apply border-b-slate-900`}
             }
         `}</style>
           {locale}
