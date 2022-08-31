@@ -52,7 +52,7 @@ const Checkout = () => {
   },[order,skipParams,router])
 
   return (
-    <main className='container flex flex-wrap justify-center gap-3 p-2'>
+    <main className='container flex flex-wrap justify-center gap-3 p-2 mx-auto max-w-3xl'>
       {paymentProviders.filter(provider => provider.group !== 'credit').map(provider =>
       <form
       className='flex justify-center items-center w-40'

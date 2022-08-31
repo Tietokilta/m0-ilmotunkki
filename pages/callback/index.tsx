@@ -72,19 +72,21 @@ const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus, content, tran
       refreshFields();
     }
   },[isValid, paymentStatus, refreshFields]);
-  console.log(isValid, paymentStatus);
+  let result = <p>{content.attributes.onSuccess}</p>
   if(isValid === undefined) return <p>Loading...</p>
-  if (!isValid) return <div>
-    {content.attributes.onError}
-    <Link href="/summary"><a>{translation.backToOrder}</a></Link>
+  if (!isValid) result = <div>
+    {content.attributes.onError} <Link href="/summary">
+      <a className='text-sky-900'>{translation.backToOrder}</a>
+      </Link>
     </div>
-    if (paymentStatus !== 'ok') return <div>
-      {content.attributes.onCancel}
-      <Link href="/summary"><a>{translation.backToOrder}</a></Link>
-    </div>
+  else if (paymentStatus !== 'ok') result = <div>
+    {content.attributes.onCancel} <Link href="/summary">
+      <a className='text-sky-900'>{translation.backToOrder}</a>
+    </Link>
+  </div>
   return (
-    <div className='container'>
-      {content.attributes.onSuccess}
+    <div className='container mx-auto max-w-3xl text-lg'>
+      {result}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import HeaderImage from '../public/header.svg';
 
 type PropType = {
@@ -9,7 +10,9 @@ const Header = ({children}: PropType) => {
         <div className='w-fit p-1 flex gap-4'>
           {children}
       </div>
-      <Image src={HeaderImage} alt="header"/>
+      <Link href="/">
+        <Image className='cursor-pointer' src={HeaderImage} alt="header"/>
+      </Link>
     </div>
 }
 
