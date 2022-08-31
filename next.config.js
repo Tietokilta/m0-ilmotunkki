@@ -8,6 +8,7 @@ const nextConfig = {
   i18n: {
     locales: ['fi', 'en',],
     defaultLocale: 'fi',
+    localeDetection: false,
   },
   output: "standalone",
 }
