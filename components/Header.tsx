@@ -6,7 +6,7 @@ type PropType = {
 }
 const Header = ({children}: PropType) => {
   return <div className="container max-w-3xl mx-auto relative">
-        <div className=' w-fit p-1 flex gap-4'>
+        <div className='w-fit p-1 flex gap-4'>
           {children}
       </div>
       <Image src={HeaderImage} alt="header"/>
