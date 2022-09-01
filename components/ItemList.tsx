@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
 import { fetchAPI } from '../lib/api';
+import Loader from "./Loader";
 
 const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
@@ -34,6 +35,7 @@ const isAtLimit = (items: Item[], itemCategory: ItemCategory) => {
     return categoryItemCount + 1 > itemCategory.attributes.orderItemLimit
 }
 const ItemList: React.FC<{translation: Record<string,string>}> = ({translation}) => {
+  const [loading, setLoading] = useState(false);
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: [
       'overflowItem',
@@ -44,12 +46,16 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
   }));
   const { addItem, deleteItem, items } = useContext(AppContext);
   const handleClick = async (item: ItemType) => {
+    setLoading(true);
     await addItem(item);
-    mutateCategories();
+    await mutateCategories();
+    setLoading(false);
   };
   const handleDelete = async (event: any, item: ItemType) => {
+    setLoading(true);
     await deleteItem(item.id);
-    mutateCategories();
+    await mutateCategories();
+    setLoading(false);
   }
   const Item = ({item, category}: ItemPropType) => (
     <div key={item.id}
@@ -59,7 +65,8 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
       </p>
       <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
       {isSoldOut(item, category) && <p>{translation.soldOut}</p>}
-      <div className='flex-1 gap-4 flex items-center'>
+      <div className='flex-1 gap-4 flex items-center relative'>
+
         <button
           onClick={(e) => handleDelete(e,item)}
           className='btn mb-4'
@@ -79,7 +86,10 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
     </div>
   )
   return (
-    <div >
+    <div className="relative">
+      {loading && <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+        <Loader/>
+      </div>}
       {itemCategories?.sort((a,b) => a.id-b.id).map(category => 
         category.attributes.itemTypes.data.filter(item => {
           if(category.attributes.overflowItem?.data?.id !== item.id) return true;
