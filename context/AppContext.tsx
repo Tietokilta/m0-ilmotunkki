@@ -105,16 +105,19 @@ const AppProvider: FC<Props> = ({ children }) => {
   const deleteItem = async (itemId: number) => {
     const itemToRemove = items?.find(({attributes: {itemType}}) => itemType.data.id === itemId);
     if (!itemToRemove) return;
-    const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
-      method: 'DELETE',
-    },
-    {
-      orderUid,
-    });
-    const filteredItems = items?.filter(item => item.id !== removeResult.id) || [];
-    const newOrder = order || appContextDefault.order;
-    newOrder.attributes.items = {data:filteredItems};
-    mutateOrder(newOrder);
+    try {
+      const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
+        method: 'DELETE',
+      },
+      {
+        orderUid,
+      });
+      const filteredItems = items?.filter(item => item.id !== removeResult.id) || [];
+      const newOrder = order || appContextDefault.order;
+      newOrder.attributes.items = {data:filteredItems};
+      mutateOrder(newOrder);
+    } catch(error) {
+    }
   };
 
   const addItem = async (itemType: ItemType) => {

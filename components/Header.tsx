@@ -11,7 +11,9 @@ const Header = ({children}: PropType) => {
           {children}
       </div>
       <Link href="/">
+        <div>
         <Image className='cursor-pointer' src={HeaderImage} alt="header"/>
+        </div>
       </Link>
     </div>
 }

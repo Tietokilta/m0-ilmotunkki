@@ -25,6 +25,7 @@ export type ItemType = StrapiBaseType<{
   availableFrom: string;
   availableTo: string;
   itemCategory: StrapiResponse<ItemCategory>;
+  upgradeTarget: StrapiResponse<ItemType | null>;
   slug: string;
 }>;
 
