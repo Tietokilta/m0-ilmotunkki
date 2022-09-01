@@ -4,7 +4,6 @@ import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
 import { fetchAPI } from '../lib/api';
 import Loader from "./Loader";
-
 const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
     attributes: {
@@ -98,9 +97,10 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
           <>
             <Item key={item.id} item={item} category={category}/>
             {item.attributes.upgradeTarget.data && itemCount(items, item.id) > 0 && 
-            <div><Item
+              <Item
                 item={item.attributes.upgradeTarget.data} 
-                category={findCategory(item.attributes.upgradeTarget.data, itemCategories) || category} /></div>}
+                category={findCategory(item.attributes.upgradeTarget.data, itemCategories) || category} />
+           }
           </>
         )
       )}
