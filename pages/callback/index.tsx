@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps<ServerPropsType> = async (co
   const data = context.query as Record<string,number | string>;
   const isValid = paytrailService.verifyPayment(data);
   try {
+    if(!isValid) throw new Error('Not valid');
     await updateOrderState(
       data['checkout-reference'] as number,
       data['checkout-status'] as string,

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import {useRouter} from 'next/router';
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { AppContext } from '../../context/AppContext';
 import qs from 'qs';
 
@@ -19,8 +19,8 @@ interface PaymentProvider {
 
 const Checkout = () => {
   const {order} = useContext(AppContext);
+  const handled = useRef(false);
   const [paymentProviders, setProviders] = useState<PaymentProvider[]>([]);
-  const [skipParams, setSkipParams] = useState<Record<string,string>>({});
   const router = useRouter();
 
   const initializePayment = useCallback(async (orderId: number) => {
@@ -35,21 +35,16 @@ const Checkout = () => {
     });
     const data = await response.json();
     if(data.status === 'skip') {
-      return setSkipParams(data.params);
+      router.push(`/callback?${qs.stringify(data.params)}`);
     }
-    setProviders(data.providers);
-  },[]);
+    setProviders(data.providers || []);
+  },[router]);
 
   useEffect(() => {
-    if (!order) return;
+    if (!order || handled.current) return;
+    handled.current = true;
     initializePayment(order.id);
   },[order, initializePayment]);
-
-  useEffect(() => {
-    if (order && skipParams['checkout-reference']===String(order.id)) {
-      router.push(`/callback?${qs.stringify(skipParams)}`);
-    }
-  },[order,skipParams,router])
 
   return (
     <main className='container flex flex-wrap justify-center gap-3 p-2 mx-auto max-w-3xl'>
