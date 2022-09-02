@@ -2,7 +2,7 @@ import type {
   NextPage,
   GetServerSideProps, 
   InferGetServerSidePropsType} from 'next'
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 import Link from 'next/link';
 import { AppContext } from '../../context/AppContext';
 import paytrailService from '../../utils/paytrail';
@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps<ServerPropsType> = async (co
   ]);
   const data = context.query as Record<string,number | string>;
   const isValid = paytrailService.verifyPayment(data);
-  console.log({isValid});
   try {
     await updateOrderState(
       data['checkout-reference'] as number,
@@ -64,14 +63,14 @@ type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
 
 const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus, content, translation}) => {
-  const {refreshFields} = useContext(AppContext);
-
+  const {reset} = useContext(AppContext);
+  const handled = useRef(false);
   useEffect(() => {
-    if(isValid && paymentStatus === 'ok') {
-      sessionStorage.removeItem('orderUid');
-      refreshFields();
+    if(isValid && paymentStatus === 'ok' && !handled.current) {
+      handled.current = true;
+      reset();
     }
-  },[isValid, paymentStatus, refreshFields]);
+  },[isValid, paymentStatus, reset]);
   let result = <p>{content.attributes.onSuccess}</p>
   if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) result = <div>

@@ -57,13 +57,13 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
     setLoading(false);
   }
   const Item = ({item, category}: ItemPropType) => (
-    <div key={item.id}
+    <div
     className='flex gap-2 text-center border-b-2 border-b-gray-200 mb-4 last:border-none items-center'>
-      <p className='flex-1 text-slate-900'>
-        {translation[item.attributes.slug]}
-      </p>
+      <div className='flex-1 text-slate-900'>
+        <p>{translation[item.attributes.slug]}</p>
+        <p className="text-red-500 flex-1 text-sm">{isSoldOut(item, category) && translation.soldOut}</p>
+      </div>
       <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
-      {isSoldOut(item, category) && <p>{translation.soldOut}</p>}
       <div className='flex-1 gap-4 flex items-center relative'>
 
         <button
@@ -94,14 +94,14 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
           if(category.attributes.overflowItem?.data?.id !== item.id) return true;
           return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
         }).map(item =>
-          <>
-            <Item key={item.id} item={item} category={category}/>
+          <div key={item.id}>
+            <Item item={item} category={category}/>
             {item.attributes.upgradeTarget.data && itemCount(items, item.id) > 0 && 
-              <Item
+              <Item key={item.attributes.upgradeTarget.data.id}
                 item={item.attributes.upgradeTarget.data} 
                 category={findCategory(item.attributes.upgradeTarget.data, itemCategories) || category} />
            }
-          </>
+          </div>
         )
       )}
     </div>

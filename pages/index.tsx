@@ -1,15 +1,14 @@
 import type {
   NextPage,
   GetStaticProps, 
-  InferGetStaticPropsType} from 'next'
-import Link from 'next/link'
-import { useContext } from 'react'
-import ItemList from '../components/ItemList'
-import { AppContext } from '../context/AppContext'
-import { fetchAPI } from '../lib/api'
-import { transformTranslations } from '../utils/helpers'
-import { FrontPageFields, Translation } from '../utils/models'
-
+  InferGetStaticPropsType} from 'next';
+import Link from 'next/link';
+import { useContext, useEffect } from 'react';
+import ItemList from '../components/ItemList';
+import { AppContext } from '../context/AppContext';
+import { fetchAPI } from '../lib/api';
+import { transformTranslations } from '../utils/helpers';
+import { FrontPageFields, Translation } from '../utils/models';
 type StaticPropType = {
   content: FrontPageFields,
   translation: Record<string,string>
