@@ -9,6 +9,7 @@ import { ContactForm,Field, Translation } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { transformTranslations } from '../../utils/helpers';
+import GroupComponent from '../../components/Group';
 
 
 type StaticPropType = {
@@ -68,7 +69,7 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
     await refreshFields();
     router.push('/summary');
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement>, key: string, type: string) => {
+  const handleChange = (event: Pick<ChangeEvent<HTMLInputElement>,'target'>, key: string, type: string) => {
     const value = type === 'checkbox' ? event.target.checked : event.target.value;
     setInputFields(previousKeys => {
       return {
@@ -85,6 +86,10 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
           <div className="mb-8" key={field.fieldName}>
             <label className='block p-1'>
             {field.label}{field.required && '*'}
+            {field.fieldName === 'group-TODO-not-implemented-in-strapi' ? 
+            <GroupComponent onChange={
+              (event: Pick<ChangeEvent<HTMLInputElement>,'target'>) => 
+                handleChange(event, field.fieldName, field.type)}/> :
             <input
               className='tx-input mt-2'
               type={field.type}
@@ -92,7 +97,7 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
               value={inputFields[field.fieldName] || ''}
               checked={inputFields[field.fieldName] || false}
               required={field.required}
-            />
+            />}
           </label>
           </div>
 

@@ -31,7 +31,7 @@ const Locale = () => {
           onClick={() => handleClick(locale)}>
           <style jsx>{`
             .select {
-              ${router.locale === locale && `border-bottom: 2px solid; @apply border-b-slate-900`}
+              ${router.locale === locale && `border-bottom: 2px solid rgb(3,105,161);`};
             }
         `}</style>
           {locale}

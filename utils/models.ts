@@ -62,6 +62,9 @@ export type Field = {
   required: boolean,
   fieldName: string,
 }
+export type Group = StrapiBaseType<{
+  name: string;
+}>;
 
 export type ContactForm = StrapiBaseType<{
   contactForm: Field[];

@@ -69,13 +69,13 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
         <button
           onClick={(e) => handleDelete(e,item)}
           className='btn mb-4'
-          disabled={itemCount(items, item.id) === 0}
+          disabled={itemCount(items, item.id) === 0 || loading}
           >
           -
         </button>
         <p className='text-gray-500 mb-4'>{itemCount(items, item.id)}</p>
         <button
-          disabled={isAtLimit(items,category) || isSoldOut(item,category)}
+          disabled={isAtLimit(items,category) || isSoldOut(item,category) || loading}
           onClick={() => handleClick(item)}
           className='btn mb-4'
           >
