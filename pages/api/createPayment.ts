@@ -32,7 +32,7 @@ const createPayment = async (orderId: number) => {
   const translation = await fetchAPI<Translation>('/translation',{},{
     locale: order.attributes.customer.data.attributes.locale,
     populate: ['translations']
-  })
+  });
   const mappedCart = mappedItems(order.attributes.items.data, transformTranslations(translation));
   const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   await updateOrderState(order.id, 'pending');

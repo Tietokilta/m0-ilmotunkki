@@ -12,7 +12,7 @@ const Order: React.FC<PropType> = ({items: cartItems, translation, children}) =>
   const totalQuantity = items.reduce((acc,item) => item.quantity + acc,0);
   const cartTotal = items.reduce((acc,item) => item.quantity*item.price + acc,0);
   return (
-    <div className='shadow-lg rounded p-4'>
+    <div>
       <div className='flex-[4] p-1 pl-2 font-bold border-b-2 border-b-gray-300'>
         {translation.products}
       </div>

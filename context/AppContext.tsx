@@ -16,7 +16,7 @@ export interface AppContextType {
   isEmpty: boolean;
   reset: () => void;
 }
-const initialCustomer =  {
+export const initialCustomer =  {
   id: 0,
   attributes: {
     firstName: '',

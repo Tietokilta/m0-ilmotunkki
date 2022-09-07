@@ -60,7 +60,7 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 const Summary: NextPage<PropType> = ({translation}) => {
-  const {customer, items, isEmpty} = useContext(AppContext);
+  const {customer, items, isEmpty, order} = useContext(AppContext);
   const router = useRouter();
   const [ termsAccepted, setTermsAccepted ] = useState(false);
   useEffect(() => {
@@ -73,7 +73,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
       <div className='bg-slate-50 rounded'>
         <ContactComponent customer={customer} translation={translation}/>
       </div>
-      <div className='bg-slate-50 rounded'>
+      <div className='bg-slate-50 rounded shadow-lg p-4'>
         <Order items={items} translation={translation}><GiftCardComponent/></Order>
       </div>
       <div className='my-2'>
@@ -91,7 +91,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
 
       <div className='flex gap-2'>
       <Link passHref href="/contact"><a className='btn'>{translation.back}</a></Link>
-      <Link passHref href="/checkout"><button className='btn' disabled={
+      <Link passHref href={`/checkout/${order?.attributes.uid}`}><button className='btn' disabled={
         !termsAccepted
         || items.length === 0
         || !customer.attributes.firstName

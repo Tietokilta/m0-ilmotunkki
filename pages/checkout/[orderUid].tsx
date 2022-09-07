@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import {useRouter} from 'next/router';
-import { useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { AppContext } from '../../context/AppContext';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import qs from 'qs';
+import { fetchAPI } from '../../lib/api';
+import useSWR from 'swr';
+import { Order } from '../../utils/models';
 
 interface PaymentProvider {
   id: string;
@@ -18,11 +20,12 @@ interface PaymentProvider {
 }
 
 const Checkout = () => {
-  const {order} = useContext(AppContext);
   const handled = useRef(false);
   const [paymentProviders, setProviders] = useState<PaymentProvider[]>([]);
   const router = useRouter();
-
+  const {orderUid} = router.query;
+  const {data: order, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
+  console.log(order, paymentProviders);
   const initializePayment = useCallback(async (orderId: number) => {
     const response = await fetch('/api/createPayment', {
       method: 'POST',
@@ -42,6 +45,7 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!order || handled.current) return;
+    if(order.attributes.status === 'ok') return;
     handled.current = true;
     initializePayment(order.id);
   },[order, initializePayment]);
