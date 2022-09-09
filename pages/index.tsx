@@ -45,7 +45,7 @@ const Home: NextPage<PropType> = ({content,translation}) => {
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-8">
       <main className='container mx-auto px-4'>
-          <ReactMarkdown className="prose prose-slate mt-0 mb-4">
+          <ReactMarkdown className="prose prose-li:my-0.5 prose-ul:my-0.5 prose-slate mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
           <ItemList translation={translation} />
