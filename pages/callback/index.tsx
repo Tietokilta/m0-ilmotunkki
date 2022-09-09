@@ -87,7 +87,7 @@ const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus, content, tran
     </Link>
   </div>
   return (
-    <div className='container mx-auto max-w-3xl text-lg'>
+    <div className='container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-2 pt-4 sm:p-8'>
       {result}
     </div>
   );
