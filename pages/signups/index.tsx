@@ -15,6 +15,7 @@ type Field = StrapiBaseType<{
   index: number;
   name: string;
   group: string;
+  status: string;
 }>
 
 type StaticPropType = {
@@ -71,12 +72,22 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
           </div>
         </div>
         {signups?.map(field =>
-        <div key={field.id} className="flex border-b-2 border-b-gray-200 py-4 justify-around">
+        <div key={field.id} className="flex border-b-2 border-b-gray-200 py-4 justify-around verified">
+          <style jsx>{`
+            .verified {
+              ${field.attributes.status !== 'ok' && `opacity: 0.6`}
+            }
+          `}</style>
           <div className='flex-[0.5]'>
             {field.attributes.index}
           </div>
           <div className='flex-1'>
-            {field.attributes.name}
+            <div>{field.attributes.name}</div>
+            {field.attributes.status !== 'ok' &&
+              <div className='text-sky-700'>
+                {translation.unverified}
+              </div>
+            }
           </div>
           <div className='flex-1'>
             {field.attributes.group}
