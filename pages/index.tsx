@@ -4,6 +4,7 @@ import type {
   InferGetStaticPropsType} from 'next';
 import Link from 'next/link';
 import { useContext, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI } from '../lib/api';
@@ -44,10 +45,9 @@ const Home: NextPage<PropType> = ({content,translation}) => {
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-8">
       <main className='container mx-auto px-4'>
-        <h1 className='font-medium leading-tight text-slate-900 text-3xl md:text-5xl mb-4' style={{hyphens: "auto"}}>{title}</h1>
-          <p className="text-base mt-0 mb-4 whitespace-pre-wrap text-slate-900">
+          <ReactMarkdown className="prose prose-slate mt-0 mb-4">
             {bodyText}
-          </p>
+          </ReactMarkdown>
           <ItemList translation={translation} />
           {items.length > 0 && 
           <Link href={'/contact'} passHref>

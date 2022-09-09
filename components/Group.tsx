@@ -64,7 +64,6 @@ const GroupComponent = ({onChange}: PropTypes) => {
         break;
       case 'ArrowDown':
         e.preventDefault();
-        console.log(filteredGroups, dropdownIndex);
         setDropdownIndex(previousIndex => Math.min(previousIndex + 1, filteredGroups.length-1));
         break;
       case 'ArrowUp':

@@ -25,7 +25,6 @@ const Checkout = () => {
   const router = useRouter();
   const {orderUid} = router.query;
   const {data: order, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
-  console.log(order, paymentProviders);
   const initializePayment = useCallback(async (orderId: number) => {
     const response = await fetch('/api/createPayment', {
       method: 'POST',

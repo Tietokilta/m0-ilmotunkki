@@ -50,7 +50,7 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
     await mutateCategories();
     setLoading(false);
   };
-  const handleDelete = async (event: any, item: ItemType) => {
+  const handleDelete = async (item: ItemType) => {
     setLoading(true);
     await deleteItem(item.id);
     await mutateCategories();
@@ -59,15 +59,15 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
   const Item = ({item, category}: ItemPropType) => (
     <div
     className='flex gap-2 text-center border-b-2 border-b-gray-200 mb-4 last:border-none items-center'>
-      <div className='flex-1 text-slate-900'>
+      <div className='flex-1 text-slate-700'>
         <p>{translation[item.attributes.slug]}</p>
         <p className="text-red-500 flex-1 text-sm">{isSoldOut(item, category) && translation.soldOut}</p>
       </div>
-      <p className='text-gray-500 flex-1'>{item.attributes.price} €</p>
+      <p className='text-slate-500 flex-1'>{item.attributes.price} €</p>
       <div className='flex-1 gap-4 flex items-center relative'>
 
         <button
-          onClick={(e) => handleDelete(e,item)}
+          onClick={() => handleDelete(item)}
           className='btn mb-4'
           disabled={itemCount(items, item.id) === 0 || loading}
           >

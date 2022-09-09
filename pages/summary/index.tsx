@@ -83,7 +83,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
           type="checkbox"
           checked={termsAccepted}
           onChange={(event) => setTermsAccepted(event.target.checked)}/>
-          {translation.haveRead} <Link href="/ehdot" passHref>
+          {translation.haveRead} <Link href="/terms" passHref>
             <a className='text-sky-900 underline'>{translation.terms}</a>
           </Link>
         </label>
