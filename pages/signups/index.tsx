@@ -52,7 +52,6 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
       '/orders/signups': content,
     },
   });
-  console.log(signups);
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     router.back();
