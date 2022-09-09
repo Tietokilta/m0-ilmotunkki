@@ -24,7 +24,9 @@ type ServerPropsType = {
 
 export const getServerSideProps: GetServerSideProps<ServerPropsType> = async (context) => {
   const [content, translation] = await Promise.all([
-    serverFetchAPI<CallbackPageFields>('/callback-page'),
+    serverFetchAPI<CallbackPageFields>('/callback-page',{},{
+      locale: context.locale,
+    }),
     fetchAPI<Translation>('/translation',{},{
       locale: context.locale,
       populate: ['translations']

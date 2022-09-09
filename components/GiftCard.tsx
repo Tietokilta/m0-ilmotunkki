@@ -2,7 +2,11 @@ import { ChangeEvent, useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, StrapiError } from '../lib/api';
 
-const GiftCardComponent = () => {
+type PropType = {
+  translation: Record<string,string>
+}
+
+const GiftCardComponent = ({translation}: PropType) => {
   const [ giftCardError, setGiftCardError ] = useState('');
   const { order, refreshFields } = useContext(AppContext);
   const [ giftCard, setGiftCard ] = useState('');
@@ -48,13 +52,13 @@ const GiftCardComponent = () => {
           name="giftCard"
           value={giftCard}
           onChange={handleGiftCardChange}
-          placeholder='Lahjakorttikoodi'
+          placeholder={translation.code}
         />
         <button
           className='btn'
           disabled={false || giftCard.length === 0}
           onClick={submitGiftcard}>
-          Lisää
+          {translation.add}
         </button>
       </div>
       <p className='text-red-400'>{giftCardError}</p>

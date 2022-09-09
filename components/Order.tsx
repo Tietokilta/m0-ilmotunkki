@@ -9,7 +9,6 @@ type PropType = {
 
 const Order: React.FC<PropType> = ({items: cartItems, translation, children}) => {
   const items = mappedItems(cartItems,translation);
-  const totalQuantity = items.reduce((acc,item) => item.quantity + acc,0);
   const cartTotal = items.reduce((acc,item) => item.quantity*item.price + acc,0);
   return (
     <div>
@@ -33,7 +32,7 @@ const Order: React.FC<PropType> = ({items: cartItems, translation, children}) =>
         {children}
       </div>}
       <div className='flex pt-4'>
-        <div className='flex-[4]'><b>yhteensä</b></div>
+        <div className='flex-[4]'><b>{translation.total}</b></div>
         <div className='flex-1'><b>{cartTotal} €</b></div>
       </div>
   </div>

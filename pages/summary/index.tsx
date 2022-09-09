@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useContext, useState, useEffect } from "react";
 import useSWR from "swr";
-import GiftCardComponent from "../../components/GiftCard";
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
 import { fetchAPI } from "../../lib/api";
@@ -74,7 +73,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
         <ContactComponent customer={customer} translation={translation}/>
       </div>
       <div className='bg-slate-50 rounded shadow-lg p-4'>
-        <Order items={items} translation={translation}><GiftCardComponent/></Order>
+        <Order items={items} translation={translation}></Order>
       </div>
       <div className='my-2'>
         <label className='text-sky-700'>
