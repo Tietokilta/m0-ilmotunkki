@@ -8,6 +8,7 @@ import { fetchAPI } from '../../lib/api';
 import { transformTranslations } from '../../utils/helpers';
 import { Translation, StrapiBaseType } from '../../utils/models';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
 type Field = StrapiBaseType<{
   id: number;
@@ -44,11 +45,17 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
 const Terms: NextPage<PropType> = ({content,translation}) => {
+  const router = useRouter();
+  const {data: signups} = useSWR<Field[]>('/orders/signups',fetchAPI,{
+    fallback: {
+      '/orders/signups': content,
+    },
+  });
+  console.log(signups);
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     router.back();
   }
-  const router = useRouter();
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-8">
       <div>
@@ -63,7 +70,7 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
             {translation.group}
           </div>
         </div>
-        {content.map(field =>
+        {signups?.map(field =>
         <div key={field.id} className="flex border-b-2 border-b-gray-200 py-4 justify-around">
           <div className='flex-[0.5]'>
             {field.attributes.index}
