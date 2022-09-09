@@ -6,7 +6,7 @@ import type {
   import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { fetchAPI } from '../../lib/api';
 import { initialCustomer } from '../../context/AppContext';
-import { ContactForm,Customer,Field, Order, Translation } from '../../utils/models';
+import { ContactForm,Customer,Field, Order, StrapiBaseType, Translation } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { transformTranslations } from '../../utils/helpers';
@@ -14,13 +14,19 @@ import GroupComponent from '../../components/Group';
 import Loader from '../../components/Loader'
 import OrderComponent from '../../components/Order';
 
+type Global = StrapiBaseType<{
+  updateEnd: string;
+}>
 
 type ServerSidePropType = {
-  contactForm: Field[],
-  translation: Record<string, string>
+  contactForm: Field[];
+  translation: Record<string, string>;
+  global: Global
 }
+
+
 export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async (context) => {
-  const [formData, translation] = await Promise.all([
+  const [formData, translation, global] = await Promise.all([
     fetchAPI<ContactForm>('/contact-form',{},{
       locale: context.locale,
       populate: 'contactForm',
@@ -29,26 +35,27 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async 
       locale: context.locale,
       populate: ['translations']
     }),
+    fetchAPI<Global>('/global'),
   ]);
   return {
     props: {
       contactForm: formData.attributes.contactForm,
       translation: transformTranslations(translation),
+      global
     },
   }
 }
 
 type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Form: NextPage<PropType> = ({contactForm, translation}) => {
+const Form: NextPage<PropType> = ({contactForm, translation, global}) => {
   const router = useRouter();
   const {orderUid} = router.query;
   const [isLoading, setLoading] = useState(false);
   const {data: customer, mutate: refreshFields} = useSWR<Customer>(`/customers/findByOrderUid/${orderUid}`, fetchAPI);
   const {data: orders, mutate: mutateOrders} = useSWR<Order[]>(customer ? `/orders/findByCustomerUid/${customer.attributes.uid}` : null, fetchAPI);
-  
   const [inputFields, setInputFields] = useState<Record<string,any>>(customer?.attributes || initialCustomer);
-
+  const updateHasEnded = new Date(global.attributes.updateEnd) <= new Date();
   useEffect(() => {
     if(!customer) return;
     setInputFields(customer.attributes);
@@ -118,7 +125,7 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
           {isLoading && <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
            <Loader/>
           </div>}
-          <button disabled={isLoading} className='btn h-12'>{translation.update}</button>
+          <button disabled={isLoading || updateHasEnded} className='btn h-12'>{translation.update}</button>
         </div>
       </form>
       {orders?.map(order => <div key={order.id} className="bg-slate-50 rounded shadow-md mb-8 p-4">
