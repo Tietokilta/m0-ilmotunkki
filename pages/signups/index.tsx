@@ -57,9 +57,9 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
     router.back();
   }
   return (
-    <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-8">
+    <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-3 sm:p-8">
       <div>
-      <div className="flex border-b-2 border-b-gray-200 py-4 justify-around text-xl">
+      <div className="flex border-b-2 border-b-gray-200 py-2 justify-around text-xl">
           <div className='flex-[0.5]'>
             #
           </div>
