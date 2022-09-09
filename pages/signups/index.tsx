@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 
 type Field = StrapiBaseType<{
   id: number;
+  index: number;
   name: string;
   group: string;
 }>
@@ -52,6 +53,9 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-8">
       <div>
       <div className="flex border-b-2 border-b-gray-200 py-4 justify-around text-xl">
+          <div className='flex-[0.5]'>
+            #
+          </div>
           <div className='flex-1'>
             {translation.name}
           </div>
@@ -61,6 +65,9 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
         </div>
         {content.map(field =>
         <div key={field.id} className="flex border-b-2 border-b-gray-200 py-4 justify-around">
+          <div className='flex-[0.5]'>
+            {field.attributes.index}
+          </div>
           <div className='flex-1'>
             {field.attributes.name}
           </div>
