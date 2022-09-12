@@ -2,12 +2,13 @@ import type {
   NextPage,
   GetStaticProps, 
   InferGetStaticPropsType} from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
-import { fetchAPI } from '../lib/api';
+import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
 import { FrontPageFields, Translation } from '../utils/models';
 type StaticPropType = {
@@ -36,6 +37,7 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
   }
 }
 
+
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<PropType> = ({content,translation}) => {
@@ -45,7 +47,14 @@ const Home: NextPage<PropType> = ({content,translation}) => {
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-1 pt-4 sm:p-8">
       <main className='container mx-auto px-4'>
-          <ReactMarkdown className="prose prose-li:my-0.5 prose-ul:my-0.5 prose-slate mt-0 mb-4">
+          <ReactMarkdown
+          components={{
+            img: image => {
+              if(!image.src) return null;
+              return <Image src={getStrapiURL(image.src)} width={400} height={400} alt={image.alt}></Image>
+            }
+          }}
+          className="prose prose-li:my-0.5 prose-ul:my-0.5 prose-slate mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
           <div className='my-10'>
