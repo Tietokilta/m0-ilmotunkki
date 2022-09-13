@@ -81,7 +81,7 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
   }
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-3 sm:p-8">
-      <div className="flex gap-5">
+      <div className="flex gap-5 mb-6">
         {itemCategories?.map(category => <div key={category.id}>
           {translation[category.attributes.name]}: {category.attributes.currentQuantity}/{category.attributes.maximumItemLimit}
           </div>)}
