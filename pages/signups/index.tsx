@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { fetchAPI } from '../../lib/api';
 import { transformTranslations } from '../../utils/helpers';
-import { Translation, StrapiBaseType } from '../../utils/models';
+import { Translation, StrapiBaseType, ItemCategory } from '../../utils/models';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
@@ -20,15 +20,25 @@ type Field = StrapiBaseType<{
 
 type StaticPropType = {
   content: Field[],
+  categories: ItemCategory[],
   translation: Record<string,string>
 }
 
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [
     content,
+    categories,
     translation,
     ] = await Promise.all([
     fetchAPI<Field[]>('/orders/signups'),
+    fetchAPI<ItemCategory[]>('/item-categories',{},{
+      populate: [
+        'overflowItem',
+        'itemTypes',
+        'itemTypes.upgradeTarget',
+        'itemTypes.upgradeTarget.itemCategory'
+      ],
+    }),
     fetchAPI<Translation>('/translation',{},{
       locale: context.locale,
       populate: ['translations']
@@ -37,6 +47,7 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
   return {
     props: {
       content,
+      categories,
       translation: transformTranslations(translation)
     },
     revalidate: 60,
@@ -45,11 +56,23 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Terms: NextPage<PropType> = ({content,translation}) => {
+const Terms: NextPage<PropType> = ({content,translation, categories}) => {
   const router = useRouter();
   const {data: signups} = useSWR<Field[]>('/orders/signups',fetchAPI,{
     fallback: {
       '/orders/signups': content,
+    },
+  });
+  const {data: itemCategories} = useSWR<ItemCategory[]>('/item-categories', url => fetchAPI(url,{},{
+    populate: [
+      'overflowItem',
+      'itemTypes',
+      'itemTypes.upgradeTarget',
+      'itemTypes.upgradeTarget.itemCategory'
+    ],
+  }),{
+    fallback: {
+      '/item-categories': categories,
     },
   });
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -58,7 +81,11 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
   }
   return (
     <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-3 sm:p-8">
-      <div>
+      <div className="flex gap-5">
+        {itemCategories?.map(category => <div key={category.id}>
+          {translation[category.attributes.name]}: {category.attributes.currentQuantity}/{category.attributes.maximumItemLimit}
+          </div>)}
+      </div>
       <div className="flex border-b-2 border-b-gray-200 py-2 justify-around text-xl">
           <div className='flex-[0.5]'>
             #
@@ -92,7 +119,6 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
             {field.attributes.group}
           </div>
         </div>)}
-      </div>
       <div className='mt-4'>
       <Link href="">
         <a onClick={goBack} className='underline text-sky-900'>
