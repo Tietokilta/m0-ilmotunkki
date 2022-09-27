@@ -25,32 +25,37 @@ type StaticPropType = {
 }
 
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
-  const [
-    content,
-    categories,
-    translation,
-    ] = await Promise.all([
-    fetchAPI<Field[]>('/orders/signups'),
-    fetchAPI<ItemCategory[]>('/item-categories',{},{
-      populate: [
-        'overflowItem',
-        'itemTypes',
-        'itemTypes.upgradeTarget',
-        'itemTypes.upgradeTarget.itemCategory'
-      ],
-    }),
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
-    }),
-  ]);
-  return {
-    props: {
+  try{
+    const [
       content,
       categories,
-      translation: transformTranslations(translation)
-    },
-    revalidate: 60,
+      translation,
+      ] = await Promise.all([
+      fetchAPI<Field[]>('/orders/signups'),
+      fetchAPI<ItemCategory[]>('/item-categories',{},{
+        populate: [
+          'overflowItem',
+          'itemTypes',
+          'itemTypes.upgradeTarget',
+          'itemTypes.upgradeTarget.itemCategory'
+        ],
+      }),
+      fetchAPI<Translation>('/translation',{},{
+        locale: context.locale,
+        populate: ['translations']
+      }),
+    ]);
+    return {
+      props: {
+        content,
+        categories,
+        translation: transformTranslations(translation)
+      },
+      revalidate: 60,
+    }
+  } catch(error) {
+    console.error(error);
+    throw error;
   }
 }
 

@@ -17,23 +17,29 @@ type StaticPropType = {
   translation: Record<string, string>
 }
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
-  const [formData, translation] = await Promise.all([
-    fetchAPI<ContactForm[]>('/contact-forms',{},{
-      locale: context.locale,
-      populate: ['contactForm','itemTypes']
-    }),
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
-    }),
-  ]);
-  return {
-    props: {
-      contactForms: formData,
-      translation: transformTranslations(translation),
-    },
-    revalidate: 60,
+  try {
+    const [formData, translation] = await Promise.all([
+      fetchAPI<ContactForm[]>('/contact-forms',{},{
+        locale: context.locale,
+        populate: ['contactForm','itemTypes']
+      }),
+      fetchAPI<Translation>('/translation',{},{
+        locale: context.locale,
+        populate: ['translations']
+      }),
+    ]);
+    return {
+      props: {
+        contactForms: formData,
+        translation: transformTranslations(translation),
+      },
+      revalidate: 60,
+    }
+  } catch(error) {
+    console.error(error);
+    throw error;
   }
+
 };
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
