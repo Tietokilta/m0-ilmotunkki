@@ -8,19 +8,19 @@ import { AppContext } from '../../context/AppContext';
 import { ContactForm,Field, Translation } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { transformTranslations } from '../../utils/helpers';
+import { getContactForm, transformTranslations } from '../../utils/helpers';
 import GroupComponent from '../../components/Group';
 
 
 type StaticPropType = {
-  contactForm: Field[],
+  contactForms: ContactForm[],
   translation: Record<string, string>
 }
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [formData, translation] = await Promise.all([
-    fetchAPI<ContactForm>('/contact-form',{},{
+    fetchAPI<ContactForm[]>('/contact-forms',{},{
       locale: context.locale,
-      populate: 'contactForm',
+      populate: ['contactForm','itemTypes']
     }),
     fetchAPI<Translation>('/translation',{},{
       locale: context.locale,
@@ -29,18 +29,18 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
   ]);
   return {
     props: {
-      contactForm: formData.attributes.contactForm,
+      contactForms: formData,
       translation: transformTranslations(translation),
     },
     revalidate: 60,
   }
-}
+};
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Form: NextPage<PropType> = ({contactForm, translation}) => {
+const Form: NextPage<PropType> = ({contactForms, translation}) => {
   const router = useRouter();
-  const {customer, refreshFields, isEmpty} = useContext(AppContext);
+  const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
   const [inputFields, setInputFields] = useState<Record<string,any>>(customer.attributes);
   useEffect(() => {
     setInputFields(customer.attributes);
@@ -51,6 +51,7 @@ const Form: NextPage<PropType> = ({contactForm, translation}) => {
     }
   },[isEmpty, router]);
 
+  const contactForm = getContactForm(contactForms, items);
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const updateFields: any = {...inputFields};

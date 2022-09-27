@@ -68,6 +68,7 @@ export type Group = StrapiBaseType<{
 
 export type ContactForm = StrapiBaseType<{
   contactForm: Field[];
+  itemTypes: StrapiResponse<ItemType[]>;
 }>;
 
 export type Order = StrapiBaseType<{

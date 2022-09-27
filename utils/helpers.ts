@@ -1,4 +1,4 @@
-import { Item, Translation } from "./models";
+import { ContactForm, Field, Item, Translation } from "./models";
 
 type AggrecatedItem = {
   id: number;
@@ -39,3 +39,17 @@ export const transformTranslations = (t: Translation): Record<string,string> =>
       acc[key] = value;
       return acc;
     }, {} as Record<string,string>);
+
+export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => {
+  const fields: Field[] = forms.reduce((acc, form) => {
+    const include = form.attributes.itemTypes.data.some(itemType => {
+      return items.some(item =>item.attributes.itemType.data.id === itemType.id);
+    });
+    if(!include) return acc
+    const newFields = form.attributes.contactForm.filter(field =>
+      !acc.some(existingField => existingField.fieldName === field.fieldName));
+    return [...acc, ...newFields]
+  },[] as Field[])
+
+  return fields;
+}

@@ -9,7 +9,7 @@ import { initialCustomer } from '../../context/AppContext';
 import { ContactForm,Customer,Field, Order, StrapiBaseType, Translation } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { transformTranslations } from '../../utils/helpers';
+import { getContactForm, transformTranslations } from '../../utils/helpers';
 import GroupComponent from '../../components/Group';
 import Loader from '../../components/Loader'
 import OrderComponent from '../../components/Order';
@@ -19,7 +19,7 @@ type Global = StrapiBaseType<{
 }>
 
 type ServerSidePropType = {
-  contactForm: Field[];
+  contactForms: ContactForm[];
   translation: Record<string, string>;
   global: Global
 }
@@ -27,9 +27,9 @@ type ServerSidePropType = {
 
 export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async (context) => {
   const [formData, translation, global] = await Promise.all([
-    fetchAPI<ContactForm>('/contact-form',{},{
+    fetchAPI<ContactForm[]>('/contact-forms',{},{
       locale: context.locale,
-      populate: 'contactForm',
+      populate: ['contactForm','itemTypes']
     }),
     fetchAPI<Translation>('/translation',{},{
       locale: context.locale,
@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async 
   ]);
   return {
     props: {
-      contactForm: formData.attributes.contactForm,
+      contactForms: formData,
       translation: transformTranslations(translation),
       global
     },
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async 
 
 type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Form: NextPage<PropType> = ({contactForm, translation, global}) => {
+const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
   const router = useRouter();
   const {orderUid} = router.query;
   const [isLoading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ const Form: NextPage<PropType> = ({contactForm, translation, global}) => {
   },[customer]);
 
   if(!customer)return null;
-
+  const contactForm = orders ? getContactForm(contactForms, orders[0]?.attributes.items.data): undefined;
   const handleSubmit = async (e: FormEvent) => {
     setLoading(true);
     e.preventDefault();
@@ -101,7 +101,7 @@ const Form: NextPage<PropType> = ({contactForm, translation, global}) => {
     <div className="container max-w-3xl mx-auto">
       <form className='mb-6 bg-slate-50 rounded shadow-md p-8' 
             onSubmit={handleSubmit}>
-        {contactForm.map(field => (
+        {contactForm?.map(field => (
           <div className="mb-8" key={field.fieldName}>
             <label className='block p-1'>
             {field.label}{field.required && '*'}
@@ -119,7 +119,6 @@ const Form: NextPage<PropType> = ({contactForm, translation, global}) => {
             />}
           </label>
           </div>
-
         ))}
         <div className=''>
           {isLoading && <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">

@@ -10,16 +10,22 @@ import useSWR from "swr";
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
 import { fetchAPI } from "../../lib/api";
-import { transformTranslations } from '../../utils/helpers';
-import { ContactForm, Customer, Translation } from "../../utils/models";
+import { getContactForm, transformTranslations } from '../../utils/helpers';
+import { ContactForm, Customer, Item, Translation } from "../../utils/models";
 
-const ContactComponent = ({customer, translation}: {customer: Customer, translation: Record<string,string>}) => {
+type ContactFormTypes = {
+  customer: Customer;
+  translation: Record<string,string>;
+  items: Item[];
+}
+
+const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, translation, items}) => {
   const {locale} = useRouter();
-  const { data } = useSWR<ContactForm>(['/contact-form',locale], url => fetchAPI<ContactForm>(url,{},{
+  const { data } = useSWR<ContactForm[]>(['/contact-forms',locale], url => fetchAPI(url,{},{
     locale,
-    populate: 'contactForm',
+    populate: ['contactForm','itemTypes']
   }));
-  const fields = data?.attributes.contactForm;
+  const fields = data && getContactForm(data,items)
   if(!fields) return null;
   return (
     <div className='mb-5'>
@@ -70,7 +76,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
   return (
     <div className='container mx-auto px-4 max-w-3xl pb-4'>
       <div className='bg-slate-50 rounded'>
-        <ContactComponent customer={customer} translation={translation}/>
+        <ContactComponent items={items} customer={customer} translation={translation}/>
       </div>
       <div className='bg-slate-50 rounded shadow-lg p-4'>
         <Order items={items} translation={translation}></Order>
