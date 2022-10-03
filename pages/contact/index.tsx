@@ -86,8 +86,8 @@ const Form: NextPage<PropType> = ({contactForms, translation}) => {
     })
   }
   return (
-    <div className="container max-w-3xl mx-auto bg-slate-50 rounded shadow-md p-4 pt-4 sm:p-8">
-      <form className='mb-6' 
+    <div className="container max-w-3xl mx-auto bg-secondary-50 dark:bg-secondary-800 rounded shadow-md p-4 pt-4 sm:p-8">
+      <form className='mb-6 text-secondary-800 dark:text-secondary-100' 
             onSubmit={handleSubmit}>
         {contactForm.map(field => (
           <div className="mb-8" key={field.fieldName}>

@@ -53,7 +53,7 @@ const Parent = () => {
     reset();
   }
   return (
-    <div className='h-4 text-slate-900'>
+    <div className='h-4 text-secondary-900 dark:text-secondary-100'>
       {order &&
       order.attributes.createdAt &&
       order.attributes.status !== 'ok'

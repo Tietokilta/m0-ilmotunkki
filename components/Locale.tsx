@@ -26,7 +26,7 @@ const Locale = () => {
     <div>
       {router.locales?.map(locale => (
         <span
-          className='m-1 uppercase cursor-pointer font-bold select text-slate-900'
+          className='m-1 uppercase cursor-pointer font-bold select text-secondary-900 dark:text-secondary-50'
           key={locale}
           onClick={() => handleClick(locale)}>
           <style jsx>{`

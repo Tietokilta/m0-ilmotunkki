@@ -85,13 +85,13 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
     router.back();
   }
   return (
-    <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-3 sm:p-8">
+    <div className="container max-w-3xl bg-secondary-50 mx-auto rounded shadow-md p-3 sm:p-8">
       <div className="flex gap-5 mb-6">
         {itemCategories?.map(category => <div key={category.id}>
           {translation[category.attributes.name]}: {category.attributes.currentQuantity}/{category.attributes.maximumItemLimit}
           </div>)}
       </div>
-      <div className="flex border-b-2 border-b-gray-200 py-2 justify-around text-xl">
+      <div className="flex border-b-2 border-b-secondary-200 py-2 justify-around text-xl">
           <div className='flex-[0.5]'>
             #
           </div>
@@ -103,7 +103,7 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
           </div>
         </div>
         {signups?.map(field =>
-        <div key={field.id} className="flex border-b-2 border-b-gray-200 py-4 justify-around verified">
+        <div key={field.id} className="flex border-b-2 border-b-secondary-200 py-4 justify-around verified">
           <style jsx>{`
             .verified {
               ${field.attributes.status !== 'ok' && `opacity: 0.6`}
@@ -115,7 +115,7 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
           <div className='flex-1'>
             <div>{field.attributes.name}</div>
             {field.attributes.status !== 'ok' &&
-              <div className='text-sky-700'>
+              <div className='text-primary-700 dark:text-primary-200'>
                 {translation.unverified}
               </div>
             }
@@ -126,7 +126,7 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
         </div>)}
       <div className='mt-4'>
       <Link href="">
-        <a onClick={goBack} className='underline text-sky-900'>
+        <a onClick={goBack} className='underline text-primary-900 dark:text-primary-100'>
           {translation.back}
         </a>
       </Link>

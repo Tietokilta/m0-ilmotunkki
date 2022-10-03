@@ -78,16 +78,16 @@ const CallbackPage: NextPage<PropType> = ({isValid, paymentStatus, content, tran
   if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) result = <div>
     {content.attributes.onError} <Link href="/summary">
-      <a className='text-sky-900'>{translation.backToOrder}</a>
+      <a className='text-primary-900 dark:text-primary-100'>{translation.backToOrder}</a>
       </Link>
     </div>
   else if (paymentStatus !== 'ok') result = <div>
     {content.attributes.onCancel} <Link href="/summary">
-      <a className='text-sky-900'>{translation.backToOrder}</a>
+      <a className='text-primary-900 dark:text-primary-100'>{translation.backToOrder}</a>
     </Link>
   </div>
   return (
-    <div className='container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-2 pt-4 sm:p-8'>
+    <div className='container text-primary-900 dark:text-primary-100 max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-2 pt-4 sm:p-8'>
       {result}
     </div>
   );

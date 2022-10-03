@@ -58,7 +58,7 @@ const Checkout = () => {
         {provider.parameters && provider.parameters.map(parameter => 
           <input key={parameter.name} type='hidden' name={parameter.name} value={parameter.value} />
         )}
-        <button className='bg-transparent border-black border rounded h-full w-full'>
+        <button className='bg-transparent border-secondary-900 dark:border-secondary-50 border rounded h-full w-full'>
           <Image height={60} width={150} src={provider.svg} alt={`${provider.name}-icon`}/>
           </button>
       </form>)}

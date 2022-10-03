@@ -99,7 +99,7 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
 
   return (
     <div className="container max-w-3xl mx-auto">
-      <form className='mb-6 bg-slate-50 rounded shadow-md p-8' 
+      <form className='mb-6 bg-secondary-50 rounded shadow-md p-8' 
             onSubmit={handleSubmit}>
         {contactForm?.map(field => (
           <div className="mb-8" key={field.fieldName}>
@@ -127,7 +127,7 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
           <button disabled={isLoading || updateHasEnded} className='btn h-12'>{translation.update}</button>
         </div>
       </form>
-      {orders?.map(order => <div key={order.id} className="bg-slate-50 rounded shadow-md mb-8 p-4">
+      {orders?.map(order => <div key={order.id} className="bg-secondary-50 rounded shadow-md mb-8 p-4">
         <OrderComponent
           translation={translation}
           items={order.attributes.items.data}

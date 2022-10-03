@@ -8,6 +8,8 @@ import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+    <div className="dark w-full h-full">
+    <div className='bg-secondary-200 dark:bg-secondary-900 w-full h-full'>
     <AppProvider>
       <Head>
         <title>Välimuistinnollaus</title>
@@ -37,8 +39,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Locale />
         <Timer/>
       </Header>
-      <Component {...pageProps} />
+          <Component {...pageProps} />
     </AppProvider>
+    </div>
+    </div>
   );
 }
 
