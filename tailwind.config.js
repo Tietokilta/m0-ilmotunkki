@@ -6,11 +6,11 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: 'class', // or media
   theme: {
     colors: {
       primary: colors.red,
-      secondary: colors.stone,
+      secondary: colors.neutral,
       transparent: colors.transparent,
     },
     extend: {
