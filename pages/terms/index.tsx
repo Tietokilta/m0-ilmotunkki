@@ -53,12 +53,12 @@ const Terms: NextPage<PropType> = ({content,translation}) => {
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-8">
       <ReactMarkdown className='prose prose-secondary dark:prose-invert'>{content.attributes.terms}</ReactMarkdown>
       <ReactMarkdown className="prose prose-secondary dark:prose-invert">{content.attributes.gdpr}</ReactMarkdown>
-      <div className='mt-4'>
-      <Link href="">
-        <a onClick={goBack} className='underline text-primary-900 dark:text-primary-500'>
-          {translation.back}
-        </a>
-      </Link>
+      <div className='my-4'>
+        <Link href="">
+          <a onClick={goBack} className='underline text-primary-900 dark:text-primary-500'>
+            {translation.back}
+          </a>
+        </Link>
       </div>
 
     </div>
