@@ -6,7 +6,7 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // or media
+  darkMode: 'class', // class/media
   theme: {
     colors: {
       primary: colors.red,
