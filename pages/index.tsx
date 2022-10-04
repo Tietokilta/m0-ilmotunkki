@@ -11,6 +11,7 @@ import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
 import { FrontPageFields, Translation } from '../utils/models';
+
 type StaticPropType = {
   content: FrontPageFields,
   translation: Record<string,string>

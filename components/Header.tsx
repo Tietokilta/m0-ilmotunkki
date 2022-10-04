@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Banner from '../public/banner.jpg'
 
 type PropType = {
   children: React.ReactNode
@@ -10,9 +11,9 @@ const Header = ({children}: PropType) => {
           {children}
       </div>
       <Link href="/">
-        <p className="text-3xl text-center py-4 text-secondary-900 dark:text-secondary-100">
-          Retuperän WBK
-        </p>
+        <div className="cursor-pointer text-3xl text-center py-4 text-secondary-900 dark:text-secondary-100">
+          <Image src={Banner} alt="banner"/>
+        </div>
       </Link>
     </header>
 }
