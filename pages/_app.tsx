@@ -4,6 +4,7 @@ import AppProvider from '../context/AppContext'
 import Locale from '../components/Locale';
 import Timer from '../components/Timer';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -38,6 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Timer/>
       </Header>
       <Component {...pageProps} />
+      <Footer/>
     </AppProvider>
   );
 }
