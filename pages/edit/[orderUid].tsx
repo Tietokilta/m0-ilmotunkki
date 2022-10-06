@@ -97,7 +97,6 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
       }
     })
   }
-
   return (
     <div className="container max-w-3xl mx-auto">
       <form className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md mb-8"
@@ -149,8 +148,11 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
               key={item.id}
               className="p-4 w-fit"
             >
-              <QRCodeSVG
-                value={`${window.location}/validate/${orderUid}_${item.id}`}/>
+              <div className='bg-secondary-200 p-2'>
+                <QRCodeSVG
+                  level='L'
+                  value={`https://${window.location.host}/validate/${orderUid}_${1}`}/>
+              </div>
               <p className='text-center'>{translation[item.attributes.itemType.data.attributes.slug]} ID: {item.id}</p>
             </div>)}
           </div>
