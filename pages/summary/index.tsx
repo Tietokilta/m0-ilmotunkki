@@ -28,7 +28,6 @@ const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, 
   const fields = data && getContactForm(data,items);
 
   if(!fields) return null;
-  console.log(customer);
   return (
     <div className='mb-5 text-primary-900 dark:text-primary-100'>
       <div className='shadow-lg rounded p-4 flex flex-col gap-2'>
