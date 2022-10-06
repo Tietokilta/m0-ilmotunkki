@@ -4,6 +4,7 @@ import type {
   InferGetServerSidePropsType} from 'next'
   import useSWR from 'swr';
   import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { fetchAPI } from '../../lib/api';
 import { initialCustomer } from '../../context/AppContext';
 import { ContactForm,Customer,Field, Order, StrapiBaseType, Translation } from '../../utils/models';
@@ -127,7 +128,8 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
           <button disabled={isLoading || updateHasEnded} className='btn h-12'>{translation.update}</button>
         </div>
       </form>
-      {orders?.map(order => <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md">
+      {orders?.map(order =>
+      <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md">
         <OrderComponent
           translation={translation}
           items={order.attributes.items.data}
@@ -138,6 +140,18 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
             disabled={
             order.attributes.items.data.length === 0
           }>{translation.pay}</button></Link>}
+          <div className='mt-4 flex flex-wrap gap-4'>
+            {translation.tickets}
+            { window && order.attributes.items.data.map(item =>
+            <div
+              key={item.id}
+              className="p-4 w-fit"
+            >
+              <QRCodeSVG
+                value={`${window.location}/validate/${orderUid}_${item.id}`}/>
+              <p className='text-center'>{translation[item.attributes.itemType.data.attributes.slug]}</p>
+            </div>)}
+          </div>
         </div>
       )}
     </div>
