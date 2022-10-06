@@ -55,7 +55,7 @@ const CallbackPage: NextPage<PropType> = ({translation, item}) => {
   console.log(item)
   const success = <div className='bg-success-500 rounded p-8 text-center text-3xl uppercase'>
     <p>{translation.success}</p>
-    {item &&<p>{translation[item.attributes.itemType.data.attributes.slug]}</p> }
+    {item &&<p>{translation[item.attributes.itemType.data.attributes.slug]} ID:{item.id}</p> }
   </div>
   const fail = <div className='bg-danger-500 rounded p-8 text-center text-3xl uppercase'>
     {translation.failed}
