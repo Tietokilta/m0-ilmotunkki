@@ -142,14 +142,16 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
           }>{translation.pay}</button></Link>}
           <div className='mt-4 flex flex-wrap gap-4'>
             {translation.tickets}
-            { window && order.attributes.items.data.map(item =>
+            { window && order.attributes.items.data
+                .sort((a,b) => a.id-b.id)
+                .map(item =>
             <div
               key={item.id}
               className="p-4 w-fit"
             >
               <QRCodeSVG
                 value={`${window.location}/validate/${orderUid}_${item.id}`}/>
-              <p className='text-center'>{translation[item.attributes.itemType.data.attributes.slug]}</p>
+              <p className='text-center'>{translation[item.attributes.itemType.data.attributes.slug]} ID: {item.id}</p>
             </div>)}
           </div>
         </div>
