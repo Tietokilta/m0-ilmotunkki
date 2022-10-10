@@ -128,12 +128,12 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
         </div>
       </form>
       {orders?.map(order =>
-      <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md">
+      <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md my-8">
         <OrderComponent
           translation={translation}
           items={order.attributes.items.data}
         />
-        {order.attributes.status === 'new' &&
+        {order.attributes.status === 'admin-new' &&
           <Link passHref href={`/checkout/${order.attributes.uid}`}>
           <button className='btn mt-5'
             disabled={

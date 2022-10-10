@@ -72,7 +72,7 @@ export type ContactForm = StrapiBaseType<{
 }>;
 
 export type Order = StrapiBaseType<{
-  status: 'new'| 'ok' | 'fail' | 'pending',
+  status: 'new'| 'ok' | 'fail' | 'pending' | 'admin-new',
   transactionId?: string;
   createdAt: string;
   items: StrapiResponse<Item[]>;
