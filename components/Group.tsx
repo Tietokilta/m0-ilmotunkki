@@ -100,10 +100,10 @@ const GroupComponent = ({onChange}: PropTypes) => {
   }
 
   return (
-    <div className="flex gap-1 border-b-2 border-b-sky-700 w-full flex-wrap mt-2">
+    <div className="flex gap-1 border-b-2 border-b-primary-700 dark:border-b-primary-200 w-full flex-wrap mt-2">
       {selectedGroups.map(group => 
       <div
-        className='bg-sky-700 text-slate-50 rounded-md px-3 flex gap-1 whitespace-nowrap justify-center items-center'
+        className='bg-primary-700 dark:bg-primary:200 text-secondary-50 rounded-md px-3 flex gap-1 whitespace-nowrap justify-center items-center'
         key={group}>
         {group}
         <span
@@ -123,11 +123,11 @@ const GroupComponent = ({onChange}: PropTypes) => {
           onBlur={handleBlur}/>
         {newGroupName.length > 0 && filteredGroups.length > 0 &&
         <div
-          className='absolute right-0 top-[100%] min-w-[300px] z-10 bg-slate-50 rounded shadow-md p-2'
+          className='absolute right-0 top-[100%] min-w-[300px] z-10 bg-secondary-50 rounded shadow-md p-2'
         >
           {filteredGroups.map((group,idx) =>
             <div
-            className='selected p-2 cursor-pointer hover:bg-sky-700 hover:text-slate-50 border-b-2 '
+            className='selected p-2 cursor-pointer hover:bg-primary-700 hover:text-secondary-50 border-b-2 '
             onMouseDown={() => handleClick(group)}
             onTouchStart={() => handleClick(group)}
             key={group}

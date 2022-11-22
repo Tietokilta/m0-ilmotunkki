@@ -61,7 +61,7 @@ const GiftCardComponent = ({translation}: PropType) => {
           {translation.add}
         </button>
       </div>
-      <p className='text-red-400'>{giftCardError}</p>
+      <p className='text-danger-400'>{giftCardError}</p>
     </div>
   )
 }

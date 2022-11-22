@@ -11,6 +11,7 @@ import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
 import { FrontPageFields, Translation } from '../utils/models';
+
 type StaticPropType = {
   content: FrontPageFields,
   translation: Record<string,string>
@@ -45,7 +46,7 @@ const Home: NextPage<PropType> = ({content,translation}) => {
   const { bodyText } = content.attributes;
 
   return (
-    <div className="container max-w-3xl bg-slate-50 mx-auto rounded shadow-md p-1 pt-4 sm:p-8">
+    <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-1 pt-4 sm:p-8">
       <main className='container mx-auto px-4'>
           <ReactMarkdown
           components={{
@@ -54,15 +55,10 @@ const Home: NextPage<PropType> = ({content,translation}) => {
               return <Image src={getStrapiURL(image.src)} width={400} height={400} alt={image.alt}></Image>
             }
           }}
-          className="prose prose-li:my-0.5 prose-ul:my-0.5 prose-slate mt-0 mb-4">
+          className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
-          <div className='my-10'>
-            <Link href={'/signups'} passHref>
-              <a className="btn">{translation.signups}</a>
-            </Link>
-          </div>
-          <div className='w-full border-b-2 border-b-sky-700 opacity-50 my-4'></div>
+          <div className='w-full border-b-2 border-b-primary-700 dark:border-b-primary-300 opacity-50 my-4'></div>
           <ItemList translation={translation} />
           {items.length > 0 && 
           <div className='h-10'>

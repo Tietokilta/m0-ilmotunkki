@@ -25,10 +25,11 @@ const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, 
     locale,
     populate: ['contactForm','itemTypes']
   }));
-  const fields = data && getContactForm(data,items)
+  const fields = data && getContactForm(data,items);
+
   if(!fields) return null;
   return (
-    <div className='mb-5'>
+    <div className='mb-5 text-primary-900 dark:text-primary-100'>
       <div className='shadow-lg rounded p-4 flex flex-col gap-2'>
         {fields.map(row =>
         <div
@@ -75,21 +76,21 @@ const Summary: NextPage<PropType> = ({translation}) => {
   },[isEmpty, router]);
   return (
     <div className='container mx-auto px-4 max-w-3xl pb-4'>
-      <div className='bg-slate-50 rounded'>
+      <div className='bg-secondary-50 dark:bg-secondary-800 rounded'>
         <ContactComponent items={items} customer={customer} translation={translation}/>
       </div>
-      <div className='bg-slate-50 rounded shadow-lg p-4'>
+      <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4'>
         <Order items={items} translation={translation}></Order>
       </div>
       <div className='my-2'>
-        <label className='text-sky-700'>
+        <label className='text-primary-700 dark:text-primary-200'>
         <input
           className='h-4 w-4 mr-3 bg-transparent'
           type="checkbox"
           checked={termsAccepted}
           onChange={(event) => setTermsAccepted(event.target.checked)}/>
           {translation.haveRead} <Link href="/terms" passHref>
-            <a className='text-sky-900 underline'>{translation.terms}</a>
+            <a className='text-primary-900 dark:text-primary-50 underline'>{translation.terms}</a>
           </Link>
         </label>
       </div>

@@ -23,19 +23,16 @@ const Locale = () => {
     return null;
   }
   return (
-    <div>
+    <div className='flex h-fit'>
       {router.locales?.map(locale => (
-        <span
-          className='m-1 uppercase cursor-pointer font-bold select text-slate-900'
+        <div
+          className='m-1 uppercase cursor-pointer font-bold text-secondary-900 dark:text-secondary-50'
           key={locale}
           onClick={() => handleClick(locale)}>
-          <style jsx>{`
-            .select {
-              ${router.locale === locale && `border-bottom: 2px solid rgb(3,105,161);`};
-            }
-        `}</style>
           {locale}
-      </span>
+          {router.locale === locale && <div className='border-t-2 border-t-primary-600'></div>}
+        </div>
+
       ))}
     </div>
   )

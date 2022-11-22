@@ -89,6 +89,8 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>) =
     language: 'FI',
     items,
     customer: {
+      firstName: order.attributes.customer.data.attributes.firstName,
+      lastName: order.attributes.customer.data.attributes.lastName,
       email: order.attributes.customer.data.attributes.email,
     },
     redirectUrls: {
