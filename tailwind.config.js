@@ -9,8 +9,8 @@ module.exports = {
   darkMode: 'class', // class/media
   theme: {
     colors: {
-      primary: colors.red,
-      secondary: colors.neutral,
+      primary: colors.green,
+      secondary: colors.emerald,
       transparent: colors.transparent,
       success: colors.green,
       danger: colors.red,
