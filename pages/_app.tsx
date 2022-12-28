@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AppProvider>
       <Head>
-        <title>RWBK Teekkarius 150</title>
+        <title>Muistinnollaus 100101</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
         <link rel="icon" href="/favicon.ico" />
@@ -22,14 +22,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#da532c"/>
         <meta name="theme-color" content="#ffffff"/>
         <meta property="og:image" content="/logo.png" />
-        <meta property="og:title" content="Retuperän WBK liput" />
-        <meta property="og:url" content="https://liput.rwbk.fi" />
+        <meta property="og:title" content="Muistinnollaus 37" />
+        <meta property="og:url" content="https://muistinnollaus.fi" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="fi_FI" />
         <meta property="robots" content="index, archive" />
         <meta
           name="description"
-          content="Retuperän WBK Teekkarius 150 konsertti"
+          content="Muistinnollaus 37 saapuu XX.XX.2023"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
