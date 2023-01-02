@@ -26,7 +26,7 @@ const Header = ({children}: PropType) => {
       </div>
       <style jsx>{`
         .bg-image {
-          background-image: url(${getStrapiURL(header?.attributes.url)});
+          background-image: url(${getStrapiURL(header?.attributes.formats.large.url)});
           background-size: cover;
         }
       `}</style>
