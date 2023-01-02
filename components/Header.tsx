@@ -18,7 +18,8 @@ const Header = ({children}: PropType) => {
   const { data } = useSWR<Response>('/front-page', url => fetchAPI(url,{},{
     populate: ['header']
   }));
-  const header = data?.attributes.header.data[0];
+  const headerArray = data?.attributes.header.data;
+  const header = headerArray && headerArray[0]
   return <header className="container max-w-3xl mx-auto relative">
         <div className='w-fit p-1 flex gap-4'>
           {children}
