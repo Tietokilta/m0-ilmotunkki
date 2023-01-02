@@ -10,12 +10,19 @@ import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
-import { FrontPageFields, Translation } from '../utils/models';
+import { StrapiBaseType, StrapiImage, Translation } from '../utils/models';
+
+type FrontPageFields = StrapiBaseType<{
+  bodyText: string;
+  title: string;
+  header: StrapiImage;
+}>;
 
 type StaticPropType = {
   content: FrontPageFields,
   translation: Record<string,string>
 }
+
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [
     content,
@@ -43,8 +50,7 @@ type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<PropType> = ({content,translation}) => {
   const {items} = useContext(AppContext)
-  const { bodyText } = content.attributes;
-
+  const { bodyText, } = content.attributes;
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-1 pt-4 sm:p-8">
       <main className='container mx-auto px-4'>
