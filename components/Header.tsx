@@ -19,14 +19,15 @@ const Header = ({children}: PropType) => {
     populate: ['header']
   }));
   const headerArray = data?.attributes.header.data;
-  const header = headerArray && headerArray[0]
+  const headerData = headerArray && headerArray[0];
+  const header = headerData?.attributes.formats?.large || headerData?.attributes
   return <header className="container max-w-3xl mx-auto relative">
         <div className='w-fit p-1 flex gap-4'>
           {children}
       </div>
       <style jsx>{`
         .bg-image {
-          background-image: header ? url(${getStrapiURL(header?.attributes.formats.large.url)}) : 'none';
+          background-image: ${header ? `url(${getStrapiURL(header?.url)})` : 'none' };
           background-size: cover;
         }
       `}</style>
