@@ -14,8 +14,6 @@ import { StrapiBaseType, StrapiImage, Translation } from '../utils/models';
 
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
-  title: string;
-  header: StrapiImage;
 }>;
 
 type StaticPropType = {
