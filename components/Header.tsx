@@ -24,14 +24,12 @@ const Header = ({children}: PropType) => {
         <div className='w-fit p-1 flex gap-4'>
           {children}
       </div>
-      {
-        header && <style jsx>{`
+      <style jsx>{`
         .bg-image {
-          background-image: url(${getStrapiURL(header?.attributes.formats.large.url)});
+          background-image: header ? url(${getStrapiURL(header?.attributes.formats.large.url)}) : 'none';
           background-size: cover;
         }
       `}</style>
-      }
 
       <Link href="/">
         <div className="cursor-pointer relative text-5xl text-center font-bold py-4 text-secondary-900 dark:text-secondary-100 bg-image h-40">
