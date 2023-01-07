@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property="robots" content="index, archive" />
         <meta
           name="description"
-          content="Muistinnollaus 37 saapuu XX.XX.2023"
+          content="Muistinnollaus 37 saapuu 17.2.2023"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -10,7 +10,7 @@ import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
-import { StrapiBaseType, StrapiImage, Translation } from '../utils/models';
+import { StrapiBaseType, Translation } from '../utils/models';
 
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
@@ -62,6 +62,11 @@ const Home: NextPage<PropType> = ({content,translation}) => {
           className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
+          <div className='my-10'>
+            <Link href={'/signups'} passHref>
+              <a className="btn">{translation.signups}</a>
+            </Link>
+          </div>
           <div className='w-full border-b-2 border-b-primary-700 dark:border-b-primary-300 opacity-50 my-4'></div>
           <ItemList translation={translation} />
           {items.length > 0 && 
