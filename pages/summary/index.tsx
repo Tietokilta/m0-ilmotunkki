@@ -76,7 +76,7 @@ const Summary: NextPage<PropType> = ({translation}) => {
     }
   },[isEmpty, router]);
   return (
-    <div className='container mx-auto px-4 max-w-3xl pb-4'>
+    <div className='container mx-auto max-w-3xl py-4'>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded'>
         <ContactComponent items={items} customer={customer} translation={translation}/>
       </div>
