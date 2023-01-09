@@ -10,6 +10,19 @@ import Head from 'next/head';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AppProvider>
+      <style jsx global>{`
+        :root {
+          --color-dynamic-100: hsl(50 80% 100%);
+          --color-dynamic-200: hsl(50 80% 90%);
+          --color-dynamic-300: hsl(50 80% 80%);
+          --color-dynamic-400: hsl(50 80% 70%);
+          --color-dynamic-500: hsl(50 80% 60%);
+          --color-dynamic-600: hsl(50 80% 50%);
+          --color-dynamic-700: hsl(50 80% 40%);
+          --color-dynamic-800: hsl(50 80% 30%);
+          --color-dynamic-900: hsl(50 80% 20%);
+        }
+      `}</style>
       <Head>
         <title>Muistinnollaus 100101</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

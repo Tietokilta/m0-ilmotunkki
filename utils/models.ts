@@ -26,7 +26,7 @@ type ImageFields = {
 export type StrapiImage = StrapiBaseType<{
   alternativeText: string | null;
   caption: string | null;
-  formats: {
+  formats?: {
     large: ImageFields;
     medium: ImageFields;
     small: ImageFields;

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useContext, useState, useEffect } from "react";
 import useSWR from "swr";
+import GiftCardComponent from '../../components/GiftCard';
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
 import { fetchAPI } from "../../lib/api";
@@ -81,6 +82,9 @@ const Summary: NextPage<PropType> = ({translation}) => {
       </div>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4'>
         <Order items={items} translation={translation}></Order>
+      </div>
+      <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4 text-primary-700 dark:text-primary-200'>
+        <GiftCardComponent translation={translation}></GiftCardComponent>
       </div>
       <div className='my-2'>
         <label className='text-primary-700 dark:text-primary-200'>
