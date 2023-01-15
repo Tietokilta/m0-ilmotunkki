@@ -1,5 +1,5 @@
 
-type StrapiResponse<T> = {
+export type StrapiResponse<T> = {
   data: T
 }
 export type StrapiBaseType<T> = {
@@ -10,6 +10,32 @@ export type StrapiBaseType<T> = {
     publishedAt: string;
   };
 };
+
+type ImageFields = {
+  ext: ".jpg",
+  url: "/uploads/small_M0_TG_icon_4_27034672c6.jpg",
+  hash: "small_M0_TG_icon_4_27034672c6",
+  mime: "image/jpeg",
+  name: "small_M0-TG-icon-4.jpg",
+  path: null,
+  size: 86.75,
+  width: 500,
+  height: 500
+}
+
+export type StrapiImage = StrapiBaseType<{
+  alternativeText: string | null;
+  caption: string | null;
+  formats?: {
+    large: ImageFields;
+    medium: ImageFields;
+    small: ImageFields;
+    thumbnail: ImageFields;
+  };
+  previewUrl: string | null;
+  provider: string;
+  provider_metadata: string;
+} & ImageFields>;
 
 export type ItemCategory = StrapiBaseType<{
   orderItemLimit: number;
@@ -46,10 +72,8 @@ export type GiftCard = StrapiBaseType<{
   code: string;
 }>;
 
-export type FrontPageFields = StrapiBaseType<{
-  bodyText: string;
-  title: string;
-}>;
+
+
 export type CallbackPageFields = StrapiBaseType<{
   onSuccess: string;
   onCancel: string;

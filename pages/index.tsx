@@ -10,12 +10,17 @@ import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { transformTranslations } from '../utils/helpers';
-import { FrontPageFields, Translation } from '../utils/models';
+import { StrapiBaseType, Translation } from '../utils/models';
+
+type FrontPageFields = StrapiBaseType<{
+  bodyText: string;
+}>;
 
 type StaticPropType = {
   content: FrontPageFields,
   translation: Record<string,string>
 }
+
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [
     content,
@@ -43,10 +48,9 @@ type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
 const Home: NextPage<PropType> = ({content,translation}) => {
   const {items} = useContext(AppContext)
-  const { bodyText } = content.attributes;
-
+  const { bodyText, } = content.attributes;
   return (
-    <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-1 pt-4 sm:p-8">
+    <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
       <main className='container mx-auto px-4'>
           <ReactMarkdown
           components={{
@@ -58,6 +62,11 @@ const Home: NextPage<PropType> = ({content,translation}) => {
           className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
+          <div className='my-10'>
+            <Link href={'/signups'} passHref>
+              <a className="btn">{translation.signups}</a>
+            </Link>
+          </div>
           <div className='w-full border-b-2 border-b-primary-700 dark:border-b-primary-300 opacity-50 my-4'></div>
           <ItemList translation={translation} />
           {items.length > 0 && 

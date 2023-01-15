@@ -85,13 +85,13 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
     router.back();
   }
   return (
-    <div className="container max-w-3xl bg-secondary-50 mx-auto rounded shadow-md p-3 sm:p-8">
+    <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-3 sm:p-8 text-secondary-800 dark:text-secondary-100">
       <div className="flex gap-5 mb-6">
         {itemCategories?.map(category => <div key={category.id}>
           {translation[category.attributes.name]}: {category.attributes.currentQuantity}/{category.attributes.maximumItemLimit}
           </div>)}
       </div>
-      <div className="flex border-b-2 border-b-secondary-200 py-2 justify-around text-xl">
+      <div className="flex border-b-4 border-b-secondary-200 dark:border-b-secondary-700 py-2 justify-around text-xl ">
           <div className='flex-[0.5]'>
             #
           </div>
@@ -103,7 +103,7 @@ const Terms: NextPage<PropType> = ({content,translation, categories}) => {
           </div>
         </div>
         {signups?.map(field =>
-        <div key={field.id} className="flex border-b-2 border-b-secondary-200 py-4 justify-around verified">
+        <div key={field.id} className="flex border-b-2 border-b-secondary-200 dark:border-b-secondary-700 py-4 justify-around verified">
           <style jsx>{`
             .verified {
               ${field.attributes.status !== 'ok' && `opacity: 0.6`}
