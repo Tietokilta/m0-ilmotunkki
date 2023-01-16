@@ -72,12 +72,17 @@ const AppProvider: FC<Props> = ({ children }) => {
   const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
   const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
   const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);
-
   const reset = useCallback(() => {
     sessionStorage.removeItem('orderUid');
     setOrderUid('');
     mutateOrder(undefined);
   },[mutateOrder]);
+
+  useEffect(() => {
+    if(error && error.status === 404) {
+      reset();
+    }
+  },[error,reset]);
 
   const initializeOrder = async () => {
     const newOrder = await fetchAPI<Order>('/orders',{
