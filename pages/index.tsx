@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Home: NextPage<PropType> = ({content,translation}) => {
+const Home: NextPage<PropType> = ({content, translation}) => {
   const {items} = useContext(AppContext)
   const { bodyText, } = content.attributes;
   return (

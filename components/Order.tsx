@@ -18,12 +18,12 @@ const Order: React.FC<PropType> = ({items: cartItems, translation, children}) =>
       {items.map(item => {
         if (!item.quantity) return null;
         return (
-        <div className='flex border-b-2 border-b-secondary-300 py-3 px-2' key={item.id}>
+        <div className='flex border-b-2 border-b-secondary-300 py-3 px-2 gap-2 items-center' key={item.id}>
           <div className='flex-1'>
-            <p className='text-2xl'>{item.name}</p>
+            <p className='text-lg'>{item.name}</p>
             <p>{item.quantity} kpl</p>
           </div>
-          <p className='flex-[2]'>{(item.quantity)*item.price} €</p>
+          <p className='flex-1 text-lg'>{(item.quantity)*item.price} €</p>
         </div>
         );
       })}
