@@ -5,8 +5,8 @@ import type {
 import Link from 'next/link';
 
 import { fetchAPI } from '../../lib/api';
-import { transformTranslations } from '../../utils/helpers';
-import { Translation, StrapiBaseType, ItemCategory } from '../../utils/models';
+import { useTranslation } from '../../utils/helpers';
+import { StrapiBaseType, ItemCategory } from '../../utils/models';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
@@ -21,7 +21,6 @@ type Field = StrapiBaseType<{
 type StaticPropType = {
   content: Field[],
   categories: ItemCategory[],
-  translation: Record<string,string>
 }
 
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
@@ -29,7 +28,6 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
     const [
       content,
       categories,
-      translation,
       ] = await Promise.all([
       fetchAPI<Field[]>('/orders/signups'),
       fetchAPI<ItemCategory[]>('/item-categories',{},{
@@ -40,16 +38,11 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
           'itemTypes.upgradeTarget.itemCategory'
         ],
       }),
-      fetchAPI<Translation>('/translation',{},{
-        locale: context.locale,
-        populate: ['translations']
-      }),
     ]);
     return {
       props: {
         content,
         categories,
-        translation: transformTranslations(translation)
       },
       revalidate: 60,
     }
@@ -61,7 +54,8 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Terms: NextPage<PropType> = ({content,translation, categories}) => {
+const Terms: NextPage<PropType> = ({content, categories}) => {
+  const {translation} = useTranslation();
   const router = useRouter();
   const {data: signups} = useSWR<Field[]>('/orders/signups',fetchAPI,{
     fallback: {

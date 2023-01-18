@@ -1,46 +1,19 @@
-import type {
-  NextPage,
-  GetStaticProps, 
-  InferGetStaticPropsType} from 'next'
+import type { NextPage } from 'next'
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { fetchAPI } from '../../lib/api';
 import { AppContext } from '../../context/AppContext';
-import { ContactForm,Field, Translation } from '../../utils/models';
+import { ContactForm} from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { getContactForm, transformTranslations } from '../../utils/helpers';
+import { getContactForm, useTranslation } from '../../utils/helpers';
 import GroupComponent from '../../components/Group';
 import useSWR from 'swr';
 
 
-type StaticPropType = {
-  translation: Record<string, string>
-}
-export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
-  try {
-    const [translation] = await Promise.all([
-      fetchAPI<Translation>('/translation',{},{
-        locale: context.locale,
-        populate: ['translations']
-      }),
-    ]);
-    return {
-      props: {
-        translation: transformTranslations(translation),
-      },
-      revalidate: 60,
-    }
-  } catch(error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-type PropType = InferGetStaticPropsType<typeof getStaticProps>
-
-const Form: NextPage<PropType> = ({translation}) => {
+const Form: NextPage = () => {
+  const { translation } = useTranslation();
   const router = useRouter();
-  const {data: contactForms, error} = useSWR('/contact-forms', url => fetchAPI<ContactForm[]>(url,{},{
+  const {data: contactForms} = useSWR('/contact-forms', url => fetchAPI<ContactForm[]>(url,{},{
     locale: router.locale,
     populate: ['contactForm','itemTypes']
   }))

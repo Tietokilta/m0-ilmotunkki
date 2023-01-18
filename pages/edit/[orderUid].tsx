@@ -7,10 +7,10 @@ import type {
 import { QRCodeSVG } from 'qrcode.react';
 import { fetchAPI } from '../../lib/api';
 import { initialCustomer } from '../../context/AppContext';
-import { ContactForm,Customer,Field, Order, StrapiBaseType, Translation } from '../../utils/models';
+import { ContactForm,Customer, Order, StrapiBaseType } from '../../utils/models';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { getContactForm, transformTranslations } from '../../utils/helpers';
+import { getContactForm, useTranslation } from '../../utils/helpers';
 import GroupComponent from '../../components/Group';
 import Loader from '../../components/Loader'
 import OrderComponent from '../../components/Order';
@@ -21,27 +21,20 @@ type Global = StrapiBaseType<{
 
 type ServerSidePropType = {
   contactForms: ContactForm[];
-  translation: Record<string, string>;
   global: Global
 }
 
-
 export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async (context) => {
-  const [formData, translation, global] = await Promise.all([
+  const [formData, global] = await Promise.all([
     fetchAPI<ContactForm[]>('/contact-forms',{},{
       locale: context.locale,
       populate: ['contactForm','itemTypes']
-    }),
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
     }),
     fetchAPI<Global>('/global'),
   ]);
   return {
     props: {
       contactForms: formData,
-      translation: transformTranslations(translation),
       global
     },
   }
@@ -49,7 +42,8 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropType> = async 
 
 type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
+const Form: NextPage<PropType> = ({contactForms, global}) => {
+  const { translation } = useTranslation();
   const router = useRouter();
   const {orderUid} = router.query;
   const [isLoading, setLoading] = useState(false);
@@ -130,7 +124,6 @@ const Form: NextPage<PropType> = ({contactForms, translation, global}) => {
       {orders?.map(order =>
       <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md my-8">
         <OrderComponent
-          translation={translation}
           items={order.attributes.items.data}
         />
         {order.attributes.status === 'admin-new' &&

@@ -1,4 +1,8 @@
+import useSWR from "swr";
+import { fetchAPI } from "../lib/api";
 import { ContactForm, Field, Item, Translation } from "./models";
+import { useRouter } from 'next/router';
+
 
 type AggrecatedItem = {
   id: number;
@@ -52,4 +56,16 @@ export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => 
   },[] as Field[])
 
   return fields;
+}
+
+export const useTranslation = () => {
+  const router = useRouter();
+  const { data, error } = useSWR('/translation',url => fetchAPI<Translation>(url,{},{
+    locale: router.locale,
+    populate: ['translations']
+  }));
+  return {
+    translation: data ? transformTranslations(data) : {},
+    error: error
+  }
 }

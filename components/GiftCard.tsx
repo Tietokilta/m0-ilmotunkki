@@ -1,12 +1,10 @@
 import { ChangeEvent, useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, StrapiError } from '../lib/api';
+import { useTranslation } from '../utils/helpers';
 
-type PropType = {
-  translation: Record<string,string>
-}
-
-const GiftCardComponent = ({translation}: PropType) => {
+const GiftCardComponent = () => {
+  const {translation} = useTranslation();
   const [ giftCardError, setGiftCardError ] = useState('');
   const { order, refreshFields } = useContext(AppContext);
   const [ giftCard, setGiftCard ] = useState('');

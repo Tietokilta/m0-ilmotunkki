@@ -4,6 +4,7 @@ import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
 import { fetchAPI } from '../lib/api';
 import Loader from "./Loader";
+import { useTranslation } from "../utils/helpers";
 const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
     attributes: {
@@ -33,7 +34,8 @@ const isAtLimit = (items: Item[], itemCategory: ItemCategory) => {
     ).length || 0;
     return categoryItemCount + 1 > itemCategory.attributes.orderItemLimit
 }
-const ItemList: React.FC<{translation: Record<string,string>}> = ({translation}) => {
+const ItemList: React.FC = () => {
+  const {translation} = useTranslation();
   const [loading, setLoading] = useState(false);
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: [

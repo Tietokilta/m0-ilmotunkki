@@ -1,6 +1,4 @@
 import type {
-  GetStaticProps,
-  InferGetStaticPropsType,
   NextPage,
 } from 'next'
 import Link from "next/link";
@@ -11,16 +9,16 @@ import GiftCardComponent from '../../components/GiftCard';
 import Order from "../../components/Order";
 import { AppContext } from "../../context/AppContext";
 import { fetchAPI } from "../../lib/api";
-import { getContactForm, transformTranslations } from '../../utils/helpers';
-import { ContactForm, Customer, Item, Translation } from "../../utils/models";
+import { getContactForm, useTranslation } from '../../utils/helpers';
+import { ContactForm, Customer, Item } from "../../utils/models";
 
 type ContactFormTypes = {
   customer: Customer;
-  translation: Record<string,string>;
   items: Item[];
 }
 
-const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, translation, items}) => {
+const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, items}) => {
+  const { translation } = useTranslation();
   const {locale} = useRouter();
   const { data } = useSWR<ContactForm[]>(['/contact-forms',locale], url => fetchAPI(url,{},{
     locale,
@@ -47,26 +45,9 @@ const ContactComponent: React.FunctionComponent<ContactFormTypes> = ({customer, 
     </div>
   );
 }
-type StaticPropType = {
-  translation: Record<string, string>
-}
-export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
-  const [translation] = await Promise.all([
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
-    }),
-  ]);
-  return {
-    props: {
-      translation: transformTranslations(translation),
-    },
-    revalidate: 60,
-  }
-}
 
-type PropType = InferGetStaticPropsType<typeof getStaticProps>
-const Summary: NextPage<PropType> = ({translation}) => {
+const Summary: NextPage = () => {
+  const { translation } = useTranslation();
   const {customer, items, isEmpty, order} = useContext(AppContext);
   const router = useRouter();
   const [ termsAccepted, setTermsAccepted ] = useState(false);
@@ -78,13 +59,13 @@ const Summary: NextPage<PropType> = ({translation}) => {
   return (
     <div className='container mx-auto max-w-3xl py-4'>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded'>
-        <ContactComponent items={items} customer={customer} translation={translation}/>
+        <ContactComponent items={items} customer={customer}/>
       </div>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4'>
-        <Order items={items} translation={translation}></Order>
+        <Order items={items}></Order>
       </div>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4 text-primary-700 dark:text-primary-200'>
-        <GiftCardComponent translation={translation}></GiftCardComponent>
+        <GiftCardComponent></GiftCardComponent>
       </div>
       <div className='my-2'>
         <label className='text-primary-700 dark:text-primary-200'>

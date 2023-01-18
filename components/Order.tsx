@@ -1,14 +1,14 @@
-import { mappedItems } from "../utils/helpers";
+import { mappedItems, useTranslation } from "../utils/helpers";
 import { Item } from "../utils/models";
 
 type PropType = {
   items: Item[];
-  translation: Record<string,string>;
   children?: React.ReactNode;
 }
 
-const Order: React.FC<PropType> = ({items: cartItems, translation, children}) => {
-  const items = mappedItems(cartItems,translation);
+const Order: React.FC<PropType> = ({items: cartItems, children}) => {
+  const {translation} = useTranslation();
+  const items = mappedItems(cartItems, translation);
   const cartTotal = items.reduce((acc,item) => item.quantity*item.price + acc,0);
   return (
     <div className="text-secondary-900 dark:text-secondary-100">

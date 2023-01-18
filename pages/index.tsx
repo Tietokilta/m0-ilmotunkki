@@ -9,8 +9,8 @@ import ReactMarkdown from 'react-markdown';
 import ItemList from '../components/ItemList';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, getStrapiURL } from '../lib/api';
-import { transformTranslations } from '../utils/helpers';
-import { StrapiBaseType, Translation } from '../utils/models';
+import { useTranslation } from '../utils/helpers';
+import { StrapiBaseType } from '../utils/models';
 
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
@@ -18,26 +18,19 @@ type FrontPageFields = StrapiBaseType<{
 
 type StaticPropType = {
   content: FrontPageFields,
-  translation: Record<string,string>
 }
 
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [
     content,
-    translation,
     ] = await Promise.all([
     fetchAPI<FrontPageFields>('/front-page',{},{
       locale: context.locale,
-    }),
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
     }),
   ]);
   return {
     props: {
       content,
-      translation: transformTranslations(translation)
     },
     revalidate: 60,
   }
@@ -46,7 +39,8 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Home: NextPage<PropType> = ({content, translation}) => {
+const Home: NextPage<PropType> = ({content}) => {
+  const {translation} = useTranslation()
   const {items} = useContext(AppContext)
   const { bodyText, } = content.attributes;
   return (
@@ -70,7 +64,7 @@ const Home: NextPage<PropType> = ({content, translation}) => {
           </div>
           */}
           <div className='w-full border-b-2 border-b-primary-700 dark:border-b-primary-300 opacity-50 my-4'></div>
-          <ItemList translation={translation} />
+          <ItemList />
           {items.length > 0 && 
           <div className='h-10'>
           <Link href={'/contact'} passHref>

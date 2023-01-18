@@ -6,8 +6,8 @@ import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 
 import { fetchAPI } from '../../lib/api';
-import { transformTranslations } from '../../utils/helpers';
-import { Translation, StrapiBaseType } from '../../utils/models';
+import { useTranslation } from '../../utils/helpers';
+import { StrapiBaseType } from '../../utils/models';
 import { useRouter } from 'next/router';
 
 type Fields = StrapiBaseType<{
@@ -16,26 +16,20 @@ type Fields = StrapiBaseType<{
 }>
 type StaticPropType = {
   content: Fields,
-  translation: Record<string,string>
 }
 
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   const [
     content,
-    translation,
     ] = await Promise.all([
     fetchAPI<Fields>('/terms-and-condition',{},{
       locale: context.locale,
     }),
-    fetchAPI<Translation>('/translation',{},{
-      locale: context.locale,
-      populate: ['translations']
-    }),
+
   ]);
   return {
     props: {
       content,
-      translation: transformTranslations(translation)
     },
     revalidate: 60,
   }
@@ -43,7 +37,8 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Terms: NextPage<PropType> = ({content,translation}) => {
+const Terms: NextPage<PropType> = ({content}) => {
+  const { translation } = useTranslation();
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     router.back();

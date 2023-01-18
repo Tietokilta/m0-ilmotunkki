@@ -3,55 +3,38 @@ import type {
   GetServerSideProps, 
   InferGetServerSidePropsType} from 'next'
 import { serverFetchAPI } from '../../lib/serverApi';
-import { Item, StrapiBaseType, Translation } from '../../utils/models';
-import { transformTranslations } from '../../utils/helpers';
-import { fetchAPI } from '../../lib/api';
+import { Item } from '../../utils/models';
+import { useTranslation } from '../../utils/helpers';
 
 type ServerPropsType = {
   item?: Item;
-  translation: Record<string,string>;
 }
 
-
-
 export const getServerSideProps: GetServerSideProps<ServerPropsType> = async (context) => {
+  let item = undefined;
   const {token} = context.query;
-  const translation = await fetchAPI<Translation>('/translation',{},{
-    locale: context.locale,
-    populate: ['translations']
-  });
-  if(!token) {
-    return {
-      props: {
-        translation: transformTranslations(translation),
-      }
+  if(token) {
+    const [orderUid, itemId] = (token as string).split('_');
+    try {
+      item = await serverFetchAPI<Item>(`/items/${itemId}`,{},{
+        orderUid,
+        locale: context.locale,
+      });
+    } catch(error) {
+      item = undefined
     }
   }
-  const [orderUid, itemId] = (token as string).split('_');
-  try {
-    const item = await serverFetchAPI<Item>(`/items/${itemId}`,{},{
-      orderUid,
-      locale: context.locale,
-    });
-    return {
-      props: {
-        item,
-        translation: transformTranslations(translation),
-      },
-    }
-  } catch(error) {
-    return {
-      props: {
-        translation: transformTranslations(translation),
-      }
+  return {
+    props: {
+      item,
     }
   }
 }
 
 type PropType = InferGetServerSidePropsType<typeof getServerSideProps>
 
-
-const CallbackPage: NextPage<PropType> = ({translation, item}) => {
+const CallbackPage: NextPage<PropType> = ({ item }) => {
+  const { translation } = useTranslation();
   const success = <div className='bg-success-500 rounded p-8 text-center text-3xl uppercase'>
     <p>{translation.success}</p>
     {item &&<p>{translation[item.attributes.itemType.data.attributes.slug]} ID:{item.id}</p> }
