@@ -83,26 +83,33 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
         </button>
       </div>
     </div>
-  )
+  );
+  const mappedItems: ItemType[] = [];
+  itemCategories?.map(category => category.attributes.itemTypes.data.filter(item => {
+    // Remove overflowItem if present
+    if(category.attributes.overflowItem?.data?.id !== item.id) return true;
+    // Show overlflow item only if the limit has been reached
+    return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
+  }).forEach(item => {
+    item.attributes.itemCategory = {
+      data: category
+    }
+    mappedItems.push(item)
+  }));
   return (
     <div className="relative">
       {loading && <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
         <Loader/>
       </div>}
-      {itemCategories?.sort((a,b) => a.id-b.id).map(category => 
-        category.attributes.itemTypes.data.filter(item => {
-          if(category.attributes.overflowItem?.data?.id !== item.id) return true;
-          return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
-        }).sort((a,b) => a.attributes.price - b.attributes.price).map(item =>
+      {mappedItems.sort((a,b)=>a.attributes.price - b.attributes.price).map(item =>
           <div key={item.id}>
-            <Item item={item} category={category}/>
+            <Item item={item} category={item.attributes.itemCategory.data}/>
             {item.attributes.upgradeTarget.data && itemCount(items, item.id) > 0 && 
               <Item key={item.attributes.upgradeTarget.data.id}
                 item={item.attributes.upgradeTarget.data} 
-                category={findCategory(item.attributes.upgradeTarget.data, itemCategories) || category} />
+                category={findCategory(item.attributes.upgradeTarget.data, itemCategories || []) || item.attributes.itemCategory.data} />
            }
           </div>
-        )
       )}
     </div>
   );
