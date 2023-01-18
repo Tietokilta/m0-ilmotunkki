@@ -10,19 +10,15 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getContactForm, transformTranslations } from '../../utils/helpers';
 import GroupComponent from '../../components/Group';
+import useSWR from 'swr';
 
 
 type StaticPropType = {
-  contactForms: ContactForm[],
   translation: Record<string, string>
 }
 export const getStaticProps: GetStaticProps<StaticPropType> = async (context) => {
   try {
-    const [formData, translation] = await Promise.all([
-      fetchAPI<ContactForm[]>('/contact-forms',{},{
-        locale: context.locale,
-        populate: ['contactForm','itemTypes']
-      }),
+    const [translation] = await Promise.all([
       fetchAPI<Translation>('/translation',{},{
         locale: context.locale,
         populate: ['translations']
@@ -30,7 +26,6 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
     ]);
     return {
       props: {
-        contactForms: formData,
         translation: transformTranslations(translation),
       },
       revalidate: 60,
@@ -39,13 +34,16 @@ export const getStaticProps: GetStaticProps<StaticPropType> = async (context) =>
     console.error(error);
     throw error;
   }
-
 };
 
 type PropType = InferGetStaticPropsType<typeof getStaticProps>
 
-const Form: NextPage<PropType> = ({contactForms, translation}) => {
+const Form: NextPage<PropType> = ({translation}) => {
   const router = useRouter();
+  const {data: contactForms, error} = useSWR('/contact-forms', url => fetchAPI<ContactForm[]>(url,{},{
+    locale: router.locale,
+    populate: ['contactForm','itemTypes']
+  }))
   const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
   const [inputFields, setInputFields] = useState<Record<string,any>>(customer.attributes);
   useEffect(() => {
@@ -57,7 +55,7 @@ const Form: NextPage<PropType> = ({contactForms, translation}) => {
     }
   },[isEmpty, router]);
 
-  const contactForm = getContactForm(contactForms, items);
+  const contactForm = getContactForm(contactForms || [], items);
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const updateFields: any = {...inputFields};
