@@ -93,7 +93,7 @@ const ItemList: React.FC<{translation: Record<string,string>}> = ({translation})
         category.attributes.itemTypes.data.filter(item => {
           if(category.attributes.overflowItem?.data?.id !== item.id) return true;
           return category.attributes.currentQuantity >= category.attributes.maximumItemLimit;
-        }).map(item =>
+        }).sort((a,b) => a.attributes.price - b.attributes.price).map(item =>
           <div key={item.id}>
             <Item item={item} category={category}/>
             {item.attributes.upgradeTarget.data && itemCount(items, item.id) > 0 && 
