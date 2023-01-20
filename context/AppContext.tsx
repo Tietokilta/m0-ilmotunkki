@@ -73,7 +73,7 @@ const AppProvider: FC<Props> = ({ children }) => {
   const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
   const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);
   const reset = useCallback(() => {
-    sessionStorage.removeItem('orderUid');
+    localStorage.removeItem('orderUid');
     setOrderUid('');
     mutateOrder(undefined);
   },[mutateOrder]);
@@ -92,7 +92,7 @@ const AppProvider: FC<Props> = ({ children }) => {
       }),
     });
     setOrderUid(newOrder.attributes.uid);
-    sessionStorage.setItem('orderUid', String(newOrder.attributes.uid));
+    localStorage.setItem('orderUid', String(newOrder.attributes.uid));
     const newCustomer = await fetchAPI<Customer>('/customers', {
       method: 'POST',
       body: JSON.stringify({
@@ -149,7 +149,7 @@ const AppProvider: FC<Props> = ({ children }) => {
   }
 
   useEffect(() => {
-    const savedOrderUid = sessionStorage.getItem('orderUid');
+    const savedOrderUid = localStorage.getItem('orderUid');
     if(savedOrderUid) {
       setOrderUid(savedOrderUid);
       return;
