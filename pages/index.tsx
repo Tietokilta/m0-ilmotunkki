@@ -50,7 +50,7 @@ const Home: NextPage<PropType> = ({content}) => {
           components={{
             img: image => {
               if(!image.src) return null;
-              return <Image src={getStrapiURL(image.src)} width={400} height={400} alt={image.alt}></Image>
+              return <Image src={getStrapiURL(image.src)} width={400} height={800} alt={image.alt}></Image>
             }
           }}
           className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
