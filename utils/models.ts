@@ -81,6 +81,7 @@ export type CallbackPageFields = StrapiBaseType<{
 }>;
 
 export type Field = {
+  id: number,
   label: string,
   type: string,
   required: boolean,
