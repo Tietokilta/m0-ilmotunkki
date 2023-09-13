@@ -12,15 +12,15 @@ export type StrapiBaseType<T> = {
 };
 
 type ImageFields = {
-  ext: ".jpg",
-  url: "/uploads/small_M0_TG_icon_4_27034672c6.jpg",
-  hash: "small_M0_TG_icon_4_27034672c6",
-  mime: "image/jpeg",
-  name: "small_M0-TG-icon-4.jpg",
+  ext: string
+  url: string,
+  hash: string
+  mime: string
+  name: string
   path: null,
-  size: 86.75,
-  width: 500,
-  height: 500
+  size: number
+  width: number
+  height: number
 }
 
 export type StrapiImage = StrapiBaseType<{

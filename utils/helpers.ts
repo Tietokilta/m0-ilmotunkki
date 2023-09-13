@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import { fetchAPI } from "../lib/api";
 import { ContactForm, Field, Item, Translation } from "./models";
-import { useRouter } from 'next/router';
 
 
 type AggrecatedItem = {
@@ -47,7 +46,7 @@ export const transformTranslations = (t: Translation): Record<string,string> =>
 export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => {
   const fields: Field[] = forms.reduce((acc, form) => {
     const include = form.attributes.itemTypes.data.some(itemType => {
-      return items.some(item =>item.attributes.itemType.data.id === itemType.id);
+      return items.some(item => item.attributes.itemType.data.id === itemType.id);
     });
     if(!include) return acc
     const newFields = form.attributes.contactForm.filter(field =>
@@ -58,10 +57,9 @@ export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => 
   return fields;
 }
 
-export const useTranslation = () => {
-  const router = useRouter();
+export const useTranslation = (locale: string) => {
   const { data, error } = useSWR('/translation',url => fetchAPI<Translation>(url,{},{
-    locale: router.locale,
+    locale, //TODO FIX
     populate: ['translations']
   }));
   return {
@@ -69,3 +67,4 @@ export const useTranslation = () => {
     error: error
   }
 }
+

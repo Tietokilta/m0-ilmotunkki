@@ -1,10 +1,10 @@
-import Image from 'next/image';
+"use client";
+
 import Link from 'next/link';
 import useSWR from 'swr';
 import { fetchAPI, getStrapiURL } from '../lib/api';
-import Banner from '../public/banner.svg'
-import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
 
+import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
 
 type Response = StrapiBaseType<{
   header: StrapiResponse<StrapiImage[]>;
@@ -31,7 +31,6 @@ const Header = ({children}: PropType) => {
           background-size: cover;
         }
       `}</style>
-
       <Link href="/">
         <div className="cursor-pointer relative text-5xl text-center font-bold py-4 text-secondary-900 dark:text-secondary-100 bg-image h-40">
           <p className="py-10">{data?.attributes.headerTitle}</p>

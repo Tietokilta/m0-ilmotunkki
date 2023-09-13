@@ -1,4 +1,6 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState, useMemo, useRef } from 'react';
+"use client";
+
+import { ChangeEvent, KeyboardEvent, useState, useMemo, useRef } from 'react';
 import useSWR from 'swr';
 import { fetchAPI } from "../lib/api";
 import { Group } from '../utils/models';
@@ -78,7 +80,7 @@ const GroupComponent = ({onChange}: PropTypes) => {
     setGroupName('');
     setDropdownIndex(-1);
     setSelectedGroups([...selectedGroups, groupName]);
-    if(!inputElement.current)return;
+    if(!inputElement.current) return;
     const event: Pick<ChangeEvent<HTMLInputElement>,'target'> = {
       target: {
         ...inputElement.current,

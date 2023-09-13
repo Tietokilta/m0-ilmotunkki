@@ -1,5 +1,6 @@
+"use client";
+
 import Image from 'next/image';
-import Link from 'next/link';
 import useSWR from 'swr';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';

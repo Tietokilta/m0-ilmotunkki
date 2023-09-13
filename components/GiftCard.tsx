@@ -1,10 +1,15 @@
+"use client";
+
 import { ChangeEvent, useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, StrapiError } from '../lib/api';
 import { useTranslation } from '../utils/helpers';
 
-const GiftCardComponent = () => {
-  const {translation} = useTranslation();
+type Props = {
+  locale: string;
+}
+const GiftCardComponent = ({locale}: Props) => {
+  const {translation} = useTranslation(locale);
   const [ giftCardError, setGiftCardError ] = useState('');
   const { order, refreshFields } = useContext(AppContext);
   const [ giftCard, setGiftCard ] = useState('');

@@ -1,7 +1,9 @@
+"use client";
+
 import {
   createContext, useState, useEffect, FC, useCallback, useRef, useMemo
 } from "react";
-import useSWR, {mutate} from "swr";
+import useSWR from "swr";
 import { fetchAPI } from "../lib/api";
 import { Customer, Item, ItemType, Order } from "../utils/models";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { Item, ItemCategory, ItemType } from "../utils/models";
@@ -34,8 +36,11 @@ const isAtLimit = (items: Item[], itemCategory: ItemCategory) => {
     ).length || 0;
     return categoryItemCount + 1 > itemCategory.attributes.orderItemLimit
 }
-const ItemList: React.FC = () => {
-  const {translation} = useTranslation();
+type Props = {
+  locale: string
+}
+const ItemList = ({locale}: Props) => {
+  const {translation} = useTranslation(locale);
   const [loading, setLoading] = useState(false);
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: [
