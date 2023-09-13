@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import Link from "next/link";
-import { useTranslation } from "../../utils/helpers";
+import { useTranslation } from "@/context/useTranslation";
 
 type Props = {
   locale: string
@@ -14,7 +14,7 @@ const Element = ({locale}: Props) => {
   return <>
     {items.length > 0 && 
     <div className='h-10'>
-    <Link className="btn" href={'/contact'} passHref>
+    <Link className="btn" href={`${locale}/contact`} passHref>
       {translation.next}
     </Link>
     </div>

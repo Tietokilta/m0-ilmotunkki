@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import { fetchAPI } from '@/lib/api';
-import { useTranslation } from '@/utils/helpers';
+import { useTranslation } from '@/context/useTranslation';
 import { StrapiBaseType, ItemCategory } from '@/utils/models';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 
 type Field = StrapiBaseType<{

@@ -1,5 +1,3 @@
-import useSWR from "swr";
-import { fetchAPI } from "../lib/api";
 import { ContactForm, Field, Item, Translation } from "./models";
 
 
@@ -56,15 +54,3 @@ export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => 
 
   return fields;
 }
-
-export const useTranslation = (locale: string) => {
-  const { data, error } = useSWR('/translation',url => fetchAPI<Translation>(url,{},{
-    locale, //TODO FIX
-    populate: ['translations']
-  }));
-  return {
-    translation: data ? transformTranslations(data) : {},
-    error: error
-  }
-}
-

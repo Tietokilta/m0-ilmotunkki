@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import paytrailService from "@/utils/paytrail";
 import { updateOrderState } from "../createPayment/route";
 
-const handler = async (request: NextRequest) => {
+export const GET = async (request: NextRequest) => {
   if (request.method !== 'GET') return NextResponse.json({}, {status: 405});
   const query = request.nextUrl.searchParams;
   const queryObject = Object.fromEntries(query.entries())
@@ -20,5 +20,3 @@ const handler = async (request: NextRequest) => {
     return NextResponse.json({}, {status: 500});
   }
 }
-
-export default handler

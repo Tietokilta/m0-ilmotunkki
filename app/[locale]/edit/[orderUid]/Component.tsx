@@ -5,10 +5,11 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
 import { initialCustomer } from '@/context/AppContext';
 import { ContactForm,Customer, Order, StrapiBaseType } from '@/utils/models';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContactForm, useTranslation } from '@/utils/helpers';
-import GroupComponent from '@/components/Group';
+import { getContactForm } from '@/utils/helpers';
+import { useTranslation } from "@/context/useTranslation";
+
 import Loader from '@/components/Loader'
 import OrderComponent from '@/components/Order';
 
@@ -19,13 +20,13 @@ type Global = StrapiBaseType<{
 type Props = {
   contactForms: ContactForm[];
   global: Global;
-  locale: string
+  locale: string;
+  orderUid: string;
 }
 
-const Form = ({contactForms, global, locale}: Props) => {
+const Form = ({contactForms, global, locale, orderUid}: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();
-  const {orderUid} = router.query;
   const [isLoading, setLoading] = useState(false);
   const {data: customer, mutate: refreshFields} = useSWR<Customer>(`/customers/findByOrderUid/${orderUid}`, fetchAPI);
   const {data: orders, mutate: mutateOrders} = useSWR<Order[]>(customer ? `/orders/findByCustomerUid/${customer.attributes.uid}` : null, fetchAPI);
@@ -42,7 +43,7 @@ const Form = ({contactForms, global, locale}: Props) => {
     setLoading(true);
     e.preventDefault();
     const updateFields: any = {...inputFields};
-    updateFields.locale = router.locale;
+    updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
     delete updateFields.publishedAt;
@@ -79,10 +80,6 @@ const Form = ({contactForms, global, locale}: Props) => {
           <div className="mb-8" key={field.fieldName}>
             <label className='block p-1'>
             {field.label}{field.required && '*'}
-            {field.fieldName === 'group-TODO-not-implemented-in-strapi' ? 
-            <GroupComponent onChange={
-              (event: Pick<ChangeEvent<HTMLInputElement>,'target'>) => 
-                handleChange(event, field.fieldName, field.type)}/> :
             <input
               className='tx-input mt-2'
               type={field.type}
@@ -90,7 +87,7 @@ const Form = ({contactForms, global, locale}: Props) => {
               value={inputFields[field.fieldName] || ''}
               checked={inputFields[field.fieldName] || false}
               required={field.required}
-            />}
+            />
           </label>
           </div>
         ))}
@@ -108,7 +105,7 @@ const Form = ({contactForms, global, locale}: Props) => {
           items={order.attributes.items.data}
         />
         {order.attributes.status === 'admin-new' &&
-          <Link passHref href={`/checkout/${order.attributes.uid}`}>
+          <Link passHref href={`/${locale}/checkout/${order.attributes.uid}`}>
           <button className='btn mt-5'
             disabled={
             order.attributes.items.data.length === 0

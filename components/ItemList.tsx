@@ -6,7 +6,7 @@ import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
 import { fetchAPI } from '../lib/api';
 import Loader from "./Loader";
-import { useTranslation } from "../utils/helpers";
+import { useTranslation } from "@/context/useTranslation";
 const itemCount = (items: Item[], itemId: number) => items.filter(
   ({
     attributes: {

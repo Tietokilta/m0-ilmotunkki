@@ -6,8 +6,9 @@ import { AppContext } from '@/context/AppContext';
 import { ContactForm} from '@/utils/models';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContactForm, useTranslation } from '@/utils/helpers';
-import GroupComponent from '@/components/Group';
+import { getContactForm } from '@/utils/helpers';
+import { useTranslation } from "@/context/useTranslation";
+
 import useSWR from 'swr';
 
 
@@ -28,9 +29,9 @@ const Form = ({locale}: Props) => {
   },[customer]);
   useEffect(() => {
     if(isEmpty) {
-      router.push('/');
+      router.push(`/${locale}`);
     }
-  },[isEmpty, router]);
+  },[isEmpty, router, locale]);
   const contactForm = getContactForm(contactForms || [], items);
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ const Form = ({locale}: Props) => {
       }),
     });
     await refreshFields();
-    router.push('/summary');
+    router.push(`/${locale}/summary`);
   };
   const handleChange = (event: Pick<ChangeEvent<HTMLInputElement>,'target'>, key: string, type: string) => {
     const value = type === 'checkbox' ? event.target.checked : event.target.value;
@@ -67,10 +68,6 @@ const Form = ({locale}: Props) => {
           <div className="mb-8" key={field.fieldName}>
             <label className='block p-1'>
             {field.label}{field.required && '*'}
-            {field.fieldName === 'group-TODO-not-implemented-in-strapi' ? 
-            <GroupComponent onChange={
-              (event: Pick<ChangeEvent<HTMLInputElement>,'target'>) => 
-                handleChange(event, field.fieldName, field.type)}/> :
             <input
               className='tx-input mt-2'
               type={field.type}
@@ -78,7 +75,7 @@ const Form = ({locale}: Props) => {
               value={inputFields[field.fieldName] || ''}
               checked={inputFields[field.fieldName] || false}
               required={field.required}
-            />}
+            />
           </label>
           </div>
 
@@ -88,7 +85,7 @@ const Form = ({locale}: Props) => {
         </div>
       </form>
         <div>
-          <Link href="/">
+          <Link href={`/${locale}/`}>
             <button className='btn h-12'>{translation.back}</button>
           </Link>
       </div>

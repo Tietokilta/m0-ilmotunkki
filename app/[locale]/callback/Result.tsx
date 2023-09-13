@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "@/context/AppContext";
 import Link from "next/link";
-import { useTranslation } from "@/utils/helpers";
+import { useTranslation } from "@/context/useTranslation";
 
 type Props = {
   locale: string;
@@ -25,12 +25,12 @@ const CallbackResult = ({ locale, isValid, paymentStatus, content}: Props) => {
   let result = <p>{content.attributes.onSuccess}</p>
   if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) result = <div>
-    {content.attributes.onError} <Link className='text-primary-900 dark:text-primary-100 underline' href="/summary">
+    {content.attributes.onError} <Link className='text-primary-900 dark:text-primary-100 underline' href={`/${locale}/summary`}>
       {translation.backToOrder}
       </Link>
     </div>
   else if (paymentStatus !== 'ok') result = <div>
-    {content.attributes.onCancel} <Link href="/summary">
+    {content.attributes.onCancel} <Link href={`/${locale}/summary`}>
       <a className='text-primary-900 dark:text-primary-100 underline'>{translation.backToOrder}</a>
     </Link>
   </div>

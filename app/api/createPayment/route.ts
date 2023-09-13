@@ -40,8 +40,7 @@ const createPayment = async (orderId: number) => {
   return paytrailService.createPayment(order);
 }
 
-const handler = async (request: NextRequest) => {
-  if (request.method !== 'POST') return NextResponse.json({},{status: 405})
+export const POST = async (request: NextRequest) => {
   const { orderId } = await request.json();
   if (!orderId) return NextResponse.json({},{status: 404})
   try {
@@ -52,5 +51,3 @@ const handler = async (request: NextRequest) => {
     return NextResponse.json({},{status: 400})
   }
 };
-
-export default handler;

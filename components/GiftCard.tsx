@@ -3,7 +3,7 @@
 import { ChangeEvent, useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { fetchAPI, StrapiError } from '../lib/api';
-import { useTranslation } from '../utils/helpers';
+import { useTranslation } from "@/context/useTranslation";
 
 type Props = {
   locale: string;

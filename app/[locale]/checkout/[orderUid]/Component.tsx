@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import qs from 'qs';
 import { fetchAPI } from '@/lib/api';
@@ -21,11 +21,15 @@ interface PaymentProvider {
   }[];
 }
 
-const Checkout = () => {
+type Props = {
+  locale: string,
+  orderUid: string
+}
+
+const Checkout = ({locale, orderUid}: Props) => {
   const handled = useRef(false);
   const [paymentProviders, setProviders] = useState<PaymentProvider[]>([]);
   const router = useRouter();
-  const {orderUid} = router.query;
   const {data: order} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
   const initializePayment = useCallback(async (orderId: number) => {
     const response = await fetch('/api/createPayment', {
@@ -39,10 +43,10 @@ const Checkout = () => {
     });
     const data = await response.json();
     if(data.status === 'skip') {
-      router.push(`/callback?${qs.stringify(data.params)}`);
+      router.push(`/${locale}/callback?${qs.stringify(data.params)}`);
     }
     setProviders(data.providers || []);
-  },[router]);
+  },[router, locale]);
 
   useEffect(() => {
     if (!order || handled.current) return;

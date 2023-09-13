@@ -44,7 +44,7 @@ const Home = async ({params: {locale}}: Props) => {
           </ReactMarkdown>
           {showSignups &&
             <div className='my-10'>
-              <Link className="btn" href={'/signups'} passHref>
+              <Link className="btn" href={`${locale}/signups`} passHref>
                 {translation.signups}
               </Link>
             </div>

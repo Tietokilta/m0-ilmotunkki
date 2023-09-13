@@ -1,6 +1,6 @@
 import { serverFetchAPI } from '@/lib/serverApi';
 import { Item } from '@/utils/models';
-import { useTranslation } from '@/utils/helpers';
+import { useTranslation } from "@/context/useTranslation";
 
 type Props = {
   params: {

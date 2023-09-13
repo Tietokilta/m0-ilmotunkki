@@ -1,4 +1,6 @@
-import { mappedItems, useTranslation } from "../utils/helpers";
+import { mappedItems } from "../utils/helpers";
+import { useTranslation } from "@/context/useTranslation";
+
 import { Item } from "../utils/models";
 
 type Props = {

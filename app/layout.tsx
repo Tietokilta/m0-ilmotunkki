@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -12,16 +12,19 @@ import { fetchAPI, getStrapiMedia } from "@/lib/api";
 
 type PropType = {
   children: React.ReactNode
+  params: {
+    locale: string
+  }
 }
 
 
-const RootLayout = async ({children}: PropType) => {
+const RootLayout = async ({children, ...rest}: PropType) => {
   return (
     <html lang='fi' className='dark w-full h-full'>
       <head />
       <body className="bg-secondary-200 dark:bg-secondary-900 p-2 text-secondary-700 dark:text-secondary-100'">
       <AppProvider>
-          <Header>
+          <Header locale="">
               <Locale />
               <Timer/>
           </Header>

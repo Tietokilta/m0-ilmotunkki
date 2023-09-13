@@ -12,9 +12,10 @@ type Response = StrapiBaseType<{
 }>
 
 type PropType = {
-  children: React.ReactNode
+  children: React.ReactNode;
+  locale: string;
 }
-const Header = ({children}: PropType) => {
+const Header = ({children, locale}: PropType) => {
   const { data } = useSWR<Response>('/front-page', url => fetchAPI(url,{},{
     populate: ['header']
   }));
@@ -31,7 +32,7 @@ const Header = ({children}: PropType) => {
           background-size: cover;
         }
       `}</style>
-      <Link href="/">
+      <Link href={`/${locale}`}>
         <div className="cursor-pointer relative text-5xl text-center font-bold py-4 text-secondary-900 dark:text-secondary-100 bg-image h-40">
           <p className="py-10">{data?.attributes.headerTitle}</p>
         </div>

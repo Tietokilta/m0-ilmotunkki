@@ -8,7 +8,8 @@ import GiftCardComponent from '@/components/GiftCard';
 import Order from "@/components/Order";
 import { AppContext } from "@/context/AppContext";
 import { fetchAPI } from "@/lib/api";
-import { getContactForm, useTranslation } from '@/utils/helpers';
+import { getContactForm } from '@/utils/helpers';
+import { useTranslation } from "@/context/useTranslation";
 import { ContactForm, Customer, Item } from "@/utils/models";
 
 type ContactProps = {
@@ -56,9 +57,9 @@ const Summary = ({locale}: SummaryProps) => {
   const [ termsAccepted, setTermsAccepted ] = useState(false);
   useEffect(() => {
     if(isEmpty) {
-      router.push('/');
+      router.push(`/${locale}`);
     }
-  },[isEmpty, router]);
+  },[isEmpty, router, locale]);
   return (
     <div className='container mx-auto max-w-3xl py-4'>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded'>
@@ -77,15 +78,15 @@ const Summary = ({locale}: SummaryProps) => {
           type="checkbox"
           checked={termsAccepted}
           onChange={(event) => setTermsAccepted(event.target.checked)}/>
-          {translation.haveRead} <Link href="/terms" className='text-primary-900 dark:text-primary-50 underline'>
+          {translation.haveRead} <Link href={`/${locale}/terms`} className='text-primary-900 dark:text-primary-50 underline'>
             {translation.terms}
           </Link>
         </label>
       </div>
 
       <div className='flex gap-2'>
-      <Link passHref href="/contact" className='btn'>{translation.back}</Link>
-      <Link passHref href={`/checkout/${order?.attributes.uid}`}><button className='btn' disabled={
+      <Link passHref href={`/${locale}/contact`} className='btn'>{translation.back}</Link>
+      <Link passHref href={`/${locale}/checkout/${order?.attributes.uid}`}><button className='btn' disabled={
         !termsAccepted
         || items.length === 0
         || !customer.attributes.firstName
