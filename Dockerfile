@@ -3,22 +3,21 @@ FROM node:16 as builder
 WORKDIR /app
 
 COPY ./package.json .
-COPY ./yarn.lock .
+COPY ./package-lock.json .
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-RUN yarn config set network-timeout 600000 -g && yarn install
+RUN npm run build
 
 COPY ./ .
 
-EXPOSE 3000
 
 ARG STRAPI_TOKEN
 ARG NEXT_PUBLIC_STRAPI_API_URL
 ENV STRAPI_TOKEN=${STRAPI_TOKEN}
 ENV NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
 
-RUN yarn build
+RUN npm run build
 
 
 FROM node:16-alpine AS runner
