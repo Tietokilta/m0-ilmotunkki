@@ -40,9 +40,10 @@ const RootLayout = async ({children}: PropType) => {
 
 type Global = StrapiBaseType<{
   updateEnd: string;
-  title: string,
-  description: string,
-  favicon: StrapiResponse<StrapiImage>,
+  title: string;
+  description: string;
+  url: string;
+  favicon: StrapiResponse<StrapiImage>;
 }>
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -53,10 +54,11 @@ export const generateMetadata = async (): Promise<Metadata> => {
     icons: {
       icon: getStrapiMedia(data.attributes.favicon) 
     },
+    metadataBase: new URL(data.attributes.url),
     openGraph: {
       title: data.attributes.title,
       description: data.attributes.description,
-      url: '',
+      url: data.attributes.url,
       siteName: data.attributes.title,
       locale: 'fi_FI',
       type: 'website'
