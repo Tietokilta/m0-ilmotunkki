@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 
 import { fetchAPI } from '@/lib/api';
@@ -85,10 +87,8 @@ const Signups = ({content, categories, locale}: Props) => {
           </div>
         </div>)}
       <div className='mt-4'>
-      <Link href="">
-        <a onClick={goBack} className='underline text-primary-900 dark:text-primary-100'>
-          {translation.back}
-        </a>
+      <Link onClick={goBack} className='underline text-primary-900 dark:text-primary-100' href="">
+        {translation.back}
       </Link>
       </div>
 

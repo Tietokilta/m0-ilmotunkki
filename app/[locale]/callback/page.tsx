@@ -2,6 +2,7 @@ import paytrailService from '@/utils/paytrail';
 
 import { serverFetchAPI } from '@/lib/serverApi';
 import { CallbackPageFields } from '@/utils/models';
+import { updateOrderState } from '@/app/api/createPayment/route';
 
 import Result from './Result';
 
@@ -18,6 +19,8 @@ const getContent = async (locale: string) => {
   }
 }
 
+
+
 type Props = {
   params: {
     locale: string
@@ -28,6 +31,13 @@ type Props = {
 const CallbackPage = async ({params: {locale}, searchParams}: Props) => {
   const params = searchParams;
   const isValid = paytrailService.verifyPayment(params);
+  if(isValid) {
+    await updateOrderState(
+      Number(params['checkout-reference']),
+      params['checkout-status'] || 'fail',
+      params['checkout-transaction-id'] || undefined,
+      );
+  }
   const paymentStatus = params['checkout-status'] as CheckoutStatus;
   const content = await getContent(locale);
   
