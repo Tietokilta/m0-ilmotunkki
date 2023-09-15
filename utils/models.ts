@@ -111,5 +111,5 @@ export type Customer = StrapiBaseType<{
   email: string;
   uid: string;
   locale: string;
-  [key: string]: string | number;
+  [key: string]: string | number | boolean;
 }>

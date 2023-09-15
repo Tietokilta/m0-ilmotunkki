@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier" //Prettier should be placed last, so it gets the chance to override other configs
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "rules": {
+    "no-unused-vars": "off", //Base rule is disabled as it can report incorrect errors
+    "@typescript-eslint/no-unused-vars": "error"
+  }
 }

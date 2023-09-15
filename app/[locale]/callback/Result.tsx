@@ -4,12 +4,13 @@ import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "@/context/AppContext";
 import Link from "next/link";
 import { useTranslation } from "@/context/useTranslation";
+import { StrapiBaseType } from "@/utils/models";
 
 type Props = {
   locale: string;
   isValid: boolean;
   paymentStatus: string;
-  content: any;
+  content?: StrapiBaseType<{onError: string; onCancel: string; onSuccess: string}>;
 }
 
 const CallbackResult = ({ locale, isValid, paymentStatus, content}: Props) => {
@@ -22,6 +23,7 @@ const CallbackResult = ({ locale, isValid, paymentStatus, content}: Props) => {
       reset();
     }
   },[isValid, paymentStatus, reset]);
+  if(!content) return <div>Error on rendering callback page</div>
   let result = <p>{content.attributes.onSuccess}</p>
   if(isValid === undefined) return <p>Loading...</p>
   if (!isValid) result = <div>

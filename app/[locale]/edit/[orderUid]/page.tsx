@@ -23,14 +23,16 @@ const getData = async (locale: string) => {
 
 type Props = {
   params: {
-    locale: string
+    locale: string;
+    orderUid: string;
   }
 }
 
 
-const EditPage = async ({params: {locale}}: Props) => {
+const EditPage = async ({params: {locale, orderUid}}: Props) => {
   const data = await getData(locale)
   return <Component
+    orderUid={orderUid}
     contactForms={data.contactForms}
     global={data.global}
     locale={locale}

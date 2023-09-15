@@ -18,7 +18,7 @@ type PropType = {
 }
 
 
-const RootLayout = async ({children, ...rest}: PropType) => {
+const RootLayout = async ({children}: PropType) => {
   return (
     <html lang='fi' className='dark w-full h-full'>
       <head />

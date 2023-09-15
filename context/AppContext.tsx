@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  createContext, useState, useEffect, FC, useCallback, useRef, useMemo
+  createContext, useState, useEffect, FC, useCallback, useMemo
 } from "react";
 import useSWR from "swr";
 import { fetchAPI } from "../lib/api";
@@ -33,7 +33,7 @@ export const initialCustomer =  {
     startYear: '',
     updatedAt: '',
     uid: '',
-  }
+  },
 };
 const appContextDefault: Required<AppContextType> = {
   customer: initialCustomer,
@@ -124,6 +124,7 @@ const AppProvider: FC<Props> = ({ children }) => {
       newOrder.attributes.items = {data:filteredItems};
       mutateOrder(newOrder);
     } catch(error) {
+      // Error in deleting an item
     }
   };
 
@@ -144,6 +145,7 @@ const AppProvider: FC<Props> = ({ children }) => {
       newOrder.attributes.items = {data: newItems};
       mutateOrder(newOrder);
     } catch(error) {
+      // Error in adding an item
     }
   }
   const refreshFields = async () => {

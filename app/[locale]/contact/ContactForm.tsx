@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
 import { AppContext } from '@/context/AppContext';
-import { ContactForm} from '@/utils/models';
+import { ContactForm, Customer} from '@/utils/models';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getContactForm } from '@/utils/helpers';
@@ -23,7 +23,7 @@ const Form = ({locale}: Props) => {
     populate: ['contactForm','itemTypes']
   }))
   const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
-  const [inputFields, setInputFields] = useState<Record<string,any>>(customer.attributes);
+  const [inputFields, setInputFields] = useState<Customer["attributes"]>(customer.attributes);
   useEffect(() => {
     setInputFields(customer.attributes);
   },[customer]);
@@ -35,7 +35,7 @@ const Form = ({locale}: Props) => {
   const contactForm = getContactForm(contactForms || [], items);
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const updateFields: any = {...inputFields};
+    const updateFields: Partial<Customer["attributes"]> = {...inputFields};
     updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
@@ -72,8 +72,8 @@ const Form = ({locale}: Props) => {
               className='tx-input mt-2'
               type={field.type}
               onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
-              value={inputFields[field.fieldName] || ''}
-              checked={inputFields[field.fieldName] || false}
+              value={String(inputFields[field.fieldName]) || ''}
+              checked={!!inputFields[field.fieldName] || false}
               required={field.required}
             />
           </label>

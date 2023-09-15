@@ -5,7 +5,6 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
 import { initialCustomer } from '@/context/AppContext';
 import { ContactForm,Customer, Order, StrapiBaseType } from '@/utils/models';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getContactForm } from '@/utils/helpers';
 import { useTranslation } from "@/context/useTranslation";
@@ -26,11 +25,10 @@ type Props = {
 
 const Form = ({contactForms, global, locale, orderUid}: Props) => {
   const { translation } = useTranslation(locale);
-  const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const {data: customer, mutate: refreshFields} = useSWR<Customer>(`/customers/findByOrderUid/${orderUid}`, fetchAPI);
-  const {data: orders, mutate: mutateOrders} = useSWR<Order[]>(customer ? `/orders/findByCustomerUid/${customer.attributes.uid}` : null, fetchAPI);
-  const [inputFields, setInputFields] = useState<Record<string,any>>(customer?.attributes || initialCustomer);
+  const {data: orders} = useSWR<Order[]>(customer ? `/orders/findByCustomerUid/${customer.attributes.uid}` : null, fetchAPI);
+  const [inputFields, setInputFields] = useState<Customer["attributes"]>(customer?.attributes || initialCustomer.attributes);
   const updateHasEnded = new Date(global.attributes.updateEnd) <= new Date();
   useEffect(() => {
     if(!customer) return;
@@ -42,7 +40,7 @@ const Form = ({contactForms, global, locale, orderUid}: Props) => {
   const handleSubmit = async (e: FormEvent) => {
     setLoading(true);
     e.preventDefault();
-    const updateFields: any = {...inputFields};
+    const updateFields: Partial<Customer["attributes"]> = {...inputFields};
     updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
@@ -57,7 +55,7 @@ const Form = ({contactForms, global, locale, orderUid}: Props) => {
         }),
       });
     } catch(error) {
-
+      // Error in updating the field
     }
     refreshFields();
     setLoading(false);
@@ -84,8 +82,8 @@ const Form = ({contactForms, global, locale, orderUid}: Props) => {
               className='tx-input mt-2'
               type={field.type}
               onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
-              value={inputFields[field.fieldName] || ''}
-              checked={inputFields[field.fieldName] || false}
+              value={String(inputFields[field.fieldName]) || ''}
+              checked={!!inputFields[field.fieldName] || false}
               required={field.required}
             />
           </label>

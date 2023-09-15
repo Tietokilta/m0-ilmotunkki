@@ -18,7 +18,7 @@ const GroupComponent = ({onChange}: PropTypes) => {
   const {data: groupData} = useSWR<Group[]>('/groups', fetchAPI);
   const groups = useMemo(() => (groupData ||[]).map(group => group.attributes.name),[groupData])
   const [dropdownIndex, setDropdownIndex] = useState(-1);
-  const [isFocused, setFocused] = useState(false);
+  const [, setFocused] = useState(false);
   const filteredGroups = useMemo(() => {
     const g = groups.filter(group => {
       if(newGroupName.length === 0) return false;

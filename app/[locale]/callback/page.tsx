@@ -25,7 +25,7 @@ type Props = {
   params: {
     locale: string
   },
-  searchParams: Record<string, any>;
+  searchParams: Record<string, string>;
 }
 
 const CallbackPage = async ({params: {locale}, searchParams}: Props) => {
