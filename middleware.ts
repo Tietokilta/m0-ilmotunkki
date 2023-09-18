@@ -22,7 +22,7 @@ export const middleware = async (request: NextRequest) => {
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    "/((?!api|_next|favicon.ico|[^.]+).*)",
+    "/((?!api|_next|favicon.ico).*)",
     // Optional: only run on root (/) URL
     // '/'
   ],

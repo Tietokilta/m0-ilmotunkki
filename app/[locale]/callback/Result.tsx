@@ -32,8 +32,8 @@ const CallbackResult = ({ locale, isValid, paymentStatus, content}: Props) => {
       </Link>
     </div>
   else if (paymentStatus !== 'ok') result = <div>
-    {content.attributes.onCancel} <Link href={`/${locale}/summary`}>
-      <a className='text-primary-900 dark:text-primary-100 underline'>{translation.backToOrder}</a>
+    {content.attributes.onCancel} <Link className='text-primary-900 dark:text-primary-100 underline' href={`/${locale}/summary`}>
+      {translation.backToOrder}
     </Link>
   </div>
   return (

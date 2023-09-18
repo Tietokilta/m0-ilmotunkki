@@ -6,7 +6,7 @@ type Props = {
   }
 }
 
-const ContactPage = ({params: {locale}}:Props) => {
+const ContactPage = async ({params: {locale}}:Props) => {
   return <Form locale={locale}/>
 }
 

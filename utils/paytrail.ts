@@ -52,6 +52,7 @@ type RefundBody = {
 }
 
 const PAYTRAIL_ENDPOINT = 'https://services.paytrail.com';
+const URL = process.env.URL || '127.0.0.1:3000';
 const MERCHANT_ID = process.env.MERCHANT_ID || '';
 const SECRET_KEY = process.env.SECRET_KEY || '';
 const REDIRECT_SUCCESS = process.env.REDIRECT_SUCCESS || '';
@@ -72,6 +73,8 @@ const calculateHmac = (
 }
 
 const generatePaymentBody = (order: Order, translation: Record<string,string>) => {
+  const locale = order.attributes.customer.data.attributes.locale;
+  const callbackUrl = `${URL}/${locale}/callback`;
   const mappedCart = mappedItems(order.attributes.items.data,translation);
   const items: PaymentBodyItem[] = mappedCart.map(item => {
     return {
@@ -86,7 +89,7 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>) =
     reference: String(order.id),
     amount: items.reduce((a,b)=> a + b.units * b.unitPrice,0),
     currency: 'EUR',
-    language: 'FI',
+    language: locale.toLocaleUpperCase(),
     items,
     customer: {
       firstName: order.attributes.customer.data.attributes.firstName,
@@ -94,8 +97,8 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>) =
       email: order.attributes.customer.data.attributes.email,
     },
     redirectUrls: {
-      success: REDIRECT_SUCCESS,
-      cancel: REDIRECT_CANCEL,
+      success: callbackUrl,
+      cancel: callbackUrl,
     },
   }
   if (CALLBACK_URL) {

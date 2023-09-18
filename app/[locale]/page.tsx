@@ -13,10 +13,14 @@ type FrontPageFields = StrapiBaseType<{
 }>;
 
 export const getFrontpageFields = async (locale: string) => {
-  const content = await fetchAPI<FrontPageFields>('/front-page',{},{
+  try {
+    const content = await fetchAPI<FrontPageFields>('/front-page',{},{
       locale,
     });
-  return content;
+    return content;
+  }catch(error) {
+    return undefined;
+  }
 }
 
 type Props = {
@@ -28,18 +32,19 @@ type Props = {
 const Home = async ({params: {locale}}: Props) => {
   const translation = await getTranslation(locale);
   const response = await getFrontpageFields(locale);
-  const {bodyText, showSignups} = response.attributes;
+  const bodyText = response?.attributes.bodyText || "";
+  const showSignups = response?.attributes.showSignups || false;
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
       <main className='container mx-auto px-4'>
           <ReactMarkdown
-          components={{
-            img: image => {
-              if(!image.src) return null;
-              return <Image src={getStrapiURL(image.src)} width={400} height={800} alt={image.alt || ""}></Image>
-            }
-          }}
-          className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
+            components={{
+              img: image => {
+                if(!image.src) return null;
+                return <Image src={getStrapiURL(image.src)} width={400} height={800} alt={image.alt || ""}></Image>
+              }
+            }}
+            className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
             {bodyText}
           </ReactMarkdown>
           {showSignups &&
