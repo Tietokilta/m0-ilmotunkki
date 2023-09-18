@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 // From: https://nextjs.org/docs/app/building-your-application/routing/internationalization
 export const middleware = async (request: NextRequest) => {
   const locales = ['fi', 'en']
-  console.log('here');
   const defaultLocale = "fi";
 
   const pathname = request.nextUrl.pathname;
