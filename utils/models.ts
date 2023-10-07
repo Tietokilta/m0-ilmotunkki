@@ -83,10 +83,11 @@ export type CallbackPageFields = StrapiBaseType<{
 export type Field = {
   id: number,
   label: string,
-  type: string,
+  type: "text" | "checkbox" | "email" | "number";
   required: boolean,
   fieldName: string,
-}
+};
+
 export type Group = StrapiBaseType<{
   name: string;
 }>;

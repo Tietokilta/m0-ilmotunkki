@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect } from 'react';
 import { fetchAPI } from '@/lib/api';
 import { AppContext } from '@/context/AppContext';
 import { ContactForm, Customer} from '@/utils/models';
@@ -9,34 +9,26 @@ import Link from 'next/link';
 import { getContactForm } from '@/utils/helpers';
 import { useTranslation } from "@/context/useTranslation";
 
-import useSWR from 'swr';
-
 
 type Props = {
   locale: string;
+  contactForms: ContactForm[];
 }
 
-const Form = ({locale}: Props) => {
+const Form = ({locale, contactForms}: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();
-  const {data: contactForms} = useSWR('/contact-forms', url => fetchAPI<ContactForm[]>(url,{},{
-    locale,
-    populate: ['contactForm','itemTypes']
-  }))
   const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
-  const [inputFields, setInputFields] = useState<Customer["attributes"]>(customer.attributes);
-  useEffect(() => {
-    setInputFields(customer.attributes);
-  },[customer]);
   useEffect(() => {
     if(isEmpty) {
       router.push(`/${locale}`);
     }
   },[isEmpty, router, locale]);
   const contactForm = getContactForm(contactForms || [], items);
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const updateFields: Partial<Customer["attributes"]> = {...inputFields};
+    const form = new FormData(e.currentTarget);
+    const updateFields = Object.fromEntries(form.entries());
     updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
@@ -52,15 +44,9 @@ const Form = ({locale}: Props) => {
     await refreshFields();
     router.push(`/${locale}/summary`);
   };
-  const handleChange = (event: Pick<ChangeEvent<HTMLInputElement>,'target'>, key: string, type: string) => {
-    const value = type === 'checkbox' ? event.target.checked : event.target.value;
-    setInputFields(previousKeys => {
-      return {
-        ...previousKeys,
-        [key]: value,
-      }
-    })
-  }
+  const getFieldValue = (key: keyof Customer["attributes"]) => {
+    return customer.attributes[key] as string;
+  };
   return (
     <div className="container max-w-3xl mx-auto bg-secondary-50 dark:bg-secondary-800 rounded shadow-md p-4 mt-4 sm:p-8">
       <form className='mb-6 text-secondary-800 dark:text-secondary-100' 
@@ -72,9 +58,10 @@ const Form = ({locale}: Props) => {
             <input
               className='tx-input mt-2'
               type={field.type}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
-              value={String(inputFields[field.fieldName]) || ''}
-              checked={!!inputFields[field.fieldName] || false}
+              id={field.fieldName}
+              name={field.fieldName}
+              defaultValue={getFieldValue(field.fieldName)}
+              checked={!!getFieldValue(field.fieldName)}
               required={field.required}
             />
           </label>
@@ -86,8 +73,8 @@ const Form = ({locale}: Props) => {
         </div>
       </form>
         <div>
-          <Link href={`/${locale}/`}>
-            <button className='btn h-12'>{translation.back}</button>
+          <Link href={`/${locale}/`} className='btn h-12'>
+            {translation.back}
           </Link>
       </div>
 
