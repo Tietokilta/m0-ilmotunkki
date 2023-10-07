@@ -1,37 +1,30 @@
-"use client";
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { redirect } from 'next/navigation';
 import qs from 'qs';
 import { fetchAPI } from '@/lib/api';
-import useSWR from 'swr';
 import { Order } from '@/utils/models';
-
-interface PaymentProvider {
-  id: string;
-  name: string;
-  icon: string;
-  svg: string;
-  group: string;
-  url: string;
-  parameters: {
-    name: string,
-    value: string
-  }[];
-}
+import type { PaytrailPaymentResponse, SkipPaymentParams } from '@/utils/models';
 
 type Props = {
   locale: string,
   orderUid: string
 }
 
-const Checkout = ({locale, orderUid}: Props) => {
-  const handled = useRef(false);
-  const [paymentProviders, setProviders] = useState<PaymentProvider[]>([]);
-  const router = useRouter();
-  const {data: order} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
-  const initializePayment = useCallback(async (orderId: number) => {
+const getOrderInformation = async (orderUid: string) => {
+  try {
+    const order = await fetchAPI<Order>(`/orders/findByUid/${orderUid}`);
+    return order;
+  } catch(error) {
+    console.error(error);
+    return undefined;
+  }
+}
+
+type PaymentApiResponse = PaytrailPaymentResponse | SkipPaymentParams;
+
+const initializePayment = async (orderId: number) => {
+  try {
     const response = await fetch('/api/createPayment', {
       method: 'POST',
       headers: {
@@ -41,19 +34,30 @@ const Checkout = ({locale, orderUid}: Props) => {
         orderId,
       })
     });
-    const data = await response.json();
-    if(data.status === 'skip') {
-      router.push(`/${locale}/callback?${qs.stringify(data.params)}`);
-    }
-    setProviders(data.providers || []);
-  },[router, locale]);
+    const data = await response.json() as PaymentApiResponse;
+    return data;
+  } catch(error) {
+    return undefined;
+  }
+}
 
-  useEffect(() => {
-    if (!order || handled.current) return;
-    if(order.attributes.status === 'ok') return;
-    handled.current = true;
-    initializePayment(order.id);
-  },[order, initializePayment]);
+const isSkipPayment = (response: PaymentApiResponse): response is SkipPaymentParams => {
+  return 'status' in response && response.status === 'skip';
+}
+
+const Checkout = async ({locale, orderUid}: Props) => {
+  const order = await getOrderInformation(orderUid);
+  if(!order || order.attributes.status === 'ok') {
+    return null;
+  }
+  const paymentResponse = await initializePayment(order.id);
+  if(!paymentResponse) {
+    return null;
+  }
+  if(isSkipPayment(paymentResponse)) {
+    return redirect(`/${locale}/callback?${qs.stringify(paymentResponse.params)}`);
+  }
+  const paymentProviders = paymentResponse.providers;
 
   return (
     <main className='container flex flex-wrap justify-center gap-3 p-2 mx-auto max-w-3xl'>

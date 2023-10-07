@@ -112,4 +112,41 @@ export type Customer = StrapiBaseType<{
   uid: string;
   locale: string;
   [key: string]: string | number | boolean;
-}>
+}>;
+
+type PaymentMethodGroup = 
+    | 'mobile' 
+    | 'bank' 
+    | 'creditcard' 
+    | 'credit';
+
+
+type PaytrailFormField = {
+  name: string,
+  value: string
+}
+export type Provider = {
+  id: string;
+  name: string;
+  icon: string;
+  svg: string;
+  url: string;
+  group: PaymentMethodGroup;
+  parameters: PaytrailFormField[];
+};
+
+export type SkipPaymentParams = {
+  status: string;
+  params: Record<string,string>
+}
+
+export type PaytrailPaymentResponse = {
+  transactionId: string;
+  href: string;
+  terms: string;
+  groups: PaymentMethodGroup[];  // Adjusted based on the new definition
+  reference: string;
+  providers: Provider[];
+}
+
+export type PaymentApiResponse = SkipPaymentParams | PaytrailPaymentResponse;

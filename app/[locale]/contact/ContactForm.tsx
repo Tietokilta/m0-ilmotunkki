@@ -15,6 +15,7 @@ import useSWR from 'swr';
 type Props = {
   locale: string;
 }
+
 const Form = ({locale}: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();

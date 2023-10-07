@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { fetchAPI } from '../lib/api';
 import { mappedItems, transformTranslations } from './helpers';
-import { Order, Translation } from './models';
+import { Order, PaytrailPaymentResponse, SkipPaymentParams, Translation } from './models';
 
 type PaymentBodyItem = {
   unitPrice: number;
@@ -43,20 +43,10 @@ type PaymentBody = {
   callbackUrls?: CallbackUrl
 }
 
-type RefundBody = {
-  amount: number; // EUR cents
-  email: string;
-  refundStamp?: string;
-  refuntReference?: string;
-  callbackUrls: CallbackUrl;
-}
-
 const PAYTRAIL_ENDPOINT = 'https://services.paytrail.com';
 const URL = process.env.URL || '127.0.0.1:3000';
 const MERCHANT_ID = process.env.MERCHANT_ID || '';
 const SECRET_KEY = process.env.SECRET_KEY || '';
-const REDIRECT_SUCCESS = process.env.REDIRECT_SUCCESS || '';
-const REDIRECT_CANCEL = process.env.REDIRECT_CANCEL || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || '';
 
 const getRandomString = (length: number = 16) => crypto.randomBytes(length).toString('base64');
@@ -121,8 +111,10 @@ const createSkipPayment = async (order: Order) => {
   }
   const signature = calculateHmac(params);
   params.signature = signature;
-  return { status: 'skip', params };
+  return { status: 'skip', params } as SkipPaymentParams;
 }
+
+
 
 const createPayment = async (order: Order) => {
   const translation = await fetchAPI<Translation>('/translation',{},{
@@ -146,7 +138,7 @@ const createPayment = async (order: Order) => {
     },
     body: JSON.stringify(body)
   })
-  const data = await response.json();
+  const data = await response.json() as PaytrailPaymentResponse;
   return data;
 }
 

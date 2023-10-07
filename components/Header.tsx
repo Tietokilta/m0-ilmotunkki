@@ -1,7 +1,4 @@
-"use client";
-
 import Link from 'next/link';
-import useSWR from 'swr';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 
 import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
@@ -15,10 +12,19 @@ type PropType = {
   children: React.ReactNode;
   locale: string;
 }
-const Header = ({children, locale}: PropType) => {
-  const { data } = useSWR<Response>('/front-page', url => fetchAPI(url,{},{
-    populate: ['header']
-  }));
+
+const getHeaderData = () => {
+  try {
+    const response = fetchAPI<Response>('/front-page',{}, { populate: ['header'] })
+    return response;
+  } catch(error) {
+    console.error(error);
+    return undefined;
+  }
+}
+
+const Header = async ({children, locale}: PropType) => {
+  const data = await getHeaderData();
   const headerArray = data?.attributes.header.data;
   const headerData = headerArray && headerArray[0];
   const header = headerData?.attributes.formats?.large || headerData?.attributes
