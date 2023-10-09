@@ -1,6 +1,8 @@
 import { fetchAPI } from "@/lib/api";
-import Component from "./Component";
-import { ContactForm, Customer, Order, StrapiBaseType } from "@/utils/models";
+import OrderList from "./OrderList";
+import { ContactForm, Customer, Item, Order, StrapiBaseType } from "@/utils/models";
+import Form from "@/components/ContactForm";
+import { getTranslation } from "@/utils/translationHelper";
 
 type Global = StrapiBaseType<{
   updateEnd: string;
@@ -62,21 +64,25 @@ const EditPage = async ({params: {locale, customerUid}}: Props) => {
     contactForms,
     customer,
     orders,
+    translation
   ] = await Promise.all([
     getGlobalSettings(),
     getContactForms(locale),
     getCustomer(customerUid),
     getOrders(customerUid),
+    getTranslation(locale),
   ]);
   if (!customer) return <p>No customer found</p>
   if (!global) return <p>Error in update settings</p>
-  return <Component
-    customer={customer}
-    orders={orders}
-    contactForms={contactForms}
-    global={global}
-    locale={locale}
-    />
+  const items = orders.reduce((list, order) => {
+    return [...list, ...order.attributes.items.data]
+  },[] as Item[]);
+  return (
+    <div>
+      <Form contactForms={contactForms} customer={customer} items={items} locale={locale} />
+      <OrderList translation={translation} orders={orders} locale={locale}/>
+    </div>
+  );
 }
 
 export default EditPage;

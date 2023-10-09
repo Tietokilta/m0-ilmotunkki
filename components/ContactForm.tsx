@@ -11,10 +11,11 @@ type Props = {
   locale: string;
   contactForms: ContactForm[];
   customer: Customer;
-  items: Item[]
+  items: Item[];
+  onSubmit?: () => void;
 }
 
-const Form = ({locale, contactForms, customer, items}: Props) => {
+const Form = ({locale, contactForms, customer, items, onSubmit=() => null}: Props) => {
   const { translation } = useTranslation(locale);
   const contactForm = getContactForm(contactForms || [], items);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -33,6 +34,7 @@ const Form = ({locale, contactForms, customer, items}: Props) => {
         }
       }),
     });
+    onSubmit();
   };
   const getFieldValue = (key: keyof Customer["attributes"]) => {
     return customer.attributes[key] as string;

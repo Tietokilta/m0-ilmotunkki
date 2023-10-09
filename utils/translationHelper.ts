@@ -11,7 +11,7 @@ export const transformTranslations = (t: Translation): Record<string,string> =>
 
 export const getTranslation = async (locale: string) => {
   const result = await fetchAPI<Translation>('/translation',{},{
-    locale: locale, //TODO FIX
+    locale: locale,
     populate: ['translations']
   });
   return transformTranslations(result);
