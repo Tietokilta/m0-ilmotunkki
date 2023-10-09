@@ -12,10 +12,10 @@ type Props = {
   contactForms: ContactForm[];
   customer: Customer;
   items: Item[];
-  onSubmit?: () => void;
+  onSubmit?: () => void | Promise<void>;
 }
 
-const Form = ({locale, contactForms, customer, items, onSubmit=() => null}: Props) => {
+const Form = ({locale, contactForms, customer, items, onSubmit=() => Promise.resolve()}: Props) => {
   const { translation } = useTranslation(locale);
   const contactForm = getContactForm(contactForms || [], items);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

@@ -1,13 +1,12 @@
 "use client";
 
-import { FormEvent, useContext, useEffect } from 'react';
-import { fetchAPI } from '@/lib/api';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '@/context/AppContext';
-import { ContactForm, Customer} from '@/utils/models';
+import { ContactForm} from '@/utils/models';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContactForm } from '@/utils/helpers';
 import { useTranslation } from "@/context/useTranslation";
+import Form from '@/components/ContactForm';
 
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
   contactForms: ContactForm[];
 }
 
-const Form = ({locale, contactForms}: Props) => {
+const Component = ({locale, contactForms}: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();
   const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
@@ -24,54 +23,19 @@ const Form = ({locale, contactForms}: Props) => {
       router.push(`/${locale}`);
     }
   },[isEmpty, router, locale]);
-  const contactForm = getContactForm(contactForms || [], items);
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const updateFields = Object.fromEntries(form.entries());
-    updateFields.locale = locale;
-    delete updateFields.createdAt;
-    delete updateFields.updatedAt;
-    delete updateFields.publishedAt;
-    await fetchAPI(`/customers/${customer.attributes.uid}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        data: {
-          ...updateFields,
-        }
-      }),
-    });
+  const handleSubmit = async () => {
     await refreshFields();
     router.push(`/${locale}/summary`);
   };
-  const getFieldValue = (key: keyof Customer["attributes"]) => {
-    return customer.attributes[key] as string;
-  };
   return (
     <div className="container max-w-3xl mx-auto bg-secondary-50 dark:bg-secondary-800 rounded shadow-md p-4 mt-4 sm:p-8">
-      <form className='mb-6 text-secondary-800 dark:text-secondary-100' 
-            onSubmit={handleSubmit}>
-        {contactForm.map(field => (
-          <div className="mb-8" key={field.fieldName}>
-            <label className='block p-1'>
-            {field.label}{field.required && '*'}
-            <input
-              className='tx-input mt-2'
-              type={field.type}
-              id={field.fieldName}
-              name={field.fieldName}
-              defaultValue={getFieldValue(field.fieldName)}
-              checked={!!getFieldValue(field.fieldName)}
-              required={field.required}
-            />
-          </label>
-          </div>
-
-        ))}
-        <div className='float-right'>
-          <button className='btn h-12'>{translation.send}</button>
-        </div>
-      </form>
+      <Form
+        contactForms={contactForms}
+        items={items}
+        customer={customer}
+        locale={locale}
+        onSubmit={handleSubmit}
+      />
         <div>
           <Link href={`/${locale}/`} className='btn h-12'>
             {translation.back}
@@ -81,4 +45,4 @@ const Form = ({locale, contactForms}: Props) => {
   );
 }
 
-export default Form;
+export default Component;
