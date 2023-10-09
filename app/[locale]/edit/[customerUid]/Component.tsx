@@ -1,9 +1,7 @@
 "use client";
 
-import useSWR from 'swr';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
-import { initialCustomer } from '@/context/AppContext';
 import { ContactForm,Customer, Order, StrapiBaseType } from '@/utils/models';
 import Link from 'next/link';
 import { getContactForm } from '@/utils/helpers';
@@ -20,27 +18,21 @@ type Props = {
   contactForms: ContactForm[];
   global: Global;
   locale: string;
-  orderUid: string;
+  customer: Customer;
+  orders: Order[];
 }
 
-const Form = ({contactForms, global, locale, orderUid}: Props) => {
+const Form = ({contactForms, global, locale, orders, customer }: Props) => {
   const { translation } = useTranslation(locale);
   const [isLoading, setLoading] = useState(false);
-  const {data: customer, mutate: refreshFields} = useSWR<Customer>(`/customers/findByOrderUid/${orderUid}`, fetchAPI);
-  const {data: orders} = useSWR<Order[]>(customer ? `/orders/findByCustomerUid/${customer.attributes.uid}` : null, fetchAPI);
-  const [inputFields, setInputFields] = useState<Customer["attributes"]>(customer?.attributes || initialCustomer.attributes);
   const updateHasEnded = new Date(global.attributes.updateEnd) <= new Date();
-  useEffect(() => {
-    if(!customer) return;
-    setInputFields(customer.attributes);
-  },[customer]);
 
-  if(!customer)return null;
   const contactForm = orders ? getContactForm(contactForms, orders[0]?.attributes.items.data): undefined;
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-    const updateFields: Partial<Customer["attributes"]> = {...inputFields};
+    const form = new FormData(e.currentTarget);
+    const updateFields = Object.fromEntries(form.entries());
     updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
@@ -57,19 +49,13 @@ const Form = ({contactForms, global, locale, orderUid}: Props) => {
     } catch(error) {
       // Error in updating the field
     }
-    refreshFields();
     setLoading(false);
   };
 
-  const handleChange = (event: Pick<ChangeEvent<HTMLInputElement>,'target'>, key: string, type: string) => {
-    const value = type === 'checkbox' ? event.target.checked : event.target.value;
-    setInputFields(previousKeys => {
-      return {
-        ...previousKeys,
-        [key]: value,
-      }
-    })
-  }
+  const getFieldValue = (key: keyof Customer["attributes"]) => {
+    return customer.attributes[key] as string;
+  };
+
   return (
     <div className="container max-w-3xl mx-auto">
       <form className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 mt-4 sm:p-8 rounded shadow-md mb-8"
@@ -81,9 +67,10 @@ const Form = ({contactForms, global, locale, orderUid}: Props) => {
             <input
               className='tx-input mt-2'
               type={field.type}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, field.fieldName, field.type)}
-              value={String(inputFields[field.fieldName]) || ''}
-              checked={!!inputFields[field.fieldName] || false}
+              id={field.fieldName}
+              name={field.fieldName}
+              defaultValue={getFieldValue(field.fieldName)}
+              checked={!!getFieldValue(field.fieldName)}
               required={field.required}
             />
           </label>

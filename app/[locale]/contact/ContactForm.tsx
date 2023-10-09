@@ -77,9 +77,7 @@ const Form = ({locale, contactForms}: Props) => {
             {translation.back}
           </Link>
       </div>
-
     </div>
-
   );
 }
 

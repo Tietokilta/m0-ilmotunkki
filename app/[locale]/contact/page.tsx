@@ -1,6 +1,6 @@
 import { fetchAPI } from "@/lib/api";
-import Form from "./ContactForm";
-import { ContactForm } from "@/utils/models";
+import ContactForm from "./ContactForm";
+import { ContactForm as ContactFormType } from "@/utils/models";
 
 type Props = {
   params: {
@@ -10,7 +10,7 @@ type Props = {
 
 const getContactForms = async (locale: string) => {
   try {
-    const data = await fetchAPI<ContactForm[]>('/contact-forms',{},{
+    const data = await fetchAPI<ContactFormType[]>('/contact-forms',{},{
       locale,
       populate: ['contactForm','itemTypes']
     });
@@ -25,7 +25,7 @@ const ContactPage = async ({params: {locale}}: Props) => {
   if(!contactForms) {
     return <p>Error in loading contact forms. Please contact admin</p>
   }
-  return <Form locale={locale} contactForms={contactForms}/>
+  return <ContactForm locale={locale} contactForms={contactForms}/>
 }
 
 export default ContactPage;
