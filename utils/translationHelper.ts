@@ -10,9 +10,15 @@ export const transformTranslations = (t: Translation): Record<string,string> =>
     }, {} as Record<string,string>);
 
 export const getTranslation = async (locale: string) => {
-  const result = await fetchAPI<Translation>('/translation',{},{
-    locale: locale,
-    populate: ['translations']
-  });
-  return transformTranslations(result);
+  try {
+    const result = await fetchAPI<Translation>('/translation',{},{
+      locale: locale,
+      populate: ['translations']
+    });
+    return transformTranslations(result);
+  } catch(error) {
+    console.error(error);
+    return {};
+  }
+
 }
