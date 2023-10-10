@@ -14,7 +14,7 @@ type Props = {
   contactForms: ContactForm[];
 }
 
-const Component = ({locale, contactForms}: Props) => {
+const FormWrapper = ({locale, contactForms}: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();
   const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
@@ -45,4 +45,4 @@ const Component = ({locale, contactForms}: Props) => {
   );
 }
 
-export default Component;
+export default FormWrapper;

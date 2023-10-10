@@ -52,7 +52,7 @@ const Form = ({locale, contactForms, customer, items, onSubmit=() => Promise.res
             id={field.fieldName}
             name={field.fieldName}
             defaultValue={getFieldValue(field.fieldName)}
-            checked={!!getFieldValue(field.fieldName)}
+            defaultChecked={!!getFieldValue(field.fieldName)}
             required={field.required}
           />
         </label>

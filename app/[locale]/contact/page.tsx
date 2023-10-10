@@ -1,5 +1,5 @@
 import { fetchAPI } from "@/lib/api";
-import ContactForm from "./ContactForm";
+import FormWrapper from "./FormWrapper";
 import { ContactForm as ContactFormType } from "@/utils/models";
 
 type Props = {
@@ -25,7 +25,7 @@ const ContactPage = async ({params: {locale}}: Props) => {
   if(!contactForms) {
     return <p>Error in loading contact forms. Please contact admin</p>
   }
-  return <ContactForm locale={locale} contactForms={contactForms}/>
+  return <FormWrapper locale={locale} contactForms={contactForms}/>
 }
 
 export default ContactPage;

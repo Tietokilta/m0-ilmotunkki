@@ -1,5 +1,7 @@
-import { ContactForm, Field, Item, Translation } from "./models";
-
+import { ContactForm, Field, Item, Translation, Order } from "./models";
+import { fetchAPI } from '@/lib/api';
+import { serverFetchAPI } from '@/lib/serverApi';
+import paytrailService from '@/utils/paytrail';
 
 type AggrecatedItem = {
   id: number;
@@ -53,4 +55,41 @@ export const getContactForm = (forms: ContactForm[], items: Item[]): Field[] => 
   },[] as Field[])
 
   return fields;
+}
+
+
+
+export const updateOrderState = async (orderId: number, status: string, transactionId?: string) => {
+  return serverFetchAPI<Order>(`/orders/${orderId}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: {
+        status,
+        transactionId,
+      }
+    })
+  });
+}
+
+export const createPayment = async (orderId: number) => {
+  const order = await serverFetchAPI<Order>(`/orders/${orderId}`,{},{
+      populate: [
+        'customer',
+        'items',
+        'items.itemType',
+        'items.itemType.itemCategory',
+        'items.giftCard',
+      ]
+    }
+  );
+  if (!order) throw new Error("No Order");
+  const translation = await fetchAPI<Translation>('/translation',{},{
+    locale: order.attributes.customer.data.attributes.locale,
+    populate: ['translations']
+  });
+  const mappedCart = mappedItems(order.attributes.items.data, transformTranslations(translation));
+  const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  await updateOrderState(order.id, 'pending');
+  if (total === 0) return paytrailService.createSkipPayment(order);
+  return paytrailService.createPayment(order);
 }

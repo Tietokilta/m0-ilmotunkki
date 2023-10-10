@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { fetchAPI, getStrapiURL } from '../lib/api';
 
 import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
+import Image from 'next/image';
 
 type Response = StrapiBaseType<{
   header: StrapiResponse<StrapiImage[]>;
@@ -32,16 +33,11 @@ const Header = async ({children, locale}: PropType) => {
         <div className='w-fit p-1 flex gap-4'>
           {children}
       </div>
-      <style jsx>{`
-        .bg-image {
-          background-image: ${header ? `url(${getStrapiURL(header?.url)})` : 'none' };
-          background-size: cover;
-        }
-      `}</style>
       <Link href={`/${locale}`}>
-        <div className="cursor-pointer relative text-5xl text-center font-bold py-4 text-secondary-900 dark:text-secondary-100 bg-image h-40">
-          <p className="py-10">{data?.attributes.headerTitle}</p>
-        </div>
+        {header && <div className="relative w-full h-96">
+          <Image fill={true} alt="header" src={getStrapiURL(header?.url)} className="object-cover" sizes="50wv"/>
+        </div>}
+        <p className="py-10">{data?.attributes.headerTitle}</p>
       </Link>
     </header>
 }

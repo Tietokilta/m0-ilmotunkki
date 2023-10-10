@@ -4,6 +4,7 @@ import qs from 'qs';
 import { fetchAPI } from '@/lib/api';
 import { Order } from '@/utils/models';
 import type { PaytrailPaymentResponse, SkipPaymentParams } from '@/utils/models';
+import { createPayment } from '@/utils/helpers';
 
 
 type Props = {
@@ -25,23 +26,6 @@ const getOrderInformation = async (orderUid: string) => {
 
 type PaymentApiResponse = PaytrailPaymentResponse | SkipPaymentParams;
 
-const initializePayment = async (orderId: number) => {
-  try {
-    const response = await fetch('/api/createPayment', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orderId,
-      })
-    });
-    const data = await response.json() as PaymentApiResponse;
-    return data;
-  } catch(error) {
-    return undefined;
-  }
-}
 
 const isSkipPayment = (response: PaymentApiResponse): response is SkipPaymentParams => {
   return 'status' in response && response.status === 'skip';
@@ -52,7 +36,7 @@ const Checkout = async ({params: {locale, orderUid}}: Props) => {
   if(!order || order.attributes.status === 'ok') {
     return null;
   }
-  const paymentResponse = await initializePayment(order.id);
+  const paymentResponse = await createPayment(order.id);
   if(!paymentResponse) {
     return null;
   }

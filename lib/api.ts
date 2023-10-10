@@ -38,7 +38,7 @@ export type StrapiError = {
   status: number,
   name: string,
   message: string,
-  details: any,
+  details: string,
 }
 
 type Media = {
