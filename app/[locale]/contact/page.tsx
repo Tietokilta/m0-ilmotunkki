@@ -10,7 +10,7 @@ type Props = {
 
 const getContactForms = async (locale: string) => {
   try {
-    const data = await fetchAPI<ContactFormType[]>('/contact-forms',{},{
+    const data = await fetchAPI<ContactFormType[]>('/contact-forms',{cache: 'no-store'},{
       locale,
       populate: ['contactForm','itemTypes']
     });

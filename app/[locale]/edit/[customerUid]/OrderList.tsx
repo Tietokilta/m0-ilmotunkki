@@ -15,6 +15,7 @@ const OrderList = ({locale, orders, translation }: Props) => {
       {orders?.map(order =>
       <div key={order.id} className="text-secondary-800 dark:text-secondary-100 bg-secondary-50 dark:bg-secondary-800  p-1 pt-4 sm:p-8 rounded shadow-md my-8">
         <OrderComponent
+          translation={translation}
           locale={locale}
           items={order.attributes.items.data}
         />

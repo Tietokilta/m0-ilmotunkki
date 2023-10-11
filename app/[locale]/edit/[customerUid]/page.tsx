@@ -11,12 +11,12 @@ type Global = StrapiBaseType<{
 
 const getContactForms = async (locale: string) => {
   try {
-    const contactForms = await fetchAPI<ContactForm[]>('/contact-forms',{},{
+    const contactForms = await fetchAPI<ContactForm[]>('/contact-forms', { cache: 'no-store' }, {
       locale,
-      populate: ['contactForm','itemTypes']
+      populate: ['contactForm', 'itemTypes']
     });
     return contactForms;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     return [];
   }
@@ -24,8 +24,8 @@ const getContactForms = async (locale: string) => {
 
 const getGlobalSettings = async () => {
   try {
-    return fetchAPI<Global>('/global');
-  } catch(error) {
+    return fetchAPI<Global>('/global', { cache: 'no-store' });
+  } catch (error) {
     console.error(error);
     return undefined;
   }
@@ -33,9 +33,9 @@ const getGlobalSettings = async () => {
 
 const getCustomer = async (customerUid: string) => {
   try {
-    const customer = fetchAPI<Customer>(`/customers/findByUid/${customerUid}`);
+    const customer = fetchAPI<Customer>(`/customers/findByUid/${customerUid}`, { cache: 'no-store' });
     return customer;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     return undefined;
   }
@@ -43,9 +43,9 @@ const getCustomer = async (customerUid: string) => {
 
 const getOrders = async (customerUid: string) => {
   try {
-    const orders = fetchAPI<Order[]>(`/orders/findByCustomerUid/${customerUid}`)
+    const orders = fetchAPI<Order[]>(`/orders/findByCustomerUid/${customerUid}`, { cache: 'no-store' })
     return orders;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     return [];
   }
@@ -58,7 +58,7 @@ type Props = {
   }
 }
 
-const EditPage = async ({params: {locale, customerUid}}: Props) => {
+const EditPage = async ({ params: { locale, customerUid } }: Props) => {
   const [
     global,
     contactForms,
@@ -76,11 +76,11 @@ const EditPage = async ({params: {locale, customerUid}}: Props) => {
   if (!global) return <p>Error in update settings</p>
   const items = orders.reduce((list, order) => {
     return [...list, ...order.attributes.items.data]
-  },[] as Item[]);
+  }, [] as Item[]);
   return (
     <div>
       <Form contactForms={contactForms} customer={customer} items={items} locale={locale} />
-      <OrderList translation={translation} orders={orders} locale={locale}/>
+      <OrderList translation={translation} orders={orders} locale={locale} />
     </div>
   );
 }
