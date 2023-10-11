@@ -14,7 +14,7 @@ type FrontPageFields = StrapiBaseType<{
 
 export const getFrontpageFields = async (locale: string) => {
   try {
-    const content = await fetchAPI<FrontPageFields>('/front-page', {cache: 'no-store'}, {
+    const content = await fetchAPI<FrontPageFields>('/front-page', { cache: 'no-store' }, {
       locale,
     });
     return content;

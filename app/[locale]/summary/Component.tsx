@@ -66,7 +66,7 @@ const Summary = ({locale}: SummaryProps) => {
         <ContactComponent items={items} customer={customer} locale={locale}/>
       </div>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4'>
-        <Order items={items} locale={locale}></Order>
+        <Order items={items} locale={locale} translation={translation}></Order>
       </div>
       <div className='bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4 text-primary-700 dark:text-primary-200'>
         <GiftCardComponent locale={locale}/>
