@@ -1,0 +1,97 @@
+{
+  "name": "Public",
+  "description": "Default role given to unauthenticated user.",
+  "type": "public",
+  "permissions": [
+    {
+      "action": "api::contact-form.contact-form.find"
+    },
+    {
+      "action": "api::customer.customer.create"
+    },
+    {
+      "action": "api::customer.customer.findByOrderUid"
+    },
+    {
+      "action": "api::customer.customer.findOne"
+    },
+    {
+      "action": "api::customer.customer.update"
+    },
+    {
+      "action": "api::front-page.front-page.find"
+    },
+    {
+      "action": "api::giftcard.giftcard.addGiftCard"
+    },
+    {
+      "action": "api::global.global.find"
+    },
+    {
+      "action": "api::group.group.find"
+    },
+    {
+      "action": "api::group.group.findOne"
+    },
+    {
+      "action": "api::item-category.item-category.find"
+    },
+    {
+      "action": "api::item-category.item-category.findOne"
+    },
+    {
+      "action": "api::item-type.item-type.find"
+    },
+    {
+      "action": "api::item-type.item-type.findOne"
+    },
+    {
+      "action": "api::item.item.create"
+    },
+    {
+      "action": "api::item.item.delete"
+    },
+    {
+      "action": "api::item.item.find"
+    },
+    {
+      "action": "api::order.order.create"
+    },
+    {
+      "action": "api::order.order.findByCustomerUid"
+    },
+    {
+      "action": "api::order.order.findByUid"
+    },
+    {
+      "action": "api::order.order.signups"
+    },
+    {
+      "action": "api::terms-and-condition.terms-and-condition.find"
+    },
+    {
+      "action": "api::translation.translation.find"
+    },
+    {
+      "action": "plugin::users-permissions.auth.callback"
+    },
+    {
+      "action": "plugin::users-permissions.auth.connect"
+    },
+    {
+      "action": "plugin::users-permissions.auth.emailConfirmation"
+    },
+    {
+      "action": "plugin::users-permissions.auth.forgotPassword"
+    },
+    {
+      "action": "plugin::users-permissions.auth.register"
+    },
+    {
+      "action": "plugin::users-permissions.auth.resetPassword"
+    },
+    {
+      "action": "plugin::users-permissions.auth.sendEmailConfirmation"
+    }
+  ]
+}

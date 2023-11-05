@@ -1,0 +1,33 @@
+{
+  "kind": "singleType",
+  "collectionName": "paytrails",
+  "info": {
+    "singularName": "paytrail",
+    "pluralName": "paytrails",
+    "displayName": "Paytrail"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "merchantId": {
+      "type": "string"
+    },
+    "secretKey": {
+      "type": "password"
+    },
+    "redirectSuccess": {
+      "type": "string"
+    },
+    "redirectCancel": {
+      "type": "string"
+    },
+    "callbackUrl": {
+      "type": "string"
+    },
+    "endpoint": {
+      "type": "string"
+    }
+  }
+}

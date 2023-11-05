@@ -1,0 +1,436 @@
+{
+  "name": "Editor",
+  "code": "strapi-editor",
+  "description": "Editors can manage and publish contents including those of other users.",
+  "permissions": [
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::contact-form.contact-form",
+      "properties": {
+        "fields": [
+          "contactForm.label",
+          "contactForm.required",
+          "contactForm.fieldName",
+          "contactForm.type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::contact-form.contact-form",
+      "properties": {
+        "fields": [
+          "contactForm.label",
+          "contactForm.required",
+          "contactForm.fieldName",
+          "contactForm.type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::contact-form.contact-form",
+      "properties": {
+        "fields": [
+          "contactForm.label",
+          "contactForm.required",
+          "contactForm.fieldName",
+          "contactForm.type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::customer.customer",
+      "properties": {
+        "fields": [
+          "firstName",
+          "lastName",
+          "email",
+          "phone",
+          "postalCode",
+          "startYear",
+          "extra",
+          "orders",
+          "uid",
+          "accept",
+          "locale"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::customer.customer",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::customer.customer",
+      "properties": {
+        "fields": [
+          "firstName",
+          "lastName",
+          "email",
+          "phone",
+          "postalCode",
+          "startYear",
+          "extra",
+          "orders",
+          "uid",
+          "accept",
+          "locale"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::customer.customer",
+      "properties": {
+        "fields": [
+          "firstName",
+          "lastName",
+          "email",
+          "phone",
+          "postalCode",
+          "startYear",
+          "extra",
+          "orders",
+          "uid",
+          "accept",
+          "locale"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::email.email",
+      "properties": {
+        "fields": [
+          "subject",
+          "text",
+          "type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::email.email",
+      "properties": {
+        "fields": [
+          "subject",
+          "text",
+          "type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::email.email",
+      "properties": {
+        "fields": [
+          "subject",
+          "text",
+          "type"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::front-page.front-page",
+      "properties": {
+        "fields": [
+          "bodyText"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::front-page.front-page",
+      "properties": {
+        "fields": [
+          "bodyText"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::front-page.front-page",
+      "properties": {
+        "fields": [
+          "bodyText"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::giftcard.giftcard",
+      "properties": {
+        "fields": [
+          "code",
+          "item",
+          "itemType"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::giftcard.giftcard",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::giftcard.giftcard",
+      "properties": {
+        "fields": [
+          "code",
+          "item",
+          "itemType"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::giftcard.giftcard",
+      "properties": {
+        "fields": [
+          "code",
+          "item",
+          "itemType"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::item-category.item-category",
+      "properties": {
+        "fields": [
+          "name",
+          "orderItemLimit",
+          "itemTypes",
+          "maximumItemLimit",
+          "overflowItem"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::item-category.item-category",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::item-category.item-category",
+      "properties": {
+        "fields": [
+          "name",
+          "orderItemLimit",
+          "itemTypes",
+          "maximumItemLimit",
+          "overflowItem"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::item-category.item-category",
+      "properties": {
+        "fields": [
+          "name",
+          "orderItemLimit",
+          "itemTypes",
+          "maximumItemLimit",
+          "overflowItem"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::item-type.item-type",
+      "properties": {
+        "fields": [
+          "price",
+          "availableFrom",
+          "availableTo",
+          "itemCategory",
+          "slug"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::item-type.item-type",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::item-type.item-type",
+      "properties": {
+        "fields": [
+          "price",
+          "availableFrom",
+          "availableTo",
+          "itemCategory",
+          "slug"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::item-type.item-type",
+      "properties": {
+        "fields": [
+          "price",
+          "availableFrom",
+          "availableTo",
+          "itemCategory",
+          "slug"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::item.item",
+      "properties": {
+        "fields": [
+          "itemType",
+          "order",
+          "giftCard"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::item.item",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::item.item",
+      "properties": {
+        "fields": [
+          "itemType",
+          "order",
+          "giftCard"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::item.item",
+      "properties": {
+        "fields": [
+          "itemType",
+          "order",
+          "giftCard"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::order.order",
+      "properties": {
+        "fields": [
+          "status",
+          "transactionId",
+          "customer",
+          "items",
+          "uid"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::order.order",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::order.order",
+      "properties": {
+        "fields": [
+          "status",
+          "transactionId",
+          "customer",
+          "items",
+          "uid"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::order.order",
+      "properties": {
+        "fields": [
+          "status",
+          "transactionId",
+          "customer",
+          "items",
+          "uid"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::upload.assets.copy-link",
+      "subject": null,
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::upload.assets.create",
+      "subject": null,
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::upload.assets.download",
+      "subject": null,
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::upload.assets.update",
+      "subject": null,
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::upload.read",
+      "subject": null,
+      "properties": {},
+      "conditions": []
+    }
+  ]
+}

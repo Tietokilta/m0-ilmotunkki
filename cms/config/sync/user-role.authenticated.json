@@ -1,0 +1,97 @@
+{
+  "name": "Authenticated",
+  "description": "Default role given to authenticated user.",
+  "type": "authenticated",
+  "permissions": [
+    {
+      "action": "api::callback-page.callback-page.find"
+    },
+    {
+      "action": "api::contact-form.contact-form.find"
+    },
+    {
+      "action": "api::customer.customer.create"
+    },
+    {
+      "action": "api::customer.customer.delete"
+    },
+    {
+      "action": "api::customer.customer.find"
+    },
+    {
+      "action": "api::customer.customer.findByOrderUid"
+    },
+    {
+      "action": "api::customer.customer.findOne"
+    },
+    {
+      "action": "api::customer.customer.update"
+    },
+    {
+      "action": "api::front-page.front-page.find"
+    },
+    {
+      "action": "api::giftcard.giftcard.addGiftCard"
+    },
+    {
+      "action": "api::giftcard.giftcard.find"
+    },
+    {
+      "action": "api::giftcard.giftcard.findOne"
+    },
+    {
+      "action": "api::item-category.item-category.find"
+    },
+    {
+      "action": "api::item-category.item-category.findOne"
+    },
+    {
+      "action": "api::item-type.item-type.find"
+    },
+    {
+      "action": "api::item-type.item-type.findOne"
+    },
+    {
+      "action": "api::item.item.create"
+    },
+    {
+      "action": "api::item.item.delete"
+    },
+    {
+      "action": "api::item.item.find"
+    },
+    {
+      "action": "api::item.item.findOne"
+    },
+    {
+      "action": "api::item.item.update"
+    },
+    {
+      "action": "api::order.order.create"
+    },
+    {
+      "action": "api::order.order.delete"
+    },
+    {
+      "action": "api::order.order.find"
+    },
+    {
+      "action": "api::order.order.findByCustomerUid"
+    },
+    {
+      "action": "api::order.order.findByUid"
+    },
+    {
+      "action": "api::order.order.findOne"
+    },
+    {
+      "action": "api::order.order.update"
+    },
+    {
+      "action": "plugin::users-permissions.auth.changePassword"
+    },
+    {
+      "action": "plugin::users-permissions.user.me"
+    }
+  ]
+}

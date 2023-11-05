@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_types",
+  "info": {
+    "singularName": "item-type",
+    "pluralName": "item-types",
+    "displayName": "ItemType",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "price": {
+      "type": "integer",
+      "pluginOptions": {}
+    },
+    "availableFrom": {
+      "type": "datetime",
+      "pluginOptions": {}
+    },
+    "availableTo": {
+      "type": "datetime",
+      "pluginOptions": {}
+    },
+    "itemCategory": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::item-category.item-category",
+      "inversedBy": "itemTypes"
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "upgradeTarget": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item-type.item-type"
+    }
+  }
+}

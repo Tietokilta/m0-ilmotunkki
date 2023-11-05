@@ -1,0 +1,158 @@
+{
+  "key": "plugin_content_manager_configuration_content_types::api::item-category.item-category",
+  "value": {
+    "uid": "api::item-category.item-category",
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "searchable": true,
+      "pageSize": 10,
+      "mainField": "name",
+      "defaultSortBy": "name",
+      "defaultSortOrder": "ASC"
+    },
+    "metadatas": {
+      "id": {
+        "edit": {},
+        "list": {
+          "label": "id",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "name": {
+        "edit": {
+          "label": "name",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "name",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "orderItemLimit": {
+        "edit": {
+          "label": "orderItemLimit",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "orderItemLimit",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "itemTypes": {
+        "edit": {
+          "label": "itemTypes",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true,
+          "mainField": "slug"
+        },
+        "list": {
+          "label": "itemTypes",
+          "searchable": false,
+          "sortable": false
+        }
+      },
+      "maximumItemLimit": {
+        "edit": {
+          "label": "maximumItemLimit",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "maximumItemLimit",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "overflowItem": {
+        "edit": {
+          "label": "overflowItem",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true,
+          "mainField": "slug"
+        },
+        "list": {
+          "label": "overflowItem",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "createdAt": {
+        "edit": {
+          "label": "createdAt",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true
+        },
+        "list": {
+          "label": "createdAt",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "updatedAt": {
+        "edit": {
+          "label": "updatedAt",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true
+        },
+        "list": {
+          "label": "updatedAt",
+          "searchable": true,
+          "sortable": true
+        }
+      }
+    },
+    "layouts": {
+      "edit": [
+        [
+          {
+            "name": "name",
+            "size": 6
+          },
+          {
+            "name": "orderItemLimit",
+            "size": 4
+          }
+        ],
+        [
+          {
+            "name": "maximumItemLimit",
+            "size": 4
+          }
+        ]
+      ],
+      "editRelations": [
+        "itemTypes",
+        "overflowItem"
+      ],
+      "list": [
+        "id",
+        "name",
+        "orderItemLimit",
+        "itemTypes"
+      ]
+    }
+  },
+  "type": "object",
+  "environment": null,
+  "tag": null
+}

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "giftcards",
+  "info": {
+    "singularName": "giftcard",
+    "pluralName": "giftcards",
+    "displayName": "Giftcard",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "code": {
+      "type": "uid"
+    },
+    "item": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item.item",
+      "mappedBy": "giftCard"
+    },
+    "itemType": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item-type.item-type"
+    }
+  }
+}

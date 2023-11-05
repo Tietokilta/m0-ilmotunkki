@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_translation_translation_fields",
+  "info": {
+    "displayName": "TranslationField",
+    "icon": "globe-europe"
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

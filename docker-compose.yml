@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14.4
+    environment: 
+      - POSTGRES_DB=strapi
+      - POSTGRES_PASSWORD=strapi
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    networks:
+      - default
+  web:
+    build:
+      context: ./web
+    environment:
+      - MERCHANT_ID=375917
+      - SECRET_KEY=SAIPPUAKAUPPIAS
+      - STRAPI_TOKEN=get-from-strapi
+      - URL=http://127.0.0.1:3000
+      - CALLBACK_URL=/verifyPaymentCallback
+      - NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
+  cms:
+    build:
+      context: ./cms
+    environment:
+      - HOST=0.0.0.0
+      - PORT=1337
+      - APP_KEYS="toBeModified1,toBeModified2,toBeModified3,toBeModified4"
+      - API_TOKEN_SALT=toBeModified1
+      - ADMIN_JWT_SECRET=toBeModified1
+      - NODE_ENV=development
+      - DATABASE_CLIENT=postgres
+      - DATABASE_NAME=strapi
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=toBeModified
+      - JWT_SECRET=toBeModified
+      - API_TOKEN_SALT=toBeModified
+      - SMTP_USER=email@emailprovider.fi
+      - SMTP_PASSWORD=password
+    ports:
+      - 1337:1337
+    networks:
+      - default
