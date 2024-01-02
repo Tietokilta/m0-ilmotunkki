@@ -1,5 +1,4 @@
 import Mail from 'nodemailer/lib/mailer';
-import SMTPPool from 'nodemailer/lib/smtp-pool';
 import {v4} from 'uuid';
 type Event = {
   model: any,
@@ -72,14 +71,10 @@ const sendConfirmationEmail = async (order: any) => {
     text: text,
   }
   try {
-    await strapi.service<EmailService>('api::email.email').create(mailOptions);
+    await strapi.service('api::email.email').create(mailOptions);
   } catch(error) {
     console.error(`Order id: ${order.id} had an issue sending the email`);
   }
-}
-
-type EmailService = {
-  create: (options: Mail.Options) => any;
 }
 
 export default {

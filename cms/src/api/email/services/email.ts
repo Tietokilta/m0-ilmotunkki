@@ -3,7 +3,6 @@
  */
 import NodeMailer from 'nodemailer';
 import { factories } from '@strapi/strapi';
-import type Mail from 'nodemailer/lib/mailer';
 
 const smtpUser = process.env.SMTP_USER;
 const smtpPassword = process.env.SMTP_PASSWORD;
@@ -23,8 +22,9 @@ transporter
   .catch((error) => console.error('Mailer error', error))
 
 export default factories.createCoreService('api::email.email',{
-  create: (options: Mail.Options) => {
-    return transporter.sendMail(options);
+  create: async(options: Record<string, unknown>) => {
+    await transporter.sendMail(options);
+    return null;
   },
 }
 );
