@@ -1,0 +1,36 @@
+{
+  "name": "management",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "management",
+    "description": "Description of management plugin",
+    "kind": "plugin"
+  },
+  "dependencies": {
+    "@strapi/design-system": "^1.2.3",
+    "@strapi/icons": "^1.2.3",
+    "styled-components": "^5.3.5"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "4.3.9",
+    "typescript": "4.6.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "maintainers": [
+    {
+      "name": "A Strapi developer"
+    }
+  ],
+  "engines": {
+    "node": ">=12.x.x <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "scripts": {
+    "develop": "tsc -w",
+    "build": "tsc"
+  },
+  "license": "MIT"
+}

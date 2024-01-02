@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_categories",
+  "info": {
+    "singularName": "item-category",
+    "pluralName": "item-categories",
+    "displayName": "ItemCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "orderItemLimit": {
+      "type": "integer"
+    },
+    "itemTypes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::item-type.item-type",
+      "mappedBy": "itemCategory"
+    },
+    "maximumItemLimit": {
+      "type": "integer"
+    },
+    "overflowItem": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item-type.item-type"
+    }
+  }
+}

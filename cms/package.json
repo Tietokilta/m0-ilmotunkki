@@ -1,0 +1,36 @@
+{
+  "name": "ilmotunkki-cms",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Headless CMS for Ilmotunkki",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/plugin-i18n": "4.16.2",
+    "@strapi/plugin-users-permissions": "4.16.2",
+    "@strapi/strapi": "4.16.2",
+    "@types/nodemailer": "^6.4.8",
+    "@types/uuid": "^9.0.1",
+    "nodemailer": "^6.7.7",
+    "pg": "8.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^5.3.4",
+    "styled-components": "^5.3.11",
+    "uuid": "^9.0.0"
+  },
+  "author": {
+    "name": "Tuomas Kontola"
+  },
+  "strapi": {
+    "uuid": "41704848-286b-441e-829f-e09468e66808"
+  },
+  "engines": {
+    "npm": ">=6.0.0"
+  },
+  "license": "GPLv3"
+}

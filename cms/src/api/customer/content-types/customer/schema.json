@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "Customer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "startYear": {
+      "type": "string"
+    },
+    "extra": {
+      "type": "text"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "customer"
+    },
+    "uid": {
+      "type": "uid",
+      "required": false
+    },
+    "accept": {
+      "type": "boolean",
+      "default": false
+    },
+    "locale": {
+      "type": "enumeration",
+      "enum": [
+        "fi",
+        "en"
+      ]
+    },
+    "diet": {
+      "type": "string"
+    },
+    "nonalcoholic": {
+      "type": "boolean"
+    },
+    "group": {
+      "type": "string"
+    },
+    "avec": {
+      "type": "string"
+    },
+    "representativeOf": {
+      "type": "string"
+    },
+    "greeting": {
+      "type": "boolean"
+    }
+  }
+}

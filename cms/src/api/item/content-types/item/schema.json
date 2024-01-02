@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "items",
+  "info": {
+    "singularName": "item",
+    "pluralName": "items",
+    "displayName": "Item",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "itemType": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item-type.item-type"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::order.order",
+      "inversedBy": "items"
+    },
+    "giftCard": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::giftcard.giftcard",
+      "inversedBy": "item"
+    }
+  }
+}
