@@ -1,6 +1,6 @@
 import { getTranslation } from "@/utils/translationHelper";
 import { NextRequest, NextResponse } from "next/server";
-
+export const dynamic = 'force-dynamic';
 type Props = {
   params: {
     locale: string;

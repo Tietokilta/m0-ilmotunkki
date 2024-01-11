@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import paytrailService from "@/utils/paytrail";
 import { updateOrderState } from '@/utils/helpers';
-
+export const dynamic = 'force-dynamic';
 
 // This is called by paytrail directly
 export const GET = async (request: NextRequest) => {

@@ -2,6 +2,7 @@ import { fetchAPI } from '@/lib/api';
 import Summary from './Summary';
 import { ContactForm as ContactFormType } from "@/utils/models";
 import { getTranslation } from '@/utils/translationHelper';
+export const dynamic = 'force-dynamic';
 type Props = {
   params: {
     locale: string

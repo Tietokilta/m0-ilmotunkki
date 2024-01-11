@@ -3,7 +3,7 @@ import OrderList from "./OrderList";
 import { ContactForm, Customer, Item, Order, StrapiBaseType } from "@/utils/models";
 import Form from "@/components/ContactForm";
 import { getTranslation } from "@/utils/translationHelper";
-
+export const dynamic = 'force-dynamic';
 type Global = StrapiBaseType<{
   updateEnd: string;
 }>

@@ -1,6 +1,6 @@
 import { fetchAPI } from "@/lib/api";
 import { NextRequest, NextResponse } from "next/server";
-
+export const dynamic = 'force-dynamic';
 type PostPayload = {
   code: string;
   orderUid: string;

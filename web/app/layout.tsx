@@ -16,7 +16,7 @@ type PropType = {
     locale: string
   }
 }
-
+export const dynamic = 'force-dynamic';
 
 const RootLayout = async ({children}: PropType) => {
   return (

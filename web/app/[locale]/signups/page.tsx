@@ -2,7 +2,7 @@ import { fetchAPI } from "@/lib/api";
 import GoBack from "./GoBack";
 import { ItemCategory, StrapiBaseType } from "@/utils/models";
 import { getTranslation } from "@/utils/translationHelper";
-
+export const dynamic = 'force-dynamic';
 
 type Field = StrapiBaseType<{
   id: number;
@@ -18,8 +18,8 @@ const getData = async () => {
     content,
     categories,
     ] = await Promise.all([
-    fetchAPI<Field[]>('/orders/signups'),
-    fetchAPI<ItemCategory[]>('/item-categories',{},{
+    fetchAPI<Field[]>('/orders/signups',{cache: 'no-store'}),
+    fetchAPI<ItemCategory[]>('/item-categories',{cache: 'no-store'},{
       populate: [
         'overflowItem',
         'itemTypes',

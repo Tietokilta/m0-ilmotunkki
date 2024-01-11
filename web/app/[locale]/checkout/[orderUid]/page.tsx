@@ -5,7 +5,7 @@ import { fetchAPI } from '@/lib/api';
 import { Order } from '@/utils/models';
 import type { PaytrailPaymentResponse, SkipPaymentParams } from '@/utils/models';
 import { createPayment } from '@/utils/helpers';
-
+export const dynamic = 'force-dynamic';
 
 type Props = {
   params: {
@@ -16,7 +16,7 @@ type Props = {
 
 const getOrderInformation = async (orderUid: string) => {
   try {
-    const order = await fetchAPI<Order>(`/orders/findByUid/${orderUid}`);
+    const order = await fetchAPI<Order>(`/orders/findByUid/${orderUid}`, {cache: 'no-store'});
     return order;
   } catch(error) {
     console.error(error);

@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/lib/api";
 import { Customer, Order } from "@/utils/models";
 import { NextResponse } from "next/server";
-
+export const dynamic = 'force-dynamic';
 
 
 export const POST = async () => {

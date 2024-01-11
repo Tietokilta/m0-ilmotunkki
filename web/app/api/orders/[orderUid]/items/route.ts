@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/lib/api";
 import { Item } from "@/utils/models";
 import { NextRequest, NextResponse } from "next/server";
-
+export const dynamic = 'force-dynamic';
 type Props = {
   params: {
     orderUid: string;

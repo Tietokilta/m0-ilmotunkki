@@ -7,12 +7,12 @@ import { updateOrderState } from '@/utils/helpers';
 import CallbackResetHandler from './CallbackResetHandler';
 import { getTranslation } from '@/utils/translationHelper';
 import Link from 'next/link';
-
+export const dynamic = 'force-dynamic';
 type CheckoutStatus = 'new' | 'ok' | 'fail' | 'pending' | 'delayed';
 
 const getContent = async (locale: string) => {
   try {
-    const content = await serverFetchAPI<CallbackPageFields>('/callback-page',{},{
+    const content = await serverFetchAPI<CallbackPageFields>('/callback-page',{cache: 'no-store'},{
       locale: locale,
     });
     return content;

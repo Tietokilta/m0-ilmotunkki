@@ -6,19 +6,20 @@ import { fetchAPI, getStrapiURL } from '../../lib/api';
 import { getTranslation } from '../../utils/translationHelper';
 import { StrapiBaseType } from '../../utils/models';
 import PageContinue from './PageContinue';
-
+export const dynamic = 'force-dynamic';
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
   showSignups: boolean;
 }>;
 
-export const getFrontpageFields = async (locale: string) => {
+const getFrontpageFields = async (locale: string) => {
   try {
-    const content = await fetchAPI<FrontPageFields>('/front-page', { cache: 'no-store' }, {
-      locale,
-    });
+    const content = await fetchAPI<FrontPageFields>('/front-page', 
+      { cache: 'no-store' },
+      { locale,}
+    );
     return content;
-  }catch(error) {
+  } catch(error) {
     return undefined;
   }
 }

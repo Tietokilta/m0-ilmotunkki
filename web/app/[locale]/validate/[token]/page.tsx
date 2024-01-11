@@ -1,7 +1,7 @@
 import { serverFetchAPI } from '@/lib/serverApi';
 import { Item } from '@/utils/models';
-import { useTranslation } from "@/context/useTranslation";
-
+import { getTranslation } from '@/utils/translationHelper';
+export const dynamic = 'force-dynamic';
 type Props = {
   params: {
     token: string;
@@ -13,7 +13,9 @@ type Props = {
 const getItem = async (token: string, locale: string) => {
   const [orderUid, itemId] = (token as string).split('_');
   try {
-    const item = await serverFetchAPI<Item>(`/items/${itemId}`,{},{
+    const item = await serverFetchAPI<Item>(`/items/${itemId}`,{
+      cache: 'no-store'
+    },{
       orderUid,
       locale: locale,
     });
@@ -25,7 +27,7 @@ const getItem = async (token: string, locale: string) => {
 
 const CallbackPage = async ({ params: {token, locale} }: Props) => {
   const item = await getItem(token, locale);
-  const { translation } = useTranslation(locale);
+  const translation = await getTranslation(locale);
   const success = <div className='bg-success-500 rounded p-8 text-center text-3xl uppercase'>
     <p>{translation.success}</p>
     {item &&<p>{translation[item.attributes.itemType.data.attributes.slug]} ID:{item.id}</p> }

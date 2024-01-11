@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/lib/api";
 import FormWrapper from "./FormWrapper";
 import { ContactForm as ContactFormType } from "@/utils/models";
-
+export const dynamic = 'force-dynamic';
 type Props = {
   params: {
     locale: string

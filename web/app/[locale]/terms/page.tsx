@@ -5,14 +5,16 @@ import { fetchAPI } from '@/lib/api';
 import { StrapiBaseType } from '@/utils/models';
 import { useRouter } from 'next/navigation';
 import { getTranslation } from '@/utils/translationHelper';
-
+export const dynamic = 'force-dynamic';
 type Fields = StrapiBaseType<{
   terms: string;
   gdpr: string;
 }>
 
 const getContent = async (locale: string) => {
-  const response = await fetchAPI<Fields>('/terms-and-condition',{},{
+  const response = await fetchAPI<Fields>('/terms-and-condition',{
+    next: {revalidate: 300}
+  },{
     locale,
   });
   return response;
