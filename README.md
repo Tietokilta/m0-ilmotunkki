@@ -1,6 +1,8 @@
 # Ilmotunkki
 Web application for signups. This project uses Strapi as the CMS and Next.js as the frontend and backend service.
-The Next.js requires a token from strapi in order to use its API. This means before the website can you used you need to create a token from Strapi
+The Next.js requires a token from strapi in order to use its API. This means before the website can you used you need to create a token from Strapi.
+
+Note that you need `docker` on the target machine.
 
 
 ## Development
