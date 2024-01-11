@@ -72,24 +72,29 @@ export const updateOrderState = async (orderId: number, status: string, transact
 }
 
 export const createPayment = async (orderId: number) => {
-  const order = await serverFetchAPI<Order>(`/orders/${orderId}`,{},{
+  try {
+    const order = await serverFetchAPI<Order>(`/orders/${orderId}`,{},{
       populate: [
         'customer',
         'items',
         'items.itemType',
         'items.itemType.itemCategory',
         'items.giftCard',
-      ]
-    }
-  );
-  if (!order) throw new Error("No Order");
-  const translation = await fetchAPI<Translation>('/translation',{},{
-    locale: order.attributes.customer.data.attributes.locale,
-    populate: ['translations']
-  });
-  const mappedCart = mappedItems(order.attributes.items.data, transformTranslations(translation));
-  const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  await updateOrderState(order.id, 'pending');
-  if (total === 0) return paytrailService.createSkipPayment(order);
-  return paytrailService.createPayment(order);
+        ]
+      }
+    );
+    if (!order) throw new Error("No Order");
+    const translation = await fetchAPI<Translation>('/translation',{},{
+      locale: order.attributes.customer.data.attributes.locale,
+      populate: ['translations']
+    });
+    const mappedCart = mappedItems(order.attributes.items.data, transformTranslations(translation));
+    const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    await updateOrderState(order.id, 'pending');
+    if (total === 0) return paytrailService.createSkipPayment(order);
+    return paytrailService.createPayment(order);
+  } catch(error) {
+    console.error("Error in creating payment",error);
+    return undefined;
+  }
 }

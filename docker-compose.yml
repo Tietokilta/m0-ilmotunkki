@@ -4,8 +4,9 @@ services:
   db:
     image: postgres:14.4
     environment: 
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_DB: strapi
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USERNAME}
   web:
     build:
       context: ./web
@@ -17,13 +18,12 @@ services:
       - /app/node_modules
       - ./web/:/app
     environment:
-      STRAPI_API_URL: ${STRAPI_API_URL}
+      STRAPI_API_URL: http://cms:1337
       STRAPI_PUBLIC_URL: ${STRAPI_URL}
       STRAPI_TOKEN: ${STRAPI_TOKEN}
       MERCHANT_ID: ${PAYTRAIL_MERCHANT_ID}
       SECRET_KEY: ${PAYTRAIL_SECRET_KEY}
       URL: ${URL}
-      CALLBACK_URL: ${CALLBACK_URL}
   cms:
     build:
       context: ./cms
@@ -34,23 +34,23 @@ services:
       - /app/node_modules
       - ./cms/:/app
     environment:
+      HOST: 0.0.0.0
+      PORT: 1337
+      NODE_ENV: development
+      DATABASE_CLIENT: postgres
+      DATABASE_NAME: strapi
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
       URL: ${STRAPI_URL}
-      HOST: ${HOST}
-      PORT: ${PORT}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       APP_KEYS: ${APP_KEYS}
       API_TOKEN_SALT: ${API_TOKEN_SALT}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       TRANSER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
-      NODE_ENV: ${NODE_ENV}
       JWT_SECRET: ${JWT_SECRET}
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
-      DATABASE_CLIENT: ${DATABASE_CLIENT}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - 1337:1337
     depends_on:

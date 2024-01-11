@@ -44,7 +44,7 @@ type PaymentBody = {
 }
 
 const PAYTRAIL_ENDPOINT = 'https://services.paytrail.com';
-const URL = process.env.URL || '127.0.0.1:3000';
+const URL = process.env.URL || 'localhost:7800';
 const MERCHANT_ID = process.env.MERCHANT_ID || '';
 const SECRET_KEY = process.env.SECRET_KEY || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || '';

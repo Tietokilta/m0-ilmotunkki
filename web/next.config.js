@@ -3,7 +3,20 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     loader: "default",
-    domains: ["localhost", "static.paytrail.com", "resources.paytrail.com", "cms"],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.paytrail.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'cms',
+      }
+    ],
   },
   eslint: {
     dirs: ["middleware.ts", "app", "context", "components"],
