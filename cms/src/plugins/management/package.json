@@ -8,13 +8,13 @@
     "kind": "plugin"
   },
   "dependencies": {
-    "@strapi/design-system": "^1.2.3",
-    "@strapi/icons": "^1.2.3",
+    "@strapi/design-system": "1.14.1",
+    "@strapi/icons": "1.14.1",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
-    "@strapi/strapi": "4.3.9",
-    "typescript": "4.6.3"
+    "@strapi/strapi": "4.16.2",
+    "typescript": "5.3.3"
   },
   "author": {
     "name": "A Strapi developer"
@@ -25,7 +25,7 @@
     }
   ],
   "engines": {
-    "node": ">=12.x.x <=16.x.x",
+    "node": ">=18.x.x <=20.x.x",
     "npm": ">=6.0.0"
   },
   "scripts": {
