@@ -11,16 +11,17 @@ services:
       context: ./web
       dockerfile: Dockerfile.dev
       args:
-        NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL}
         PRIMARY_COLOR: ${PRIMARY_COLOR}
         SECONDARY_COLOR: ${SECONDARY_COLOR}
     volumes:
       - /app/node_modules
       - ./web/:/app
     environment:
+      STRAPI_API_URL: ${STRAPI_API_URL}
+      STRAPI_PUBLIC_URL: ${STRAPI_URL}
+      STRAPI_TOKEN: ${STRAPI_TOKEN}
       MERCHANT_ID: ${PAYTRAIL_MERCHANT_ID}
       SECRET_KEY: ${PAYTRAIL_SECRET_KEY}
-      STRAPI_TOKEN: ${STRAPI_TOKEN}
       URL: ${URL}
       CALLBACK_URL: ${CALLBACK_URL}
   cms:
@@ -29,6 +30,9 @@ services:
       dockerfile: Dockerfile.dev
       args:
         URL: ${STRAPI_URL}
+    volumes:
+      - /app/node_modules
+      - ./cms/:/app
     environment:
       URL: ${STRAPI_URL}
       HOST: ${HOST}

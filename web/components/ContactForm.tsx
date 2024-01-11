@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent } from 'react';
-import { fetchAPI } from '@/lib/api';
 import { ContactForm, Customer, Item} from '@/utils/models';
 import { getContactForm } from '@/utils/helpers';
 import { useTranslation } from "@/context/useTranslation";
@@ -26,13 +25,13 @@ const Form = ({locale, contactForms, customer, items, onSubmit=() => Promise.res
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
     delete updateFields.publishedAt;
-    await fetchAPI(`/customers/${customer.attributes.uid}`, {
+    const payload = {
+      data: updateFields,
+      customerUid: customer.attributes.uid,
+    }
+    await fetch(`/api/customers`, {
       method: 'PUT',
-      body: JSON.stringify({
-        data: {
-          ...updateFields,
-        }
-      }),
+      body: JSON.stringify(payload)
     });
     onSubmit();
   };

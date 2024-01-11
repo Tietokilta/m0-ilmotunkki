@@ -1,7 +1,7 @@
 import qs from "qs";
 export const getStrapiURL = (path = "") => {
   return `${
-    process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337"
+    process.env.STRAPI_API_URL || "http://cms:1337"
   }${path}`;
 }
 
@@ -11,7 +11,7 @@ export const fetchAPI = async <T>(
   urlParamsObject = {},
   ): Promise<T> => {
   // Merge default and user options
-  const mergedOptions = {
+  const mergedOptions: RequestInit = {
     headers: {
       "Content-Type": "application/json",
     },
@@ -49,8 +49,14 @@ type Media = {
   },
 };
 
+const getPublicStrapiURL = (path = "") => {
+  return `${
+    process.env.STRAPI_PUBLIC_URL
+  }${path}`;
+}
+
 export const getStrapiMedia = (media: Media) => {
   const { url } = media.data.attributes;
-  const imageUrl = url.startsWith("/") ? getStrapiURL(url) : url;
+  const imageUrl = url.startsWith("/") ? getPublicStrapiURL(url) : url;
   return imageUrl;
 }

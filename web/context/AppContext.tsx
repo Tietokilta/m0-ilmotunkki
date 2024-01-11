@@ -4,7 +4,6 @@ import {
   createContext, useState, useEffect, FC, useCallback, useMemo
 } from "react";
 import useSWR from "swr";
-import { fetchAPI } from "../lib/api";
 import { Customer, Item, ItemType, Order } from "../utils/models";
 
 export interface AppContextType {
@@ -68,11 +67,11 @@ export const AppContext = createContext<AppContextType>(appContextDefault);
 type Props = {
   children: React.ReactNode
 }
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const AppProvider: FC<Props> = ({ children }) => {
   const [orderUid, setOrderUid] = useState<string | undefined>(undefined);
-  //TODO FORWARD TO NEXT
-  const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
+  const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/api/orders/${orderUid}` : null, fetcher);
   const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
   const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);
   const reset = useCallback(() => {
@@ -88,24 +87,16 @@ const AppProvider: FC<Props> = ({ children }) => {
   },[error,reset]);
 
   const initializeOrder = async () => {
-    const newOrder = await fetchAPI<Order>('/orders',{
+    const response = await fetch('/api/orders', {
       method: 'POST',
-      body: JSON.stringify({
-        data: {}
-      }),
     });
+    if(!response.ok) {
+      throw new Error("Error in initializing order");
+    }
+
+    const newOrder = await response.json() as Order;
     setOrderUid(newOrder.attributes.uid);
     localStorage.setItem('orderUid', String(newOrder.attributes.uid));
-    const newCustomer = await fetchAPI<Customer>('/customers', {
-      method: 'POST',
-      body: JSON.stringify({
-        data: {
-          orders: [newOrder.id]
-        }
-      }),
-    });
-    newOrder.attributes.customer = {data:newCustomer}
-    newOrder.attributes.items = {data: appContextDefault.items}
     mutateOrder(newOrder);
     return newOrder.attributes.uid;
   };
@@ -114,12 +105,10 @@ const AppProvider: FC<Props> = ({ children }) => {
     const itemToRemove = items?.find(({attributes: {itemType}}) => itemType.data.id === itemId);
     if (!itemToRemove) return;
     try {
-      const removeResult = await fetchAPI<Item>(`/items/${itemToRemove.id}`, {
+      const response = await fetch(`/api/orders/${orderUid}/items/${itemToRemove.id}`, {
         method: 'DELETE',
-      },
-      {
-        orderUid,
       });
+      const removeResult = await response.json() as Item;
       const filteredItems = items?.filter(item => item.id !== removeResult.id) || [];
       const newOrder = order || appContextDefault.order;
       newOrder.attributes.items = {data:filteredItems};
@@ -132,15 +121,13 @@ const AppProvider: FC<Props> = ({ children }) => {
   const addItem = async (itemType: ItemType) => {
     const currentOrderUid = orderUid || await initializeOrder();
     try {
-      const newItem = await fetchAPI<Item>('/items', {
+      const response = await fetch(`/api/orders/${currentOrderUid}/items`, {
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            itemType: itemType.id,
-            order: currentOrderUid,
-          }
+          itemType: itemType.id,
         }),
       });
+      const newItem = await response.json() as Item
       const newItems = [...items, newItem];
       const newOrder = order || appContextDefault.order;
       newOrder.attributes.items = {data: newItems};

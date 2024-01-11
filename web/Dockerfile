@@ -11,19 +11,17 @@ RUN npm run build
 
 COPY ./ .
 
+ARG PRIMARY_COLOR
+ARG SECONDARY_COLOR
 
-ARG STRAPI_TOKEN
-ARG NEXT_PUBLIC_STRAPI_API_URL
-ENV STRAPI_TOKEN=${STRAPI_TOKEN}
-ENV NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
+ENV PRIMARY_COLOR=${PRIMARY_COLOR}
+ENV SECONDARY_COLOR=${SECONDARY_COLOR}
 
 RUN npm run build
-
 
 FROM node:20.6.1-alpine AS runner
 
 WORKDIR /app
-ENV NODE_ENV production
 
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
@@ -35,5 +33,7 @@ COPY --from=builder /app/.next/static ./.next/static
 EXPOSE 3000
 
 ENV PORT=3000
+ENV NODE_ENV production
+
 
 CMD ["node", "server.js"]

@@ -13,19 +13,28 @@ services:
   web:
     build:
       context: ./web
+      dockerfile: Dockerfile
+      args:
+        PRIMARY_COLOR: ${PRIMARY_COLOR}
+        SECONDARY_COLOR: ${SECONDARY_COLOR}
     environment:
+      STRAPI_API_URL: ${STRAPI_API_URL}
+      STRAPI_PUBLIC_URL: ${STRAPI_URL}
+      STRAPI_TOKEN: ${STRAPI_TOKEN}
       MERCHANT_ID: ${PAYTRAIL_MERCHANT_ID}
       SECRET_KEY: ${PAYTRAIL_SECRET_KEY}
-      STRAPI_TOKEN: ${STRAPI_TOKEN}
       URL: ${URL}
       CALLBACK_URL: ${CALLBACK_URL}
-      NEXT_PUBLIC_STRAPI_API_URL: ${PUBLIC_STRAPI_API_URL}
     profiles:
       - default
   cms:
     build:
       context: ./cms
+      dockerfile: Dockerfile
+      args:
+        URL: ${STRAPI_URL}
     environment:
+      URL: ${STRAPI_URL}
       HOST: ${HOST}
       PORT: ${PORT}
       APP_KEYS: ${APP_KEYS}
@@ -42,8 +51,8 @@ services:
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-    ports:
-      - 1337:1337
+    depends_on:
+      - db
     profiles:
       - default
   nginx:

@@ -47,12 +47,14 @@ type Global = StrapiBaseType<{
 }>
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const data = await fetchAPI<Global>('/global',{},{populate: ['favicon']});
+  const data = await fetchAPI<Global>('/global',{
+    next: {revalidate: 300}
+  },{populate: ['favicon']});
   return {
     title: data.attributes.title,
     description: data.attributes.description,
     icons: {
-      icon: getStrapiMedia(data.attributes.favicon) 
+      icon: getStrapiMedia(data.attributes.favicon),
     },
     metadataBase: new URL(data.attributes.url),
     openGraph: {

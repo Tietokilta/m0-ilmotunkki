@@ -44,7 +44,6 @@ export default factories.createCoreController('api::giftcard.giftcard',{
         }
       }
     });
-    console.log(order,newCard,itemToBeLinked);
     if(!itemToBeLinked) {
       return ctx.badRequest('NOMATCH');
     }
