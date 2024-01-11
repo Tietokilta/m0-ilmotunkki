@@ -9,6 +9,8 @@ Note that you need `docker` on the target machine.
 
 **These instructions are for local development.**
 
+Go set correct domain names inside `nginx/nginx.prod.conf`
+
 Go run `npm install` in `web` and `cms` folders.
 
 Copy `.env.sample` to `.env` and fill in:

@@ -7,7 +7,7 @@ COPY ./package-lock.json .
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-RUN npm run build
+RUN npm install
 
 COPY ./ .
 
