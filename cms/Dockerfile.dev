@@ -1,19 +1,18 @@
-FROM node:16
+FROM node:18.13.0
 # Installing libvips-dev for sharp Compatability
 RUN apt-get update && apt-get install libvips-dev -y
 ARG NODE_ENV=development
+ARG URL=cms
+ENV URL=${URL}
 ENV NODE_ENV=${NODE_ENV}
 WORKDIR /app
 COPY ./package.json .
-COPY ./yarn.lock .
+COPY ./package-lock.json .
 
-ENV PATH /app/node_modules/.bin:$PATH
-
-RUN yarn config set network-timeout 600000 -g && yarn install
-
+RUN npm install
 COPY ./ .
 
-RUN yarn build
+RUN npm run build
 EXPOSE 1337
 
-CMD ["yarn", "develop"]
+CMD ["npm","run", "develop"]

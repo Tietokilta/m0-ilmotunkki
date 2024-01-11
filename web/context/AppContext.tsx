@@ -71,6 +71,7 @@ type Props = {
 
 const AppProvider: FC<Props> = ({ children }) => {
   const [orderUid, setOrderUid] = useState<string | undefined>(undefined);
+  //TODO FORWARD TO NEXT
   const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/orders/findByUid/${orderUid}` : null, fetchAPI);
   const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
   const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);

@@ -42,6 +42,7 @@ type Props = {
 const ItemList = ({locale}: Props) => {
   const {translation} = useTranslation(locale);
   const [loading, setLoading] = useState(false);
+  //TODO FORWARD TO NEXT
   const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
     populate: [
       'overflowItem',

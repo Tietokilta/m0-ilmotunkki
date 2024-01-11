@@ -16,6 +16,7 @@ const GiftCardComponent = ({locale}: Props) => {
   const submitGiftcard = async () => {
     if(!order) return;
     try {
+      //TODO FORWARD TO NEXT
       await fetchAPI('/giftcards/addGiftCard',{
         method: 'POST',
         body: JSON.stringify({

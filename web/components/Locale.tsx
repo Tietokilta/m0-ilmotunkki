@@ -17,6 +17,7 @@ const Locale = () => {
     pathParts[0] = locale
     router.push(`/${pathParts.join('/')}?${query.toString()}`);
     if(!customer.attributes.uid) return;
+    //TODO FORWARD TO NEXT
     await fetchAPI(`/customers/${customer.attributes.uid}`, {
       method: 'PUT',
       body: JSON.stringify({

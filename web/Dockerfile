@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:20.6.1 as builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ ENV NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
 RUN npm run build
 
 
-FROM node:16-alpine AS runner
+FROM node:20.6.1-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV production
