@@ -1,15 +1,12 @@
-import { fetchAPI } from "@/lib/api";
-import { transformTranslations } from "@/utils/helpers";
-import { Translation } from "@/utils/models";
 import useSWR from "swr";
 
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export const useTranslation = (locale: string) => {
-  const { data, error } = useSWR('/translation',url => fetchAPI<Translation>(url,{},{
-    locale,
-    populate: ['translations']
-  }));
+  const { data, error } = useSWR<Record<string,string>>(`/api/translation/${locale}`,fetcher);
   return {
-    translation: data ? transformTranslations(data) : {},
+    translation: data || {},
     error: error
   }
 }

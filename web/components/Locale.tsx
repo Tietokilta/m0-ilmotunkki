@@ -3,7 +3,6 @@
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { fetchAPI } from '../lib/api';
 
 const Locale = () => {
   const router = useRouter();
@@ -17,9 +16,10 @@ const Locale = () => {
     pathParts[0] = locale
     router.push(`/${pathParts.join('/')}?${query.toString()}`);
     if(!customer.attributes.uid) return;
-    await fetchAPI(`/customers/${customer.attributes.uid}`, {
+    await fetch('api/customers', {
       method: 'PUT',
       body: JSON.stringify({
+        customerUid: customer.attributes.uid,
         data: {
           locale,
         }

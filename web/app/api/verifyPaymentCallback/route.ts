@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import paytrailService from "@/utils/paytrail";
-import { updateOrderState } from "../createPayment/route";
+import { updateOrderState } from '@/utils/helpers';
 
 
 // This is called by paytrail directly

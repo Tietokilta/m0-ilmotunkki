@@ -1,7 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 import colors from 'tailwindcss/colors';
+import { DefaultColors } from 'tailwindcss/types/generated/colors';
 
-export default {
+type Key = keyof DefaultColors;
+
+// Function to validate and get color
+const getColor = (colorName: string | undefined, defaultColor: Key) => {
+  if(!colorName) {
+    return colors[defaultColor];
+  }
+  if (colorName in colors) {
+    return colors[colorName as Key];
+  }
+  console.warn(`Invalid color name '${colorName}'. Falling back to default '${defaultColor}'.`);
+  return colors[defaultColor];
+};
+
+const PRIMARY_COLOR = process.env.PRIMARY_COLOR;
+const SECONDARY_COLOR = process.env.SECONDARY_COLOR;
+
+const configuration = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./app/**/*.{js,ts,jsx,tsx}",
@@ -10,19 +28,8 @@ export default {
   darkMode: 'class', // class/media
   theme: {
     colors: {
-      dynamic: {
-        100: `var(--color-dynamic-100,${colors.emerald["100"]})`,
-        200: `var(--color-dynamic-200,${colors.emerald["200"]})`,
-        300: `var(--color-dynamic-300,${colors.emerald["300"]})`,
-        400: `var(--color-dynamic-400,${colors.emerald["400"]})`,
-        500: `var(--color-dynamic-500,${colors.emerald["500"]})`,
-        600: `var(--color-dynamic-600,${colors.emerald["600"]})`,
-        700: `var(--color-dynamic-700,${colors.emerald["700"]})`,
-        800: `var(--color-dynamic-800,${colors.emerald["800"]})`,
-        900: `var(--color-dynamic-900,${colors.emerald["900"]})`,
-      },
-      primary: colors.red,
-      secondary: colors.neutral,
+      primary: getColor(PRIMARY_COLOR,"blue"),
+      secondary: getColor(SECONDARY_COLOR,"neutral"),
       transparent: colors.transparent,
       success: colors.green,
       danger: colors.red,
@@ -34,4 +41,6 @@ export default {
     require('@tailwindcss/typography'),
   ],
 }
+
+export default configuration;
 

@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { Item, ItemCategory, ItemType } from "../utils/models";
 import useSWR from 'swr';
-import { fetchAPI } from '../lib/api';
 import Loader from "./Loader";
 import { useTranslation } from "@/context/useTranslation";
 const itemCount = (items: Item[], itemId: number) => items.filter(
@@ -39,17 +38,12 @@ const isAtLimit = (items: Item[], itemCategory: ItemCategory) => {
 type Props = {
   locale: string
 }
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const ItemList = ({locale}: Props) => {
   const {translation} = useTranslation(locale);
   const [loading, setLoading] = useState(false);
-  const {data: itemCategories, mutate: mutateCategories} = useSWR('/item-categories', url => fetchAPI<ItemCategory[]>(url,{},{
-    populate: [
-      'overflowItem',
-      'itemTypes',
-      'itemTypes.upgradeTarget',
-      'itemTypes.upgradeTarget.itemCategory'
-    ],
-  }));
+  const {data: itemCategories, mutate: mutateCategories} = useSWR<ItemCategory[]>('/api/categories', fetcher);
   const { addItem, deleteItem, items } = useContext(AppContext);
   const handleClick = async (item: ItemType) => {
     setLoading(true);

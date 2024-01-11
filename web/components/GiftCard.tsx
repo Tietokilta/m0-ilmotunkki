@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { fetchAPI, StrapiError } from '../lib/api';
+import { StrapiError } from '../lib/api';
 import { useTranslation } from "@/context/useTranslation";
 
 type Props = {
@@ -16,13 +16,10 @@ const GiftCardComponent = ({locale}: Props) => {
   const submitGiftcard = async () => {
     if(!order) return;
     try {
-      await fetchAPI('/giftcards/addGiftCard',{
+      await fetch(`/api/giftcards`, {
         method: 'POST',
-        body: JSON.stringify({
-          code: giftCard,
-          orderUid: order.attributes.uid,
-        }),
-      });
+        body: JSON.stringify({code: giftCard, orderUid: order.attributes.uid})
+      })
       refreshFields();
       setGiftCardError('');
     } catch(e) {

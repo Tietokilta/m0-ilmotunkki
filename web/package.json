@@ -10,23 +10,23 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.7",
-    "@types/qs": "^6.9.7",
-    "eslint-config-next": "^13.4.19",
-    "next": "^13.4.19",
+    "eslint-config-next": "^14.0.4",
+    "next": "^14.0.4",
     "qs": "^6.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.3",
-    "sharp": "^0.31.1",
+    "sharp": "^0.33.1",
     "swr": "^1.3.0"
   },
   "author": {
     "name": "Tuomas Kontola"
   },
   "devDependencies": {
+    "@types/qs": "^6.9.7",
     "@types/node": "^20.2.5",
-    "@types/react": "^18.2.7",
-    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "autoprefixer": "^10.4.8",
     "eslint": "^8.18.0",

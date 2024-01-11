@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     loader: "default",
-    domains: ["localhost", "static.paytrail.com", "resources.paytrail.com", "muistinnollaus.fi", "vuosijuhlat.rwbk.fi", "matrikkeli.rwbk.fi", "liput.rwbk.fi"],
+    domains: ["localhost", "static.paytrail.com", "resources.paytrail.com", "cms"],
   },
   eslint: {
     dirs: ["middleware.ts", "app", "context", "components"],
