@@ -9,6 +9,8 @@ Note that you need `docker` on the target machine.
 
 **These instructions are for local development.**
 
+Note that strapi is quite heavy inside docker, so it might be beneficial to just run the database inside docker and run next and strapi outside docker. Remember to update environment variables in this case.
+
 Go set correct domain names inside `nginx/nginx.prod.conf`
 
 Go run `npm install` in `web` and `cms` folders.
