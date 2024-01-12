@@ -19,7 +19,7 @@ Copy `.env.sample` to `.env` and fill in:
 - Email settings
 - CMS secrets
 
-For generating CMS secrets you can use `npm run generate` inside `cms`-folder. (If you don't have npm installed on target system, you can run `docker run hajoppi/ilmotunkki-generate-strapi-keys`) to generate the secrets. Copy these secrets to the env file.
+For generating CMS secrets you can use `npm run generate` inside `cms`-folder. (If you don't have npm installed on target system, you can run `docker run hajoppi/ilmotunkki-generate-strapi-keys` to generate the secrets.) Copy these secrets to the env file.
 
 Start the project:
 ```
@@ -59,7 +59,7 @@ Copy `.env.sample` to `.env` and fill in:
 - Cerbot settings
 
 
-For generating CMS secrets you can use `npm run generate` inside `cms`-folder. (If you don't have npm installed on target system or don't want to install it, you can run `docker run hajoppi/ilmotunkki-generate-strapi-keys`) to generate the secrets. Copy these secrets to the env file.
+For generating CMS secrets you can use `npm run generate` inside `cms`-folder. (If you don't have npm installed on target system or don't want to install it, you can run `docker run hajoppi/ilmotunkki-generate-strapi-keys` to generate the secrets.) Copy these secrets to the env file.
 
 Setup the ssl certs
 ```
