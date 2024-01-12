@@ -63,7 +63,7 @@ const sendConfirmationEmail = async (order: any) => {
     template.text,
     form.contactForm,
     customer,
-    translation).replace('{orderUid}',order.uid);
+    translation).replace('{customerUid}',customer.uid);
   const mailOptions: Mail.Options = {
     to: customer.email,
     from: template.from,
