@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import qs from 'qs';
 import { fetchAPI } from '@/lib/api';
@@ -36,7 +37,8 @@ const Checkout = async ({params: {locale, orderUid}}: Props) => {
   if(!order || order.attributes.status === 'ok') {
     return null;
   }
-  const paymentResponse = await createPayment(order.id);
+  const url = headers().get('host') || 'localhost:3000'
+  const paymentResponse = await createPayment(order.id, url);
   if(!paymentResponse) {
     return null;
   }

@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import { fetchAPI } from '../lib/api';
 import { mappedItems, transformTranslations } from './helpers';
 import { Order, PaytrailPaymentResponse, SkipPaymentParams, Translation } from './models';
-import { headers } from "next/headers"
 
 type PaymentBodyItem = {
   unitPrice: number;
@@ -61,8 +60,7 @@ const calculateHmac = (
   return crypto.createHmac('sha256', SECRET_KEY).update(payload).digest('hex');
 }
 
-const generatePaymentBody = (order: Order, translation: Record<string,string>) => {
-  const url = headers().get('host') || 'localhost:3000'
+const generatePaymentBody = (order: Order, translation: Record<string,string>, url: string) => {
   const locale = order.attributes.customer.data.attributes.locale;
   const callbackUrl = `${url}/${locale}/callback`;
   const verifyPaymentCallback = `${url}/api/verifyPaymentCallback`;
@@ -115,12 +113,12 @@ const createSkipPayment = async (order: Order) => {
 
 
 
-const createPayment = async (order: Order) => {
+const createPayment = async (order: Order, url: string) => {
   const translation = await fetchAPI<Translation>('/translation',{},{
     locale: order.attributes.customer.data.attributes.locale,
     populate: ['translations']
   })
-  const body = generatePaymentBody(order, transformTranslations(translation));
+  const body = generatePaymentBody(order, transformTranslations(translation), url);
   const headers = {
     'checkout-account': MERCHANT_ID,
     'checkout-algorithm': 'sha256',
