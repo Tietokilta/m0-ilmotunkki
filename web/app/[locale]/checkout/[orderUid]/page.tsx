@@ -37,7 +37,8 @@ const Checkout = async ({params: {locale, orderUid}}: Props) => {
   if(!order || order.attributes.status === 'ok') {
     return null;
   }
-  const url = headers().get('host') || 'localhost:3000'
+  const hostname = headers().get('host')
+  const url = hostname ? `https://${hostname}` : 'http://localhost:3000';
   const paymentResponse = await createPayment(order.id, url);
   console.log(paymentResponse);
   if(!paymentResponse) {
