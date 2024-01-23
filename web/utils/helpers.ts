@@ -71,7 +71,7 @@ export const updateOrderState = async (orderId: number, status: string, transact
   });
 }
 
-export const createPayment = async (orderId: number) => {
+export const createPayment = async (orderId: number, url: string) => {
   try {
     const order = await serverFetchAPI<Order>(`/orders/${orderId}`,{},{
       populate: [
@@ -92,7 +92,7 @@ export const createPayment = async (orderId: number) => {
     const total = mappedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     await updateOrderState(order.id, 'pending');
     if (total === 0) return paytrailService.createSkipPayment(order);
-    return paytrailService.createPayment(order);
+    return paytrailService.createPayment(order, url);
   } catch(error) {
     console.error("Error in creating payment",error);
     return undefined;
