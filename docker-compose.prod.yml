@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -25,7 +25,6 @@ services:
       MERCHANT_ID: ${PAYTRAIL_MERCHANT_ID}
       SECRET_KEY: ${PAYTRAIL_SECRET_KEY}
       URL: ${URL}
-      CALLBACK_URL: ${URL}/api/verifyPaymentCallback
     profiles:
       - default
   cms:

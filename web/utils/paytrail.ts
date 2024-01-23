@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { fetchAPI } from '../lib/api';
 import { mappedItems, transformTranslations } from './helpers';
 import { Order, PaytrailPaymentResponse, SkipPaymentParams, Translation } from './models';
+import { headers } from "next/headers"
 
 type PaymentBodyItem = {
   unitPrice: number;
@@ -44,10 +45,8 @@ type PaymentBody = {
 }
 
 const PAYTRAIL_ENDPOINT = 'https://services.paytrail.com';
-const URL = process.env.URL || 'localhost:7800';
 const MERCHANT_ID = process.env.MERCHANT_ID || '';
 const SECRET_KEY = process.env.SECRET_KEY || '';
-const CALLBACK_URL = process.env.CALLBACK_URL || '';
 
 const getRandomString = (length: number = 16) => crypto.randomBytes(length).toString('base64');
 
@@ -63,8 +62,10 @@ const calculateHmac = (
 }
 
 const generatePaymentBody = (order: Order, translation: Record<string,string>) => {
+  const url = headers().get('host') || 'localhost:3000'
   const locale = order.attributes.customer.data.attributes.locale;
-  const callbackUrl = `${URL}/${locale}/callback`;
+  const callbackUrl = `${url}/${locale}/callback`;
+  const verifyPaymentCallback = `${url}/api/verifyPaymentCallback`;
   const mappedCart = mappedItems(order.attributes.items.data,translation);
   const items: PaymentBodyItem[] = mappedCart.map(item => {
     return {
@@ -90,11 +91,9 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>) =
       success: callbackUrl,
       cancel: callbackUrl,
     },
-  }
-  if (CALLBACK_URL) {
-    body.callbackUrls = {
-      success: CALLBACK_URL,
-      cancel: CALLBACK_URL,
+    callbackUrls: {
+      success: verifyPaymentCallback,
+      cancel: verifyPaymentCallback,
     }
   }
   return body;
