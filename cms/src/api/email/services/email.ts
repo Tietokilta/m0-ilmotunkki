@@ -1,30 +1,31 @@
 /**
  * email service.
  */
-import NodeMailer from 'nodemailer';
-import { factories } from '@strapi/strapi';
+import { createTransport } from "nodemailer";
+import { factories } from "@strapi/strapi";
 
 const smtpUser = process.env.SMTP_USER;
 const smtpPassword = process.env.SMTP_PASSWORD;
-
-const transporter = NodeMailer.createTransport({
-  service: 'gmail',
+const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com.";
+const stmpTLS = process.env.SMTP_TLS === "true";
+const transporter = createTransport({
+  host: smtpHost,
+  secure: stmpTLS,
   auth: {
     user: smtpUser,
-    pass: smtpPassword
+    pass: smtpPassword,
   },
-  pool: true
+  pool: true,
 });
 
 transporter
   .verify()
-  .then(() =>console.log('Mailer setup succesfully'))
-  .catch((error) => console.error('Mailer error', error))
+  .then(() => console.log("Mailer setup succesfully"))
+  .catch((error) => console.error("Mailer error", error));
 
-export default factories.createCoreService('api::email.email',{
-  create: async(options: Record<string, unknown>) => {
+export default factories.createCoreService("api::email.email", {
+  create: async (options: Record<string, unknown>) => {
     await transporter.sendMail(options);
     return null;
   },
-}
-);
+});
