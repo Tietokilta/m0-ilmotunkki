@@ -64,6 +64,7 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>, u
   const locale = order.attributes.customer.data.attributes.locale;
   const callbackUrl = `${url}/${locale}/callback`;
   const verifyPaymentCallback = `${url}/api/verifyPaymentCallback`;
+  console.log('urls',callbackUrl, verifyPaymentCallback)
   const mappedCart = mappedItems(order.attributes.items.data,translation);
   const items: PaymentBodyItem[] = mappedCart.map(item => {
     return {
@@ -94,6 +95,7 @@ const generatePaymentBody = (order: Order, translation: Record<string,string>, u
       cancel: verifyPaymentCallback,
     }
   }
+  console.log('body',body)
   return body;
 }
 

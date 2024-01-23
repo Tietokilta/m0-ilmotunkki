@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import { fetchAPI } from '@/lib/api';
+import { createPayment } from '@/utils/helpers';
+import type { PaytrailPaymentResponse, SkipPaymentParams } from '@/utils/models';
+import { Order } from '@/utils/models';
 import { headers } from 'next/headers';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import qs from 'qs';
-import { fetchAPI } from '@/lib/api';
-import { Order } from '@/utils/models';
-import type { PaytrailPaymentResponse, SkipPaymentParams } from '@/utils/models';
-import { createPayment } from '@/utils/helpers';
 export const dynamic = 'force-dynamic';
 
 type Props = {
@@ -39,6 +39,7 @@ const Checkout = async ({params: {locale, orderUid}}: Props) => {
   }
   const url = headers().get('host') || 'localhost:3000'
   const paymentResponse = await createPayment(order.id, url);
+  console.log(paymentResponse);
   if(!paymentResponse) {
     return null;
   }
