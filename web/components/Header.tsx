@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { fetchAPI, getStrapiURL } from '../lib/api';
+import { fetchAPI } from '../lib/api';
 
 import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
 import Image from 'next/image';
@@ -35,7 +35,7 @@ const Header = async ({children, locale}: PropType) => {
       </div>
       <Link href={`/${locale}`}>
         {header && <div className="relative w-full h-96">
-          <Image fill={true} alt="header" src={getStrapiURL(header?.url)} className="object-cover" sizes="50wv" priority={true}/>
+          <Image fill={true} alt="header" src={header?.url} className="object-cover" sizes="50wv" priority={true}/>
         </div>}
         <p className="py-10 text-3xl text-secondary-800 dark:text-secondary-50">{data?.attributes.headerTitle}</p>
       </Link>

@@ -1,5 +1,6 @@
 import qs from "qs";
-export const getStrapiURL = (path = "") => {
+
+const getStrapiURL = (path = "") => {
   return `${
     process.env.STRAPI_API_URL || "http://cms:1337"
   }${path}`;
@@ -39,24 +40,4 @@ export type StrapiError = {
   name: string,
   message: string,
   details: string,
-}
-
-type Media = {
-  data: {
-    attributes: {
-      url: string;
-    }
-  },
-};
-
-const getPublicStrapiURL = (path = "") => {
-  return `${
-    process.env.STRAPI_PUBLIC_URL
-  }${path}`;
-}
-
-export const getStrapiMedia = (media: Media) => {
-  const { url } = media.data.attributes;
-  const imageUrl = url.startsWith("/") ? getPublicStrapiURL(url) : url;
-  return imageUrl;
 }

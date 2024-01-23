@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import ItemList from '../../components/ItemList';
-import { fetchAPI, getStrapiURL } from '../../lib/api';
+import { fetchAPI } from '../../lib/api';
 import { getTranslation } from '../../utils/translationHelper';
 import { StrapiBaseType } from '../../utils/models';
 import PageContinue from './PageContinue';
@@ -42,7 +42,7 @@ const Home = async ({params: {locale}}: Props) => {
             components={{
               img: image => {
                 if(!image.src) return null;
-                return <Image src={getStrapiURL(image.src)} width={400} height={800} alt={image.alt || ""}></Image>
+                return <Image src={image.src} width={400} height={800} alt={image.alt || ""}></Image>
               }
             }}
             className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">

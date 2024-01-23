@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { fetchAPI, getStrapiURL } from '../lib/api';
+import { fetchAPI } from '../lib/api';
 import { StrapiBaseType, StrapiImage, StrapiResponse } from '../utils/models';
 
 
@@ -34,7 +34,7 @@ const Footer = async () => {
         const dimensions = sponsor.logo.data.attributes.formats?.thumbnail || sponsor.logo.data.attributes;
         return <a key={sponsor.name} href={sponsor.url} target="_blank" rel="noreferrer">
           <div className="cursor-pointer max-w-[200px]">
-            <Image height={dimensions.height} width={dimensions.width} src={getStrapiURL(image.url)} alt={sponsor.name} />
+            <Image height={dimensions.height} width={dimensions.width} src={image.url} alt={sponsor.name} />
           </div>
         </a>
       })}

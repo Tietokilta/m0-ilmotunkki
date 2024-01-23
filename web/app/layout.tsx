@@ -5,10 +5,10 @@ import Header from '../components/Header';
 import Locale from '../components/Locale';
 import Timer from '../components/Timer';
 
-import '../styles/global.css';
-import AppProvider from '../context/AppContext';
+import { fetchAPI } from "@/lib/api";
 import { StrapiBaseType, StrapiImage, StrapiResponse } from "@/utils/models";
-import { fetchAPI, getStrapiMedia } from "@/lib/api";
+import AppProvider from '../context/AppContext';
+import '../styles/global.css';
 
 type PropType = {
   children: React.ReactNode
@@ -54,7 +54,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
     title: data.attributes.title,
     description: data.attributes.description,
     icons: {
-      icon: getStrapiMedia(data.attributes.favicon),
+      icon: data.attributes.favicon.data.attributes.url,
     },
     metadataBase: new URL(data.attributes.url),
     openGraph: {

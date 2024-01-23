@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
-
 // From: https://nextjs.org/docs/app/building-your-application/routing/internationalization
 export const middleware = async (request: NextRequest) => {
-  const locales = ['fi', 'en']
-  const defaultLocale = "fi";
-
   const pathname = request.nextUrl.pathname;
+  if (pathname.startsWith("/uploads")) {
+    const destination = new URL(process.env.STRAPI_URL || "");
+    const url = request.nextUrl.clone();
+    url.host = destination.host;
+    url.port = destination.port;
+    url.pathname = pathname;
+    return NextResponse.rewrite(url);
+  }
+
+  const locales = ["fi", "en"];
+  const defaultLocale = "fi";
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
