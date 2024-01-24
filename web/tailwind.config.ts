@@ -28,7 +28,7 @@ const configuration = {
   darkMode: 'class', // class/media
   theme: {
     colors: {
-      primary: getColor(PRIMARY_COLOR,"blue"),
+      primary: getColor(PRIMARY_COLOR,"purple"),
       secondary: getColor(SECONDARY_COLOR,"neutral"),
       transparent: colors.transparent,
       success: colors.green,
