@@ -1,7 +1,12 @@
 "use client";
 
 import {
-  createContext, useState, useEffect, FC, useCallback, useMemo
+  FC,
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
 } from "react";
 import useSWR from "swr";
 import { Customer, Item, ItemType, Order } from "../utils/models";
@@ -72,8 +77,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const AppProvider: FC<Props> = ({ children }) => {
   const [orderUid, setOrderUid] = useState<string | undefined>(undefined);
   const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/api/orders/${orderUid}` : null, fetcher);
-  const customer = useMemo(() => order?.attributes.customer.data || appContextDefault.customer,[order]);
-  const items = useMemo(() => order?.attributes.items?.data || appContextDefault.items, [order]);
+  console.log('order', order)
+  const customer = useMemo(() => order?.attributes?.customer?.data || appContextDefault.customer,[order]);
+  const items = useMemo(() => order?.attributes?.items?.data || appContextDefault.items, [order]);
+  console.log('customer', customer)
+  console.log('items', items)
   const reset = useCallback(() => {
     localStorage.removeItem('orderUid');
     setOrderUid('');
