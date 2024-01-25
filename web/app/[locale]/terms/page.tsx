@@ -1,10 +1,10 @@
-import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 
 import { fetchAPI } from '@/lib/api';
 import { StrapiBaseType } from '@/utils/models';
 import { useRouter } from 'next/navigation';
 import { getTranslation } from '@/utils/translationHelper';
+import { TermsContent } from './Content';
 export const dynamic = 'force-dynamic';
 type Fields = StrapiBaseType<{
   terms: string;
@@ -37,8 +37,7 @@ const Terms = async ({params: {locale}}: Props) => {
   const router = useRouter();
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-8">
-      <ReactMarkdown className='prose prose-secondary dark:prose-invert'>{content.attributes.terms}</ReactMarkdown>
-      <ReactMarkdown className="prose prose-secondary dark:prose-invert">{content.attributes.gdpr}</ReactMarkdown>
+      <TermsContent terms={content.attributes.terms} gdpr={content.attributes.gdpr} />
       <div className='my-4'>
         <Link onClick={goBack} className='underline text-primary-900 dark:text-primary-500' href="">
             {translation.back}
