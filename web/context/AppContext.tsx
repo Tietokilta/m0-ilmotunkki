@@ -81,7 +81,6 @@ const AppProvider: FC<Props> = ({ children }) => {
     mutate: mutateOrder,
     error,
   } = useSWR<Order>(orderUid ? `/api/orders/${orderUid}` : null, fetcher);
-  console.log("order", order);
   const customer = useMemo(
     () => order?.attributes?.customer?.data || appContextDefault.customer,
     [order],
@@ -90,8 +89,6 @@ const AppProvider: FC<Props> = ({ children }) => {
     () => order?.attributes?.items?.data || appContextDefault.items,
     [order],
   );
-  console.log("customer", customer);
-  console.log("items", items);
   const reset = useCallback(() => {
     localStorage.removeItem("orderUid");
     setOrderUid("");
@@ -139,6 +136,7 @@ const AppProvider: FC<Props> = ({ children }) => {
       mutateOrder(newOrder);
     } catch (error) {
       // Error in deleting an item
+      reset();
     }
   };
 
@@ -158,6 +156,7 @@ const AppProvider: FC<Props> = ({ children }) => {
       mutateOrder(newOrder);
     } catch (error) {
       // Error in adding an item
+      reset();
     }
   };
   const refreshFields = async () => {
