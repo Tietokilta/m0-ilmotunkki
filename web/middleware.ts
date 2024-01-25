@@ -4,7 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 export const middleware = async (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
   if (pathname.startsWith("/uploads")) {
-    const destination = new URL(process.env.STRAPI_URL || "");
+    const destination = new URL(
+      process.env.STRAPI_URL || "http://localhost:1337",
+    );
     const url = request.nextUrl.clone();
     url.host = destination.host;
     url.port = destination.port;
