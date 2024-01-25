@@ -28,9 +28,9 @@ const RootLayout = async ({children}: PropType) => {
               <Locale />
               <Timer/>
           </Header>
-          <main className='max-w-7xl mx-auto'>
+          <div className='max-w-7xl mx-auto'>
             {children}
-          </main>
+          </div>
           </AppProvider>
         <Footer/>
       </body>
