@@ -1,5 +1,5 @@
+import Form from "@/components/ContactForm";
 import { fetchAPI } from "@/lib/api";
-import OrderList from "./OrderList";
 import {
   ContactForm,
   Customer,
@@ -7,8 +7,8 @@ import {
   Order,
   StrapiBaseType,
 } from "@/utils/models";
-import Form from "@/components/ContactForm";
 import { getTranslation } from "@/utils/translationHelper";
+import OrderList from "./OrderList";
 export const dynamic = "force-dynamic";
 type Global = StrapiBaseType<{
   updateEnd: string;
@@ -83,9 +83,9 @@ const EditPage = async ({ params: { locale, customerUid } }: Props) => {
     ]);
   if (!customer) return <p>No customer found</p>;
   if (!global) return <p>Error in update settings</p>;
-  const items = orders.reduce((list, order) => {
+  const items = orders.reduce<Item[]>((list, order) => {
     return [...list, ...order.attributes.items.data];
-  }, [] as Item[]);
+  }, []);
   return (
     <div>
       <div className="mb-32 max-w-3xl mx-auto">
