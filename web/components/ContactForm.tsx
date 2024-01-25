@@ -20,7 +20,12 @@ const Form = ({locale, contactForms, customer, items, onSubmit=() => Promise.res
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    const updateFields = Object.fromEntries(form.entries());
+    const updateFields = Object.fromEntries(form.entries()) as Record<string,string | boolean | number>;
+    contactForm.forEach(field => {
+      if (field.type === 'checkbox') {
+        updateFields[field.fieldName] = form.has(field.fieldName);
+      }
+    });
     updateFields.locale = locale;
     delete updateFields.createdAt;
     delete updateFields.updatedAt;
@@ -50,8 +55,8 @@ const Form = ({locale, contactForms, customer, items, onSubmit=() => Promise.res
             type={field.type}
             id={field.fieldName}
             name={field.fieldName}
-            defaultValue={getFieldValue(field.fieldName)}
-            defaultChecked={!!getFieldValue(field.fieldName)}
+            defaultChecked={field.type === 'checkbox' ? !!getFieldValue(field.fieldName) : undefined}
+            defaultValue={field.type !== 'checkbox' ? getFieldValue(field.fieldName) : undefined}
             required={field.required}
           />
         </label>
