@@ -22,18 +22,18 @@ const Error = ({
           <p>Kokeile jotakin seuraavista korjataksesi vian</p>
           <ol>
             <li>
-              1. Kokeile uudestaan{" "}
-              <button className="btn" onClick={reset}>
+              Kokeile uudestaan{" "}
+              <button className="btn my-0" onClick={reset}>
                 Resetoi
               </button>
             </li>
             <li>
-              2. Päivitä sivu ja nollaa välimuisti <kbd>CTRL</kbd>+
-              <kbd>SHIFT</kbd>+<kbd>R</kbd>
+              Päivitä sivu ja nollaa välimuisti <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>
+              +<kbd>R</kbd>
             </li>
-            <li>3. Kokeile toista selainta</li>
+            <li>Kokeile toista selainta</li>
             <li>
-              4. Ota yhteyttä Muistinnollaustireehtööreihin @kulttuuri tai
+              Ota yhteyttä Muistinnollaustireehtööreihin @kulttuuri tai
               @Carogust. Helpottaaksesi asian selvitystä ota kuvankaappaus
               konsolista <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>I</kbd> ja
               ilmoita tämä koodi {error.digest}
