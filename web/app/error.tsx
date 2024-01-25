@@ -23,7 +23,9 @@ const Error = ({
           <ol>
             <li>
               1. Kokeile uudestaan{" "}
-              <button className="btn" onClick={reset}></button>
+              <button className="btn" onClick={reset}>
+                Resetoi
+              </button>
             </li>
             <li>
               2. Päivitä sivu ja nollaa välimuisti <kbd>CTRL</kbd>+
