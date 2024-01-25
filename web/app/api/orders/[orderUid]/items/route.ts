@@ -1,4 +1,5 @@
 import { fetchAPI } from "@/lib/api";
+import { extractStatusFromError } from "@/lib/utils";
 import { Item } from "@/utils/models";
 import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
@@ -27,6 +28,11 @@ export const POST = async (request: NextRequest, { params }: Props) => {
     return NextResponse.json(newItem);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({}, { status: 500 });
+    return NextResponse.json(
+      {},
+      {
+        status: extractStatusFromError(error) ?? 500,
+      },
+    );
   }
 };

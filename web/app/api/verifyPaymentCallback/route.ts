@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import paytrailService from "@/utils/paytrail";
+import { extractStatusFromError } from "@/lib/utils";
 import { updateOrderState } from "@/utils/helpers";
+import paytrailService from "@/utils/paytrail";
+import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 // This is called by paytrail directly
@@ -18,6 +19,11 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({}, { status: 500 });
+    return NextResponse.json(
+      {},
+      {
+        status: extractStatusFromError(error) ?? 500,
+      },
+    );
   }
 };

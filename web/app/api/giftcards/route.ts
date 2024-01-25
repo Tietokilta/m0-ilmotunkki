@@ -1,4 +1,5 @@
 import { fetchAPI } from "@/lib/api";
+import { extractStatusFromError } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 type PostPayload = {
@@ -16,6 +17,11 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({}, { status: 500 });
+    return NextResponse.json(
+      {},
+      {
+        status: extractStatusFromError(error) ?? 500,
+      },
+    );
   }
 };
