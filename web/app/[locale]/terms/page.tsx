@@ -1,8 +1,8 @@
 import { fetchAPI } from "@/lib/api";
 import { StrapiBaseType } from "@/utils/models";
 import { getTranslation } from "@/utils/translationHelper";
-import { TermsContent } from "./Content";
 import { BackLink } from "./BackLink";
+import { TermsContent } from "./Content";
 
 export const dynamic = "force-dynamic";
 type Fields = StrapiBaseType<{
@@ -30,9 +30,7 @@ type Props = {
 };
 const Terms = async ({ params: { locale } }: Props) => {
   const content = await getContent(locale);
-  console.log("terms", content);
   const translation = await getTranslation(locale);
-  console.log("terms", translation);
 
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-8">
