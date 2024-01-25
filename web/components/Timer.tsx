@@ -61,7 +61,7 @@ const Parent = () => {
   };
   return (
     <div className="h-4 text-secondary-900 dark:text-secondary-100">
-      {order &&
+      {order?.attributes &&
         order.attributes.createdAt &&
         order.attributes.status !== "ok" && (
           <Timer
