@@ -1,7 +1,7 @@
 import qs from "qs";
 
 const getStrapiURL = (path = "") => {
-  return `${process.env.STRAPI_API_URL || "http://cms:1337"}${path}`;
+  return `${process.env.STRAPI_API_URL || "http://localhost:1337"}${path}`;
 };
 
 export const fetchAPI = async <T>(
