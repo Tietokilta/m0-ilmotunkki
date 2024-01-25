@@ -1,10 +1,10 @@
-import Link from 'next/link';
 
 import { fetchAPI } from '@/lib/api';
 import { StrapiBaseType } from '@/utils/models';
-import { useRouter } from 'next/navigation';
 import { getTranslation } from '@/utils/translationHelper';
 import { TermsContent } from './Content';
+import { BackLink } from './BackLink';
+
 export const dynamic = 'force-dynamic';
 type Fields = StrapiBaseType<{
   terms: string;
@@ -30,20 +30,13 @@ const Terms = async ({params: {locale}}: Props) => {
   console.log('terms', content)
   const translation = await getTranslation(locale);
   console.log('terms', translation)
-  const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    router.back();
-  }
-  const router = useRouter();
+
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md p-8">
       <TermsContent terms={content.attributes.terms} gdpr={content.attributes.gdpr} />
       <div className='my-4'>
-        <Link onClick={goBack} className='underline text-primary-900 dark:text-primary-500' href="">
-            {translation.back}
-        </Link>
+        <BackLink backText={translation.back} />
       </div>
-
     </div>
   )
 }
