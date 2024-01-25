@@ -5,14 +5,14 @@
 body {
   width: 100%;
   height: 100%;
-  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
-  'Arial', sans-serif;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica",
+    "Arial", sans-serif;
 }
 
 .btn {
-  @apply bg-primary-700 hover:bg-primary-900 text-secondary-50 font-bold p-3 rounded-sm shadow-sm disabled:opacity-50 disabled:hover:bg-primary-700
+  @apply bg-primary-700 hover:bg-primary-900 text-secondary-50 font-bold p-3 rounded-sm shadow-sm disabled:opacity-50 disabled:hover:bg-primary-700;
 }
 
 .tx-input {
-  @apply bg-transparent border-b-2 border-b-primary-700 block w-full focus:outline-none focus:border-b-primary-800
+  @apply bg-transparent border-b-2 border-b-primary-700 block w-full focus:outline-none focus:border-b-primary-800;
 }

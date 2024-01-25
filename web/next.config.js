@@ -26,11 +26,11 @@ const nextConfig = {
     dirs: ["middleware.ts", "app", "context", "components"],
   },
   output: "standalone",
-  logging:{
+  logging: {
     fetches: {
       fullUrl: true,
-    }
-  }
+    },
+  },
 };
 
 module.exports = nextConfig;

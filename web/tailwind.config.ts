@@ -1,18 +1,20 @@
 /** @type {import('tailwindcss').Config} */
-import colors from 'tailwindcss/colors';
-import { DefaultColors } from 'tailwindcss/types/generated/colors';
+import colors from "tailwindcss/colors";
+import { DefaultColors } from "tailwindcss/types/generated/colors";
 
 type Key = keyof DefaultColors;
 
 // Function to validate and get color
 const getColor = (colorName: string | undefined, defaultColor: Key) => {
-  if(!colorName) {
+  if (!colorName) {
     return colors[defaultColor];
   }
   if (colorName in colors) {
     return colors[colorName as Key];
   }
-  console.warn(`Invalid color name '${colorName}'. Falling back to default '${defaultColor}'.`);
+  console.warn(
+    `Invalid color name '${colorName}'. Falling back to default '${defaultColor}'.`,
+  );
   return colors[defaultColor];
 };
 
@@ -25,22 +27,18 @@ const configuration = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // class/media
+  darkMode: "class", // class/media
   theme: {
     colors: {
-      primary: getColor(PRIMARY_COLOR,"purple"),
-      secondary: getColor(SECONDARY_COLOR,"neutral"),
+      primary: getColor(PRIMARY_COLOR, "purple"),
+      secondary: getColor(SECONDARY_COLOR, "neutral"),
       transparent: colors.transparent,
       success: colors.green,
       danger: colors.red,
     },
-    extend: {
-    },
+    extend: {},
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
-}
+  plugins: [require("@tailwindcss/typography")],
+};
 
 export default configuration;
-

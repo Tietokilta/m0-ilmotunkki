@@ -9,18 +9,18 @@ import { AppContext } from "@/context/AppContext";
 type Props = {
   isValid: boolean;
   paymentStatus: string;
-}
+};
 
 const CallbackResetHandler = ({ isValid, paymentStatus }: Props) => {
-  const {reset} = useContext(AppContext);
+  const { reset } = useContext(AppContext);
   const handled = useRef(false);
   useEffect(() => {
-    if(isValid && paymentStatus === 'ok' && !handled.current) {
+    if (isValid && paymentStatus === "ok" && !handled.current) {
       handled.current = true;
       reset();
     }
-  },[isValid, paymentStatus, reset]);
+  }, [isValid, paymentStatus, reset]);
   return null;
-}
+};
 
 export default CallbackResetHandler;

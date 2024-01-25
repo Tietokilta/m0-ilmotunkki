@@ -1,7 +1,7 @@
 const Loader = () => (
   <div>
     <style jsx>{`
-    .lds-dual-ring {
+      .lds-dual-ring {
         display: inline-block;
         width: 80px;
         height: 80px;
@@ -25,9 +25,9 @@ const Loader = () => (
           transform: rotate(360deg);
         }
       }
-      `}</style>
+    `}</style>
     <div className="lds-dual-ring"></div>
   </div>
-)
+);
 
 export default Loader;

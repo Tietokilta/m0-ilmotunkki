@@ -1,28 +1,27 @@
 "use client";
 
-import { useContext, useEffect } from 'react';
-import { AppContext } from '@/context/AppContext';
-import { ContactForm} from '@/utils/models';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useContext, useEffect } from "react";
+import { AppContext } from "@/context/AppContext";
+import { ContactForm } from "@/utils/models";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useTranslation } from "@/context/useTranslation";
-import Form from '@/components/ContactForm';
-
+import Form from "@/components/ContactForm";
 
 type Props = {
   locale: string;
   contactForms: ContactForm[];
-}
+};
 
-const FormWrapper = ({locale, contactForms}: Props) => {
+const FormWrapper = ({ locale, contactForms }: Props) => {
   const { translation } = useTranslation(locale);
   const router = useRouter();
-  const {customer, refreshFields, isEmpty, items} = useContext(AppContext);
+  const { customer, refreshFields, isEmpty, items } = useContext(AppContext);
   useEffect(() => {
-    if(isEmpty) {
+    if (isEmpty) {
       router.push(`/${locale}`);
     }
-  },[isEmpty, router, locale]);
+  }, [isEmpty, router, locale]);
   const handleSubmit = async () => {
     await refreshFields();
     router.push(`/${locale}/summary`);
@@ -36,13 +35,13 @@ const FormWrapper = ({locale, contactForms}: Props) => {
         locale={locale}
         onSubmit={handleSubmit}
       />
-        <div>
-          <Link href={`/${locale}/`} className='btn h-12'>
-            {translation.back}
-          </Link>
+      <div>
+        <Link href={`/${locale}/`} className="btn h-12">
+          {translation.back}
+        </Link>
       </div>
     </div>
   );
-}
+};
 
 export default FormWrapper;

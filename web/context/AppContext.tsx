@@ -6,7 +6,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from "react";
 import useSWR from "swr";
 import { Customer, Item, ItemType, Order } from "../utils/models";
@@ -22,21 +22,21 @@ export interface AppContextType {
   isEmpty: boolean;
   reset: () => void;
 }
-export const initialCustomer =  {
+export const initialCustomer = {
   id: 0,
   attributes: {
-    firstName: '',
-    lastName: '',
-    createdAt: '',
-    email: '',
-    extra: '',
-    locale: '',
-    phone: '',
-    postalCode: '',
-    publishedAt: '',
-    startYear: '',
-    updatedAt: '',
-    uid: '',
+    firstName: "",
+    lastName: "",
+    createdAt: "",
+    email: "",
+    extra: "",
+    locale: "",
+    phone: "",
+    postalCode: "",
+    publishedAt: "",
+    startYear: "",
+    updatedAt: "",
+    uid: "",
   },
 };
 const appContextDefault: Required<AppContextType> = {
@@ -44,23 +44,23 @@ const appContextDefault: Required<AppContextType> = {
   order: {
     id: 0,
     attributes: {
-      createdAt: '',
-      uid: '',
-      publishedAt: '',
-      status: 'new',
-      updatedAt: '',
-      transactionId: '',
+      createdAt: "",
+      uid: "",
+      publishedAt: "",
+      status: "new",
+      updatedAt: "",
+      transactionId: "",
       items: {
-        data: []
+        data: [],
       },
       customer: {
-        data: initialCustomer
-      }
-    }
+        data: initialCustomer,
+      },
+    },
   },
   items: [],
   isEmpty: true,
-  initializeOrder: () => Promise.resolve(''),
+  initializeOrder: () => Promise.resolve(""),
   refreshFields: () => Promise.resolve(),
   addItem: () => Promise.resolve(),
   deleteItem: () => Promise.resolve(),
@@ -70,105 +70,122 @@ const appContextDefault: Required<AppContextType> = {
 export const AppContext = createContext<AppContextType>(appContextDefault);
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const AppProvider: FC<Props> = ({ children }) => {
   const [orderUid, setOrderUid] = useState<string | undefined>(undefined);
-  const {data: order, mutate: mutateOrder, error} = useSWR<Order>(orderUid ? `/api/orders/${orderUid}` : null, fetcher);
-  console.log('order', order)
-  const customer = useMemo(() => order?.attributes?.customer?.data || appContextDefault.customer,[order]);
-  const items = useMemo(() => order?.attributes?.items?.data || appContextDefault.items, [order]);
-  console.log('customer', customer)
-  console.log('items', items)
+  const {
+    data: order,
+    mutate: mutateOrder,
+    error,
+  } = useSWR<Order>(orderUid ? `/api/orders/${orderUid}` : null, fetcher);
+  console.log("order", order);
+  const customer = useMemo(
+    () => order?.attributes?.customer?.data || appContextDefault.customer,
+    [order],
+  );
+  const items = useMemo(
+    () => order?.attributes?.items?.data || appContextDefault.items,
+    [order],
+  );
+  console.log("customer", customer);
+  console.log("items", items);
   const reset = useCallback(() => {
-    localStorage.removeItem('orderUid');
-    setOrderUid('');
+    localStorage.removeItem("orderUid");
+    setOrderUid("");
     mutateOrder(undefined);
-  },[mutateOrder]);
+  }, [mutateOrder]);
 
   useEffect(() => {
-    if(error && error.status === 404) {
+    if (error && error.status === 404) {
       reset();
     }
-  },[error,reset]);
+  }, [error, reset]);
 
   const initializeOrder = async () => {
-    const response = await fetch('/api/orders', {
-      method: 'POST',
+    const response = await fetch("/api/orders", {
+      method: "POST",
     });
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error("Error in initializing order");
     }
 
-    const newOrder = await response.json() as Order;
+    const newOrder = (await response.json()) as Order;
     setOrderUid(newOrder.attributes.uid);
-    localStorage.setItem('orderUid', String(newOrder.attributes.uid));
+    localStorage.setItem("orderUid", String(newOrder.attributes.uid));
     mutateOrder(newOrder);
     return newOrder.attributes.uid;
   };
 
   const deleteItem = async (itemId: number) => {
-    const itemToRemove = items?.find(({attributes: {itemType}}) => itemType.data.id === itemId);
+    const itemToRemove = items?.find(
+      ({ attributes: { itemType } }) => itemType.data.id === itemId,
+    );
     if (!itemToRemove) return;
     try {
-      const response = await fetch(`/api/orders/${orderUid}/items/${itemToRemove.id}`, {
-        method: 'DELETE',
-      });
-      const removeResult = await response.json() as Item;
-      const filteredItems = items?.filter(item => item.id !== removeResult.id) || [];
+      const response = await fetch(
+        `/api/orders/${orderUid}/items/${itemToRemove.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+      const removeResult = (await response.json()) as Item;
+      const filteredItems =
+        items?.filter((item) => item.id !== removeResult.id) || [];
       const newOrder = order || appContextDefault.order;
-      newOrder.attributes.items = {data:filteredItems};
+      newOrder.attributes.items = { data: filteredItems };
       mutateOrder(newOrder);
-    } catch(error) {
+    } catch (error) {
       // Error in deleting an item
     }
   };
 
   const addItem = async (itemType: ItemType) => {
-    const currentOrderUid = orderUid || await initializeOrder();
+    const currentOrderUid = orderUid || (await initializeOrder());
     try {
       const response = await fetch(`/api/orders/${currentOrderUid}/items`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           itemType: itemType.id,
         }),
       });
-      const newItem = await response.json() as Item
+      const newItem = (await response.json()) as Item;
       const newItems = [...items, newItem];
       const newOrder = order || appContextDefault.order;
-      newOrder.attributes.items = {data: newItems};
+      newOrder.attributes.items = { data: newItems };
       mutateOrder(newOrder);
-    } catch(error) {
+    } catch (error) {
       // Error in adding an item
     }
-  }
+  };
   const refreshFields = async () => {
     mutateOrder();
-  }
+  };
 
   useEffect(() => {
-    const savedOrderUid = localStorage.getItem('orderUid');
-    if(savedOrderUid) {
+    const savedOrderUid = localStorage.getItem("orderUid");
+    if (savedOrderUid) {
       setOrderUid(savedOrderUid);
       return;
     }
-    setOrderUid('');
-  },[]);
+    setOrderUid("");
+  }, []);
   return (
-    <AppContext.Provider value={
-      {
+    <AppContext.Provider
+      value={{
         items: items,
         order: order,
-        isEmpty: orderUid === '' && !error && !order, // Is empty;
+        isEmpty: orderUid === "" && !error && !order, // Is empty;
         customer,
         initializeOrder,
         refreshFields,
         addItem,
         deleteItem,
         reset,
-      }}>
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

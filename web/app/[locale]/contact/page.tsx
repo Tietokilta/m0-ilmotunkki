@@ -1,31 +1,35 @@
 import { fetchAPI } from "@/lib/api";
 import FormWrapper from "./FormWrapper";
 import { ContactForm as ContactFormType } from "@/utils/models";
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 type Props = {
   params: {
-    locale: string
-  }
-}
+    locale: string;
+  };
+};
 
 const getContactForms = async (locale: string) => {
   try {
-    const data = await fetchAPI<ContactFormType[]>('/contact-forms',{cache: 'no-store'},{
-      locale,
-      populate: ['contactForm','itemTypes']
-    });
+    const data = await fetchAPI<ContactFormType[]>(
+      "/contact-forms",
+      { cache: "no-store" },
+      {
+        locale,
+        populate: ["contactForm", "itemTypes"],
+      },
+    );
     return data;
-  } catch(error) {
+  } catch (error) {
     return undefined;
   }
-}
+};
 
-const ContactPage = async ({params: {locale}}: Props) => {
+const ContactPage = async ({ params: { locale } }: Props) => {
   const contactForms = await getContactForms(locale);
-  if(!contactForms) {
-    return <p>Error in loading contact forms. Please contact admin</p>
+  if (!contactForms) {
+    return <p>Error in loading contact forms. Please contact admin</p>;
   }
-  return <FormWrapper locale={locale} contactForms={contactForms}/>
-}
+  return <FormWrapper locale={locale} contactForms={contactForms} />;
+};
 
 export default ContactPage;

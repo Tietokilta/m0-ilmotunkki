@@ -906,6 +906,7 @@ export interface ApiCustomerCustomer extends Schema.CollectionType {
     locale: Attribute.Enumeration<['fi', 'en']>;
     diet: Attribute.String;
     nonalcoholic: Attribute.Boolean;
+    nonalcoholicshots: Attribute.Boolean;
     group: Attribute.String;
     avec: Attribute.String;
     representativeOf: Attribute.String;

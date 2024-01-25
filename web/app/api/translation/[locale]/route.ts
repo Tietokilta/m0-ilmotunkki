@@ -1,15 +1,15 @@
 import { getTranslation } from "@/utils/translationHelper";
 import { NextRequest, NextResponse } from "next/server";
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 type Props = {
   params: {
     locale: string;
-  }
-}
-export const GET = async (request: NextRequest, {params}: Props) => {
+  };
+};
+export const GET = async (request: NextRequest, { params }: Props) => {
   const translation = await getTranslation(params.locale);
-  if(Object.keys(translation).length === 0) {
-    return NextResponse.json({}, {status: 404})
+  if (Object.keys(translation).length === 0) {
+    return NextResponse.json({}, { status: 404 });
   }
   return NextResponse.json(translation);
-}
+};
