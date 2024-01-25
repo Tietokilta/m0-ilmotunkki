@@ -27,7 +27,9 @@ type Props = {
 }
 const Terms = async ({params: {locale}}: Props) => {
   const content = await getContent(locale);
+  console.log('terms', content)
   const translation = await getTranslation(locale);
+  console.log('terms', translation)
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     router.back();
