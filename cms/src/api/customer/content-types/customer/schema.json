@@ -63,6 +63,9 @@
     "nonalcoholicshots": {
       "type": "boolean"
     },  
+    "vegan": {
+      "type": "boolean"
+    },
     "group": {
       "type": "string"
     },
