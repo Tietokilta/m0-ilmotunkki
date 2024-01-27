@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/lib/api";
-import GoBack from "./GoBack";
 import { ItemCategory, StrapiBaseType } from "@/utils/models";
 import { getTranslation } from "@/utils/translationHelper";
+import GoBack from "./GoBack";
 export const dynamic = "force-dynamic";
 
 type Field = StrapiBaseType<{
