@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -6,6 +7,8 @@ import { fetchAPI } from "../../lib/api";
 import { getTranslation } from "../../utils/translationHelper";
 import { StrapiBaseType } from "../../utils/models";
 import PageContinue from "./PageContinue";
+import React from 'react'
+import { ShaderGradientCanvas, ShaderGradient } from '@shadergradient/react'
 export const dynamic = "force-dynamic";
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
@@ -39,6 +42,7 @@ const Home = async ({ params: { locale } }: Props) => {
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
       <main className="container mx-auto px-4">
+
         <ReactMarkdown
           components={{
             img: (image) => {
