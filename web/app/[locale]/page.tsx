@@ -39,7 +39,7 @@ const Home = async ({ params: { locale } }: Props) => {
   const bodyText = response?.attributes.bodyText || "";
   const showSignups = response?.attributes.showSignups || false;
   return (
-    <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
+    <div className="relative container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
       <main className="container mx-auto px-4">
 
         <ReactMarkdown

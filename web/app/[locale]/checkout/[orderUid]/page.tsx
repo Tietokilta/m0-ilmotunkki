@@ -23,6 +23,7 @@ const getOrderInformation = async (orderUid: string) => {
     const order = await fetchAPI<Order>(`/orders/findByUid/${orderUid}`, {
       cache: "no-store",
     });
+    console.log("Managed to get here")
     return order;
   } catch (error) {
     console.error(error);
@@ -44,7 +45,8 @@ const Checkout = async ({ params: { locale, orderUid } }: Props) => {
     return null;
   }
   const hostname = headers().get("host");
-  const url = hostname ? `https://${hostname}` : "http://localhost:3000";
+  console.log("Got here to tell the tale", hostname)
+  const url = "http://localhost:3000" // hostname ? `https://${hostname}` : "http://localhost:3000";
   const paymentResponse = await createPayment(order.id, url);
   console.log(paymentResponse);
   if (!paymentResponse) {

@@ -52,7 +52,7 @@ const PAYTRAIL_ENDPOINT = "https://services.paytrail.com";
 const PAYTRAIL_MERCHANT_ID = process.env.PAYTRAIL_MERCHANT_ID || "";
 const PAYTRAIL_SECRET_KEY = process.env.PAYTRAIL_SECRET_KEY || "";
 
-const getRandomString = (length: number = 16) =>
+const getRandomString = (length: number = 15) =>
   crypto.randomBytes(length).toString("base64");
 
 const calculateHmac = (
