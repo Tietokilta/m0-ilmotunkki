@@ -37,12 +37,7 @@ npx strapi import -f base_content.tar.gz
 Go to [http://localhost:1337/admin](http://localhost:1337/admin), create an account and login. Go to Settings > API Tokens > Add new API Token. Name it something descriptive and set the token type to `full-access`.
 Copy the new token and set it to `STRAPI_TOKEN` in `.env` file.
 
-Then run
-
-```shell
-npm run develop
-```
-in both `web` and `cms` folders. Now the site should be up and running.
+Now the site should be up and running.
 
 ## CMS
 
