@@ -32,7 +32,7 @@ const RootLayout = async ({ children }: PropType) => {
             <Locale />
             <Timer />
           </Header>
-          <div className="relative max-w-7xl mx-auto">{children}</div>
+          <div className="max-w-7xl mx-auto">{children}</div>
         </AppProvider>
         <Footer />
       </body>

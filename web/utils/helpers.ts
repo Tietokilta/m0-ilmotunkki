@@ -121,7 +121,6 @@ export const createPayment = async (orderId: number, url: string) => {
       (acc, item) => acc + item.price * item.quantity,
       0,
     );
-    console.log("\n\n\n\nTotal", total);
     await updateOrderState(order.id, "pending");
     if (total === 0) return paytrailService.createSkipPayment(order);
     return paytrailService.createPayment(order, url);
