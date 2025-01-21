@@ -8,6 +8,7 @@ import { getTranslation } from "../../utils/translationHelper";
 import { StrapiBaseType } from "../../utils/models";
 import PageContinue from "./PageContinue";
 import React from 'react'
+import { ShaderGradientCanvas, ShaderGradient } from '@shadergradient/react'
 export const dynamic = "force-dynamic";
 type FrontPageFields = StrapiBaseType<{
   bodyText: string;
