@@ -9,7 +9,6 @@ import { fetchAPI } from "@/lib/api";
 import { StrapiBaseType, StrapiImage, StrapiResponse } from "@/utils/models";
 import AppProvider from "../context/AppContext";
 import "../styles/global.css";
-import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 type PropType = {
   children: React.ReactNode;
@@ -24,7 +23,6 @@ const RootLayout = async ({ children }: PropType) => {
     <html lang="fi" className="dark w-full h-full">
       <head />
       <body className="bg-secondary-200 dark:bg-secondary-900 p-2 text-secondary-700 dark:text-secondary-100'">
-        <BackgroundCanvas />
         <AppProvider>
           <Header locale="">
             <Locale />
