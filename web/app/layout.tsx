@@ -4,13 +4,12 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Locale from "../components/Locale";
 import Timer from "../components/Timer";
-import BackgroundCanvas from "../components/BackgroundCanvas";
-
 
 import { fetchAPI } from "@/lib/api";
 import { StrapiBaseType, StrapiImage, StrapiResponse } from "@/utils/models";
 import AppProvider from "../context/AppContext";
 import "../styles/global.css";
+import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 type PropType = {
   children: React.ReactNode;
