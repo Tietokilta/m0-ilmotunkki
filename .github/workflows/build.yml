@@ -87,7 +87,6 @@ jobs:
       matrix:
         project: [web, cms]
     if: github.ref == 'refs/heads/main'
-    environment: production
     steps:
       - name: Login via Azure CLI
         uses: azure/login@v2
