@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Locale from "../components/Locale";
 import Timer from "../components/Timer";
+import BackgroundCanvas from "../components/BackgroundCanvas";
+
 
 import { fetchAPI } from "@/lib/api";
 import { StrapiBaseType, StrapiImage, StrapiResponse } from "@/utils/models";
@@ -22,7 +24,8 @@ const RootLayout = async ({ children }: PropType) => {
   return (
     <html lang="fi" className="dark w-full h-full">
       <head />
-      <body className="bg-secondary-200 dark:bg-secondary-900 p-2 text-secondary-700 dark:text-secondary-100'">
+      <body className="bg-secondary-200 dark:bg-secondary-900 p-2 text-secondary-50 dark:text-secondary-100 font-raleway font-extralight">
+        <BackgroundCanvas />
         <AppProvider>
           <Header locale="">
             <Locale />

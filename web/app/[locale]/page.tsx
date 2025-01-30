@@ -64,7 +64,7 @@ const Home = async ({ params: { locale } }: Props) => {
             </Link>
           </div>
         )}
-        <div className="w-full border-b-2 border-b-primary-700 dark:border-b-primary-300 opacity-50 my-4"></div>
+        <div className="w-full border-b-2 border-b-primary-300 opacity-50 my-4"></div>
         <ItemList locale={locale} />
         <PageContinue locale={locale} />
       </main>
