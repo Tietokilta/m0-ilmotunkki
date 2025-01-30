@@ -36,7 +36,7 @@ const Header = async ({ children, locale }: PropType) => {
     headerData?.attributes.formats?.large || headerData?.attributes;
   return (
     <header className="container max-w-3xl mx-auto relative">
-      <div className="w-fit p-1 flex gap-4">{children}</div>
+      <div className="w-fit py-4 flex gap-4">{children}</div>
       <Link href={`/${locale}`}>
         {header && (
           <Image
@@ -44,7 +44,7 @@ const Header = async ({ children, locale }: PropType) => {
             src={header?.url}
             width={header?.width ?? 0}
             height={header?.height ?? 0}
-            className="object-contain"
+            className="object-contain py-4"
             priority={true}
           />
         )}

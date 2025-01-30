@@ -17,7 +17,7 @@ const Error = ({
   return (
     <div className="container max-w-3xl bg-secondary-50 dark:bg-secondary-800 mx-auto rounded shadow-md mt-4 p-1 sm:p-8">
       <main className="container mx-auto px-4">
-        <section className="prose dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
+        <section className="prose text-secondary-50 dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4">
           <h2>Hups, jotain meni pieleen!</h2>
           <p>Kokeile jotakin seuraavista korjataksesi vian</p>
           <ol>

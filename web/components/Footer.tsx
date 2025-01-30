@@ -31,7 +31,7 @@ const Footer = async () => {
   const sponsors = data?.attributes.sponsors;
   if (!sponsors) return null;
   return (
-    <footer className="relative container max-w-3xl mx-auto my-10 bg-secondary-50 dark:bg-secondary-600 rounded shadow-md p-1 pt-4 sm:p-8">
+    <footer className="relative container max-w-3xl mx-auto my-10 bg-secondary-50 dark:bg-secondary-800 rounded shadow-md p-1 pt-4 sm:p-8">
       <div className="flex justify-center gap-6 flex-wrap items-center">
         {sponsors?.map((sponsor) => {
           const image =
