@@ -65,13 +65,13 @@ const ItemList = ({ locale }: Props) => {
   };
   const Item = ({ item, category }: ItemPropType) => (
     <div className="flex gap-2 text-center border-b-2 border-b-secondary-200 dark:border-b-secondary-700 mb-4 last:border-none items-center">
-      <div className="flex-1 text-secondary-700 dark:text-secondary-100">
+      <div className="flex-1 text-secondary-50 font-medium text-xl tracking-wider">
         <p>{translation[item.attributes.slug]}</p>
         <p className="text-red-500 flex-1 text-sm">
           {isSoldOut(item, category) && translation.soldOut}
         </p>
       </div>
-      <p className="text-secondary-500 dark:text-secondary-300 flex-1">
+      <p className="text-secondary-50 flex-1 font-medium text-xl">
         {item.attributes.price} €
       </p>
       <div className="flex-1 gap-4 flex items-center relative">
@@ -82,7 +82,7 @@ const ItemList = ({ locale }: Props) => {
         >
           -
         </button>
-        <p className="text-secondary-500 dark:text-secondary-300 mb-4">
+        <p className="text-secondary-50 mb-4 font-light text-xl">
           {itemCount(items, item.id)}
         </p>
         <button

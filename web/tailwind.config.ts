@@ -1,25 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import colors from "tailwindcss/colors";
-import { DefaultColors } from "tailwindcss/types/generated/colors";
 
-type Key = keyof DefaultColors;
-
-// Function to validate and get color
-const getColor = (colorName: string | undefined, defaultColor: Key) => {
-  if (!colorName) {
-    return colors[defaultColor];
-  }
-  if (colorName in colors) {
-    return colors[colorName as Key];
-  }
-  console.warn(
-    `Invalid color name '${colorName}'. Falling back to default '${defaultColor}'.`,
-  );
-  return colors[defaultColor];
-};
-
-const PRIMARY_COLOR = process.env.PRIMARY_COLOR;
-const SECONDARY_COLOR = process.env.SECONDARY_COLOR;
 
 const configuration = {
   content: [
@@ -30,13 +11,40 @@ const configuration = {
   darkMode: "class", // class/media
   theme: {
     colors: {
-      primary: getColor(PRIMARY_COLOR, "purple"),
-      secondary: getColor(SECONDARY_COLOR, "neutral"),
+      primary: {
+        50: "#5c533b",
+        100: '#e6c46a',
+        200: '#F7D57B',
+        300: '#5c533b',
+        400: '#00FF00',
+        500: '#FF88FF',
+        600: '#f7d57b',
+        700: '#7b0b06',
+        750: '#ae3e39',
+        800: '#0088FF',
+        900: '#7b0b06',
+      },
+      secondary: {
+        50: "#F7D57B",
+        100: '#FFFF88',
+        200: '#FFFF00',
+        300: '#5c533b',
+        400: '#FF00FF',
+        500: '#88FFFF',
+        600: '#00FFFF',
+        700: '#5c533b',
+        800: '#290200',
+        900: '#f7d57b',
+      },
       transparent: colors.transparent,
       success: colors.green,
       danger: colors.red,
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        raleway: ["Raleway", "sans-serif"],
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };

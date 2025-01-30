@@ -40,8 +40,8 @@ const Summary = ({ locale, translation, contactForms }: SummaryProps) => {
       <div className="bg-secondary-50 dark:bg-secondary-800 rounded shadow-lg p-4 text-primary-700 dark:text-primary-200">
         <GiftCardComponent locale={locale} />
       </div>
-      <div className="my-2">
-        <label className="text-primary-700 dark:text-primary-200">
+      <div className="text-base bg-secondary-800 pl-20 pt-5 pb-9">
+        <label className="text-secondary-50">
           <input
             className="h-4 w-4 mr-3 bg-transparent"
             type="checkbox"
@@ -51,7 +51,7 @@ const Summary = ({ locale, translation, contactForms }: SummaryProps) => {
           {translation.haveRead}{" "}
           <Link
             href={`/${locale}/terms`}
-            className="text-primary-900 dark:text-primary-50 underline"
+            className="text-primary-750 font-bold underline"
           >
             {translation.terms}
           </Link>
