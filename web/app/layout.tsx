@@ -24,7 +24,7 @@ const RootLayout = async ({ children }: PropType) => {
   return (
     <html lang="fi" className="dark w-full h-full">
       <head />
-      <body className="bg-secondary-200 dark:bg-secondary-900 p-2 text-secondary-50 dark:text-secondary-100 font-raleway font-extralight">
+      <body className="bg-secondary-800 dark:bg-secondary-800 p-2 text-secondary-50 dark:text-secondary-100 font-raleway font-extralight">
         <BackgroundCanvas />
         <AppProvider>
           <Header locale="">
