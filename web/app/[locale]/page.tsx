@@ -53,7 +53,7 @@ const Home = async ({ params: { locale } }: Props) => {
               );
             },
           }}
-          className="prose text-secondary-50 dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4"
+          className="prose prose-strong:text-secondary-50 text-secondary-50 dark:prose-invert prose-li:my-0.5 prose-ul:my-0.5 prose-secondary mt-0 mb-4"
         >
           {bodyText}
         </ReactMarkdown>
