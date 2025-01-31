@@ -58,7 +58,7 @@ const Summary = ({ locale, translation, contactForms }: SummaryProps) => {
         </label>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 pt-4">
         <Link passHref href={`/${locale}/contact`} className="btn">
           {translation.back}
         </Link>
