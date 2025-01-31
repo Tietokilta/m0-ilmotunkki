@@ -88,13 +88,14 @@ const EditPage = async ({ params: { locale, customerUid } }: Props) => {
   }, []);
   return (
     <div>
-      <div className="mb-32 max-w-3xl mx-auto">
+      <div className="container mb-32 max-w-3xl mx-auto bg-secondary-50 dark:bg-secondary-800 p-1 pt-4 sm:p-8 rounded shadow-md">
         <Form
           contactForms={contactForms}
           customer={customer}
           items={items}
           locale={locale}
         />
+        <br />
       </div>
       <OrderList translation={translation} orders={orders} locale={locale} />
     </div>
